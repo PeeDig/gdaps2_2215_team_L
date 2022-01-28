@@ -7,7 +7,7 @@ _This README contains basic information about the project and its artifacts. If 
 - Max Gomez
 - Aidan Loucks
 - Xinyuan Pan
-- MEMBER4
+- Jason Weinberg
 - MEMBER5
 
 ## Repo Organization
