@@ -6,7 +6,7 @@ _This README contains basic information about the project and its artifacts. If 
 ## Team Members
 - Max Gomez
 - Aidan Loucks
-- MEMBER3
+- Xinyuan Pan
 - MEMBER4
 - MEMBER5
 
