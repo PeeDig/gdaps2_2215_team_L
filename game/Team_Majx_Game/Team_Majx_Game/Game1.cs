@@ -4,10 +4,22 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Team_Majx_Game
 {
+    // Enums control the Game State
+    enum GameState
+    {
+        menu,
+        rules,
+        settings,
+        charSelect,
+        battle,
+        pause,
+        endScreen
+    }
     public class Game1 : Game
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        private GameState State;
 
         public Game1()
         {
@@ -35,7 +47,30 @@ namespace Team_Majx_Game
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            // FSM for what controls will go on in each state
+            switch (State)
+            {
+                case GameState.menu:
+                    break;
+
+                case GameState.rules:
+                    break;
+
+                case GameState.settings:
+                    break;
+
+                case GameState.charSelect:
+                    break;
+
+                case GameState.battle:
+                    break;
+
+                case GameState.pause:
+                    break;
+
+                case GameState.endScreen:
+                    break;
+            }
 
             base.Update(gameTime);
         }
@@ -44,7 +79,31 @@ namespace Team_Majx_Game
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            // FSM to control what will be
+            // drawn to the screen at a specific state
+            switch (State)
+            {
+                case GameState.menu:
+                    break;
+
+                case GameState.rules:
+                    break;
+
+                case GameState.settings:
+                    break;
+
+                case GameState.charSelect:
+                    break;
+
+                case GameState.battle:
+                    break;
+
+                case GameState.pause:
+                    break;
+
+                case GameState.endScreen:
+                    break;
+            }
 
             base.Draw(gameTime);
         }
