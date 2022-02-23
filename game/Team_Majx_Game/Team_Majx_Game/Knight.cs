@@ -13,12 +13,14 @@ namespace Team_Majx_Game
     {
         public int shieldHealth;
 
-        public Knight (Texture2D texture, int x, int y, int width, int height) : base (texture,x,y,width,height)
-            {
+        public Knight(Texture2D texture, int x, int y, int width, int height, bool player1, GameManager gameManager) : base(texture, x, y, width, height, player1, gameManager)
+        {
+            this.gameManager = gameManager;
             shieldHealth = 100; //Default value???
             this.texture = texture;
             this.position = new Rectangle(x, y, width, height);
             speed = 1; //Default speed???
+            this.player1 = player1;
         }
 
         //Returns and changes the shield health. Sets the shield health to 100 if the inputted number is greater than it
@@ -40,4 +42,6 @@ namespace Team_Majx_Game
                     shieldHealth = 0;
                 }
             }
+        }
+    }
 }
