@@ -12,8 +12,8 @@ namespace Team_Majx_Game
     class Mage : CommonCharacter
     {
         private int mana;
-        public Mage(Texture2D texture, int x, int y, int width, int height) : base (texture,x,y,width,height)
-            {
+        public Mage(Texture2D texture, int x, int y, int width, int height) : base(texture, x, y, width, height)
+        {
             mana = 100;
             this.texture = texture;
             this.position = new Rectangle(x, y, width, height);
@@ -25,14 +25,16 @@ namespace Team_Majx_Game
         {
             get { return mana; }
             set
-            {   
-                if(value >= 100)
-                    {
-                    mana = 100; 
+            {
+                if (value >= 100)
+                {
+                    mana = 100;
                 }
                 else if (value <= 100 && value >= 0)
                 {
                     mana = value;
                 }
+            }
         }
+    }
 }

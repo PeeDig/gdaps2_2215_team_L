@@ -68,16 +68,46 @@ namespace Team_Majx_Game
         // Method for writing to the settings file
         public void ReadFile(string fileName)
         {
-            // Will read from the settings file
-            input = new StreamReader("../../" + fileName);
+            try
+            {
+                // Will read from the settings file
+                input = new StreamReader("../../" + fileName);
 
-            // Sets each of the settings accordingly
-            stocks = int.Parse(input.ReadLine());
-            health = double.Parse(input.ReadLine());
-            gravity = double.Parse(input.ReadLine());
-            timer = double.Parse(input.ReadLine());
-            damage = double.Parse(input.ReadLine());
-            speedX = double.Parse(input.ReadLine());
+                // Sets each of the settings accordingly
+                stocks = int.Parse(input.ReadLine());
+                health = double.Parse(input.ReadLine());
+                gravity = double.Parse(input.ReadLine());
+                timer = double.Parse(input.ReadLine());
+                damage = double.Parse(input.ReadLine());
+                speedX = double.Parse(input.ReadLine());
+
+                input.Close();
+            }
+            catch
+            {
+                // Write the error here to somewhere
+            }
+        }
+
+        public void SaveFile()
+        {
+            try
+            {
+                output = new StreamWriter("GameSettings.txt");
+
+                output.WriteLine(stocks);
+                output.WriteLine(health);
+                output.WriteLine(gravity);
+                output.WriteLine(timer);
+                output.WriteLine(damage);
+                output.WriteLine(speedX);
+
+                output.Close();
+            }
+            catch
+            {
+                // Implement the catch here
+            }
         }
     }
 }
