@@ -7,13 +7,13 @@ namespace Team_Majx_Game
     // Enums control the Game State
     enum GameState
     {
-        menu,
-        rules,
-        settings,
-        charSelect,
-        battle,
-        pause,
-        endScreen
+        Menu,
+        Rules,
+        Settings,
+        CharSelect,
+        Battle,
+        Pause,
+        EndScreen
     }
     public class Game1 : Game
     {
@@ -21,6 +21,7 @@ namespace Team_Majx_Game
         private SpriteBatch _spriteBatch;
         private GameState currentState;
         private KeyboardState prevkbState;
+        private MouseState prevMsState;
 
         public Game1()
         {
@@ -33,6 +34,7 @@ namespace Team_Majx_Game
         {
             // TODO: Add your initialization logic here
             prevkbState = Keyboard.GetState();
+            prevMsState = Mouse.GetState();
 
             base.Initialize();
         }
@@ -50,89 +52,91 @@ namespace Team_Majx_Game
                 Exit();
 
             KeyboardState kbState = Keyboard.GetState();
+            MouseState msState = Mouse.GetState();
 
             // FSM for what controls will go on in each state
             switch (currentState)
             {
-                case GameState.menu:
+                case GameState.Menu:
                     if (SingleKeyPress(Keys.R, kbState))
                     {
-                        currentState = GameState.rules;
+                        currentState = GameState.Rules;
                     }
                     else if (SingleKeyPress(Keys.S, kbState))
                     {
-                        currentState = GameState.settings;
+                        currentState = GameState.Settings;
                     }
                     else if (SingleKeyPress(Keys.Enter, kbState))
                     {
-                        currentState = GameState.charSelect;
+                        currentState = GameState.CharSelect;
                     }
                     break;
 
-                case GameState.rules:
+                case GameState.Rules:
                     if (SingleKeyPress(Keys.Back, kbState))
                     {
-                        currentState = GameState.menu;
+                        currentState = GameState.Menu;
                     }
                     break;
 
-                case GameState.settings:
+                case GameState.Settings:
                     if (SingleKeyPress(Keys.Back, kbState))
                     {
-                        currentState = GameState.menu;
+                        currentState = GameState.Menu;
                     }
                     break;
 
-                case GameState.charSelect:
+                case GameState.CharSelect:
                     if (SingleKeyPress(Keys.Back, kbState))
                     {
-                        currentState = GameState.menu;
+                        currentState = GameState.Menu;
                     }
                     else if (SingleKeyPress(Keys.S, kbState))
                     {
-                        currentState = GameState.settings;
+                        currentState = GameState.Settings;
                     }
                     else if (SingleKeyPress(Keys.Enter, kbState))
                     {
-                        currentState = GameState.battle;
+                        currentState = GameState.Battle;
                     }
                     break;
 
-                case GameState.battle:
+                case GameState.Battle:
                     if (SingleKeyPress(Keys.P, kbState))
                     {
-                        currentState = GameState.pause;
+                        currentState = GameState.Pause;
                     }
                     else if (SingleKeyPress(Keys.W, kbState))
                     {
-                        currentState = GameState.endScreen;
+                        currentState = GameState.EndScreen;
                     }
                     break;
 
-                case GameState.pause:
+                case GameState.Pause:
                     if (SingleKeyPress(Keys.P, kbState))
                     {
-                        currentState = GameState.battle;
+                        currentState = GameState.Battle;
                     }
                     else if (SingleKeyPress(Keys.M, kbState))
                     {
-                        currentState = GameState.menu;
+                        currentState = GameState.Menu;
                     }
                     break;
 
-                case GameState.endScreen:
+                case GameState.EndScreen:
                     if (SingleKeyPress(Keys.Enter, kbState))
                     {
-                        currentState = GameState.charSelect;
+                        currentState = GameState.CharSelect;
                     }
                     else if (SingleKeyPress(Keys.M, kbState))
                     {
-                        currentState = GameState.menu;
+                        currentState = GameState.Menu;
                     }
                     break;
             }
 
             kbState = prevkbState;
+            msState = prevMsState;
 
             base.Update(gameTime);
         }
@@ -141,38 +145,49 @@ namespace Team_Majx_Game
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            _spriteBatch.Begin();
+            ShapeBatch.Begin(GraphicsDevice);
+            
             // FSM to control what will be
             // drawn to the screen at a specific state
             switch (currentState)
             {
-                case GameState.menu:
+                case GameState.Menu:
+                    
                     break;
 
-                case GameState.rules:
+                case GameState.Rules:
+
                     break;
 
-                case GameState.settings:
+                case GameState.Settings:
+
                     break;
 
-                case GameState.charSelect:
+                case GameState.CharSelect:
+
                     break;
 
-                case GameState.battle:
+                case GameState.Battle:
+
                     break;
 
-                case GameState.pause:
+                case GameState.Pause:
+
                     break;
 
-                case GameState.endScreen:
+                case GameState.EndScreen:
+
                     break;
             }
 
+            _spriteBatch.End();
             base.Draw(gameTime);
         }
 
         private bool SingleKeyPress(Keys key, KeyboardState kbState)
         {
-            if (kbState.IsKeyDown(key) && prevkbState.IsKeyUp(key))
+            if (kbState.IsKeyUp(key) && prevkbState.IsKeyDown(key))
             {
                 return true;
             }
