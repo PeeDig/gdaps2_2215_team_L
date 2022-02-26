@@ -13,8 +13,8 @@ namespace Team_Majx_Game
     {
         public int shieldHealth;
 
-        public Knight (Texture2D texture, int x, int y, int width, int height) : base (texture,x,y,width,height)
-            {
+        public Knight(Texture2D texture, int x, int y, int width, int height) : base(texture, x, y, width, height)
+        {
             shieldHealth = 100; //Default value???
             this.texture = texture;
             this.position = new Rectangle(x, y, width, height);
@@ -40,4 +40,6 @@ namespace Team_Majx_Game
                     shieldHealth = 0;
                 }
             }
+        }
+    }
 }
