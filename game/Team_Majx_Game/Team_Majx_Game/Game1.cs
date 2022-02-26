@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace Team_Majx_Game
 {
@@ -22,6 +23,7 @@ namespace Team_Majx_Game
         private GameState currentState;
         private KeyboardState prevkbState;
         private MouseState prevMsState;
+        private List<Rectangle> buttonList;
 
         public Game1()
         {
@@ -32,9 +34,16 @@ namespace Team_Majx_Game
 
         protected override void Initialize()
         {
+            _graphics.PreferredBackBufferWidth = 1440;
+            _graphics.PreferredBackBufferHeight = 810;
+            _graphics.ApplyChanges();
             // TODO: Add your initialization logic here
             prevkbState = Keyboard.GetState();
             prevMsState = Mouse.GetState();
+            buttonList = new List<Rectangle>();
+            buttonList.Add(new Rectangle(200, 400, 50, 50));
+            buttonList.Add(new Rectangle(300, 400, 50, 50));
+            buttonList.Add(new Rectangle(400, 400, 50, 50));
 
             base.Initialize();
         }
@@ -58,15 +67,15 @@ namespace Team_Majx_Game
             switch (currentState)
             {
                 case GameState.Menu:
-                    if (SingleKeyPress(Keys.R, kbState))
+                    if (ClickButton(buttonList[0], msState))
                     {
                         currentState = GameState.Rules;
                     }
-                    else if (SingleKeyPress(Keys.S, kbState))
+                    else if (ClickButton(buttonList[1], msState))
                     {
                         currentState = GameState.Settings;
                     }
-                    else if (SingleKeyPress(Keys.Enter, kbState))
+                    else if (ClickButton(buttonList[2], msState))
                     {
                         currentState = GameState.CharSelect;
                     }
@@ -153,7 +162,9 @@ namespace Team_Majx_Game
             switch (currentState)
             {
                 case GameState.Menu:
-                    
+                    ShapeBatch.Box(buttonList[0], Color.PapayaWhip);
+                    ShapeBatch.Box(buttonList[1], Color.PapayaWhip);
+                    ShapeBatch.Box(buttonList[2], Color.PapayaWhip);
                     break;
 
                 case GameState.Rules:
@@ -181,11 +192,12 @@ namespace Team_Majx_Game
                     break;
             }
 
+            ShapeBatch.End();
             _spriteBatch.End();
             base.Draw(gameTime);
         }
 
-        private bool SingleKeyPress(Keys key, KeyboardState kbState)
+        public bool SingleKeyPress(Keys key, KeyboardState kbState)
         {
             if (kbState.IsKeyUp(key) && prevkbState.IsKeyDown(key))
             {
@@ -196,5 +208,29 @@ namespace Team_Majx_Game
                 return false;
             }
         }
+
+        public bool SingleMousePress(MouseState mState)
+        {
+            if (mState.LeftButton == ButtonState.Pressed && prevMsState.LeftButton == ButtonState.Released)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool ClickButton(Rectangle button, MouseState mState)
+        {
+            if (SingleMousePress(mState) && button.Contains(mState.X, mState.Y))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        } 
     }
 }
