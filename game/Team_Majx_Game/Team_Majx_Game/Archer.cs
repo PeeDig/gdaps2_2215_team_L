@@ -13,12 +13,14 @@ namespace Team_Majx_Game
     {
         private int arrows;
 
-        public Archer (Texture2D texture, int x, int y, int width, int height) : base(texture, x, y, width, height)
+        public Archer (Texture2D texture, int x, int y, int width, int height, bool player1, GameManager gameManager) : base(texture, x, y, width, height, player1, gameManager)
         {
+            this.gameManager = gameManager;
             arrows = 10;
             this.texture = texture;
             this.position = new Rectangle(x, y, width, height);
             speed = 1; //Default speed???
+            this.player1 = player1;
         }
 
         public int Arrows
