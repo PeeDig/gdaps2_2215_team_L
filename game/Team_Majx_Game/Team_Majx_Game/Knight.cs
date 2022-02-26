@@ -13,7 +13,7 @@ namespace Team_Majx_Game
     {
         public int shieldHealth;
 
-        public Knight(Texture2D texture, int x, int y, int width, int height, bool player1, GameManager gameManager) : base(texture, x, y, width, height, player1, gameManager)
+        public Knight(Texture2D texture, int x, int y, int width, int height, bool player1, GameManager gameManager, HurtBox hurtbox) : base(texture, x, y, width, height, player1, gameManager, hurtBox)
         {
             this.gameManager = gameManager;
             shieldHealth = 100; //Default value???
