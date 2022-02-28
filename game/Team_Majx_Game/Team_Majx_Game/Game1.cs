@@ -41,9 +41,9 @@ namespace Team_Majx_Game
             prevkbState = Keyboard.GetState();
             prevMsState = Mouse.GetState();
             buttonList = new List<Rectangle>();
-            buttonList.Add(new Rectangle(200, 400, 50, 50));
-            buttonList.Add(new Rectangle(300, 400, 50, 50));
-            buttonList.Add(new Rectangle(400, 400, 50, 50));
+            buttonList.Add(new Rectangle(260, 600, 200, 75));
+            buttonList.Add(new Rectangle(620, 600, 200, 75));
+            buttonList.Add(new Rectangle(980, 600, 200, 75));
 
             base.Initialize();
         }
