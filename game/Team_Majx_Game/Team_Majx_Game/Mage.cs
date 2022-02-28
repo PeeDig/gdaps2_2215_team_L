@@ -12,7 +12,7 @@ namespace Team_Majx_Game
     class Mage : CommonCharacter
     {
         private int mana;
-        public Mage(Texture2D texture, int x, int y, int width, int height, bool player1, GameManager gameManager) : base(texture, x, y, width, height, player1, gameManager)
+        public Mage(Texture2D texture, int x, int y, int width, int height, bool player1, GameManager gameManager, HurtBox hurtBox) : base(texture, x, y, width, height, player1, gameManager, hurtbox)
         {
             this.gameManager = gameManager;
             mana = 100;
@@ -20,6 +20,7 @@ namespace Team_Majx_Game
             this.position = new Rectangle(x, y, width, height);
             speed = 1; //Default speed???
             this.player1 = player1;
+            this.hurtBox = hurtBox;
         }
 
         //Returns and changes the mana. Sets mana to 100 if the inputted number is greater than it
