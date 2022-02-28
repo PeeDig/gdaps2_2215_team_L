@@ -12,7 +12,7 @@ namespace Team_Majx_Game
     class Mage : CommonCharacter
     {
         private int mana;
-        public Mage(Texture2D texture, int x, int y, int width, int height, bool player1, GameManager gameManager, HurtBox hurtBox) : base(texture, x, y, width, height, player1, gameManager, hurtbox)
+        public Mage(Texture2D texture, int x, int y, int width, int height, bool player1, GameManager gameManager, HurtBox hurtBox) : base(texture, x, y, width, height, player1, gameManager, hurtBox)
         {
             this.gameManager = gameManager;
             mana = 100;

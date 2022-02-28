@@ -75,69 +75,136 @@ namespace Team_Majx_Game
         }
     
         //Does the attacks and updates the state based on input or game environment
-        public void update(GameTime gameTime)
+        public void update(GameTime gameTime, Keys up, Keys down, Keys left, Keys right, Keys attack, Keys special, Keys strong, Keys dodge)
         {
             switch(currentAttackState)
             {
                 case CharacterAttackState.Stand:
-                    if(KeyPress(Keys.Right))
+                    if(KeyPress(right))
                     {
                         position.X += 5;
                         currentAttackState = CharacterAttackState.Walk;
                         direction = Direction.Right;
                     }
-                    else if(KeyPress(Keys.Left))
+                    else if(KeyPress(left))
                     {
                         position.X -= 5;
                         currentAttackState = CharacterAttackState.Walk;
                         direction = Direction.Left;
                     }
-                    else if(KeyPress(Keys.Up))
+                    else if(KeyPress(up))
                     {
                         currentAttackState = CharacterAttackState.Jump;
                         yVelocity = 100;
                         position.Y += yVelocity;
                     }
-                    else if (KeyPress(Keys.P))
+                    else if (KeyPress(down))
+                    {
+                        currentAttackState = CharacterAttackState.Crouch;
+                    }
+                    else if (KeyPress(attack))
                     {
                         currentAttackState = CharacterAttackState.Jab;
                     }
-                    else if(KeyPress(Keys.O))
+                    else if(KeyPress(special))
                     {
                         currentAttackState = CharacterAttackState.NeutralSpecial;
                     }
-                    else if(KeyPress(Keys.L))
+                    else if(KeyPress(dodge))
                     {
                         currentAttackState = CharacterAttackState.Dodge;
+                    }
+                    else if(KeyPress(strong))
+                    {
+                        currentAttackState = CharacterAttackState.ForwardStrong;
+;
                     }
                     break;
 
                 case CharacterAttackState.Walk:
-                    if(direction == Direction.Right)
+
+                    if (kbState.IsKeyDown(right))
                     {
-                        if(kbState.IsKeyDown(Keys.Right))
+                        direction = Direction.Right;
+                    }
+                    else if(kbState.IsKeyDown(left))
+                    {
+                        direction = Direction.Left;
+                    }
+                    if (kbState.IsKeyDown(right) || kbState.IsKeyDown(left))
+                    {
+
+                        if (StandingOnPlatform())
                         {
-                            if (StandingOnPlatform())
+                            if (KeyPress(up))
                             {
-                                if (KeyPress(Keys.Up))
+                                currentAttackState = CharacterAttackState.Jump;
+                                yVelocity = 100;
+                                position.Y += yVelocity;
+                            }
+                            else if (KeyPress(attack))
+                            {
+                                currentAttackState = CharacterAttackState.ForwardTilt;
+                            }
+                            else if (KeyPress(special))
+                            {
+                                currentAttackState = CharacterAttackState.ForwardSpecial;
+                            }
+                            else if (KeyPress(strong))
+                            {
+                                currentAttackState = CharacterAttackState.ForwardStrong;
+                            }
+                            else if (KeyPress(dodge))
+                            {
+                                currentAttackState = CharacterAttackState.Dodge;
+                            }
+                            else
+                            {
+                                if(direction == Direction.Right)
                                 {
-                                    currentAttackState = CharacterAttackState.Jump;
-                                    yVelocity = 100;
-                                    position.Y += yVelocity;
-                                }
-                                else if (KeyPress(Keys.P))
-                                {
-                                    currentAttackState = CharacterAttackState.ForwardTilt;
+                                    position.X += 5;
                                 }
                                 else
                                 {
-                                    currentAttackState = CharacterAttackState.Stand;
+                                    position.X -= 5;
                                 }
                             }
                         }
+                        //If they are walking and not on a platform, set them to the jump state but don't give them initial velocity so they will fall.
+                        else
+                        {
+                            currentAttackState = CharacterAttackState.Jump;
+                        }
                     }
 
+                    //If they are not holding a direction, then they stand.
+                    else
+                    {
+                        currentAttackState = CharacterAttackState.Stand;
+                    }
+                    
+
                     break;
+
+                case CharacterAttackState.Jump:
+                    {
+                        if(StandingOnPlatform())
+                        {
+
+                        }
+                        else
+                        {
+                            if(kbState.IsKeyDown(right))
+                            {
+                                position.X += 5;
+                            }
+                            else if(kbState.IsKeyDown(left))
+                            { 
+                                position.X -= 5;
+                            }
+                        }
+                        break;
+                    }
             }
         }
 
