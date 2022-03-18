@@ -34,7 +34,9 @@ namespace Team_Majx_Game
         UpStrong,
         DownStrong,
         Dodge,
-        AirDodge
+        AirDodge,
+        Hitstun,
+        LandingLag
     }
     enum Direction
     {
@@ -190,18 +192,36 @@ namespace Team_Majx_Game
                     {
                         if(StandingOnPlatform())
                         {
-
+                            if(kbState.IsKeyDown(left))
+                            {
+                                direction = Direction.Left;
+                                currentAttackState = CharacterAttackState.Walk;
+                                position.X -= 5;
+                            }
+                            else if (kbState.IsKeyDown(right))
+                            {
+                                direction = Direction.Right;
+                                currentAttackState = CharacterAttackState.Walk;
+                                position.X += 5;
+                            }
+                            else
+                            {
+                                currentAttackState = CharacterAttackState.Stand;
+                            }
                         }
                         else
                         {
                             if(kbState.IsKeyDown(right))
                             {
                                 position.X += 5;
+                               
+
                             }
                             else if(kbState.IsKeyDown(left))
                             { 
                                 position.X -= 5;
                             }
+                            
                         }
                         break;
                     }
@@ -219,6 +239,7 @@ namespace Team_Majx_Game
             get { return speed; }
         }
 
+        //Checks if a key was just pressed
         private bool KeyPress(Keys key)
         {
             if (prevKBState != null)
