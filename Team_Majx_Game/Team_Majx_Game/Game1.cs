@@ -24,6 +24,16 @@ namespace Team_Majx_Game
         private KeyboardState prevkbState;
         private MouseState prevMsState;
         private List<Rectangle> buttonList;
+        private SpriteFont font;
+        private Texture2D hitbox;
+        private Texture2D knight;
+        private Knight player1;
+        private HurtBox player1HurtBox;
+
+        //Temporary game manager class for the first demo
+        private GameManager manager1;
+
+
 
         public Game1()
         {
@@ -45,12 +55,21 @@ namespace Team_Majx_Game
             buttonList.Add(new Rectangle(620, 600, 200, 75));
             buttonList.Add(new Rectangle(980, 600, 200, 75));
 
+            //Creating a temporary knight for the purpose of the first demo
+            player1HurtBox = new HurtBox(new Rectangle(720, 405, 100, 100));
+            manager1 = new GameManager();
+
+            player1 = new Knight(knight, 720, 405, 100, 100, true, manager1, player1HurtBox);
+
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+            hitbox = Content.Load<Texture2D>("hitbox");
+            knight = Content.Load<Texture2D>("knight1");
+            font = Content.Load<SpriteFont>("arial");
 
             // TODO: use this.Content to load your game content here
         }
@@ -73,7 +92,7 @@ namespace Team_Majx_Game
                     }
                     else if (ClickButton(buttonList[1], msState))
                     {
-                        currentState = GameState.Settings;
+                        currentState = GameState.Battle;
                     }
                     else if (ClickButton(buttonList[2], msState))
                     {
@@ -156,7 +175,7 @@ namespace Team_Majx_Game
 
             _spriteBatch.Begin();
             ShapeBatch.Begin(GraphicsDevice);
-            
+
             // FSM to control what will be
             // drawn to the screen at a specific state
             switch (currentState)
@@ -164,6 +183,7 @@ namespace Team_Majx_Game
                 case GameState.Menu:
                     ShapeBatch.Box(buttonList[0], Color.PapayaWhip);
                     ShapeBatch.Box(buttonList[1], Color.PapayaWhip);
+                    _spriteBatch.DrawString(font, "Gameplay demo", new Vector2(620, 620), Color.Black);
                     ShapeBatch.Box(buttonList[2], Color.PapayaWhip);
                     break;
 
@@ -180,7 +200,9 @@ namespace Team_Majx_Game
                     break;
 
                 case GameState.Battle:
-
+                    player1.update(gameTime, Keys.Up, Keys.Down, Keys.Left, Keys.Right, Keys.P, Keys.O, Keys.I, Keys.L);
+                    player1.Draw(_spriteBatch, knight, hitbox);
+                    _spriteBatch.Draw(hitbox, new Rectangle(720, 505, 200, 100), Color.White);
                     break;
 
                 case GameState.Pause:
@@ -231,6 +253,6 @@ namespace Team_Majx_Game
             {
                 return false;
             }
-        } 
+        }
     }
 }

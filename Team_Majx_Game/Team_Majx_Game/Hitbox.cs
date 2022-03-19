@@ -20,7 +20,6 @@ namespace Team_Majx_Game
             this.damage = damage;
             this.knockback = knockback;
             this.knockbackDirection = knockbackDirection;
-
         }
 
         public Rectangle Position
@@ -40,11 +39,17 @@ namespace Team_Majx_Game
             get { return knockback; }
             set { knockback = value; }
         }
-        
+
         public double KnockbackDireciton
         {
             get { return knockbackDirection; }
             set { knockbackDirection = value; }
+        }
+
+        //Draw the hurtbox for the demo and potential future testing
+        public void Draw(SpriteBatch spriteBatch, Texture2D sprite)
+        {
+            spriteBatch.Draw(sprite, position, Color.White);
         }
     }
 }

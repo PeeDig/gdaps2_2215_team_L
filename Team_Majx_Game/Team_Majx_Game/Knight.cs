@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace Team_Majx_Game
 {
@@ -11,7 +12,9 @@ namespace Team_Majx_Game
     /// </summary>
     class Knight : CommonCharacter
     {
-        public int shieldHealth;
+        private int shieldHealth;
+        private KeyboardState kbState;
+        private KeyboardState prevKBState;
 
         public Knight(Texture2D texture, int x, int y, int width, int height, bool player1, GameManager gameManager, HurtBox hurtBox) : base(texture, x, y, width, height, player1, gameManager, hurtBox)
         {

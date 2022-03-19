@@ -7,10 +7,6 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Team_Majx_Game
 {
-    /// <summary>
-    /// This class is used for each of the different player classes
-    /// </summary>
-    /// 
     enum CharacterAttackState
     {
         Stand,
@@ -40,12 +36,12 @@ namespace Team_Majx_Game
     }
     enum Direction
     {
-    Right,
-    Left
+        Right,
+        Left
     }
-
     abstract class CommonCharacter
     {
+
         protected Texture2D texture;
         protected Rectangle position;
         protected double speed;
@@ -57,9 +53,11 @@ namespace Team_Majx_Game
         protected GameManager gameManager;
         protected HurtBox hurtBox;
         protected int yVelocity;
+        protected int lagFrames;
         private KeyboardState kbState;
         private KeyboardState prevKBState;
         private Tile platform;
+        private Hitbox jabHitbox;
 
 
         //Creates a character object with their position, textures, width, and height.
@@ -68,36 +66,38 @@ namespace Team_Majx_Game
             this.gameManager = gameManager;
             this.texture = texture;
             this.position = new Rectangle(x, y, width, height);
-            this.health = gameManager.Health; //GET HEALTH HERE FROM FILE
-            this.stockCount = gameManager.Stocks; //GET STOCKS FROM FILE
+            this.health = 100; //gameManager.Health; //GET HEALTH HERE FROM FILE
+            this.stockCount = 3; //gameManager.Stocks; //GET STOCKS FROM FILE
             this.player1 = player1;
             this.hurtBox = hurtBox;
             yVelocity = 0;
-           // platform = new Tile(new Rectangle(new Vector2(10, 10), 10, 10, ), TileType.Platform);
+            lagFrames = 0;
+            // platform = new Tile(new Rectangle(new Vector2(10, 10), 10, 10, ), TileType.Platform);
         }
-    
+
         //Does the attacks and updates the state based on input or game environment
         public void update(GameTime gameTime, Keys up, Keys down, Keys left, Keys right, Keys attack, Keys special, Keys strong, Keys dodge)
         {
-            switch(currentAttackState)
+            kbState = Keyboard.GetState();
+            switch (currentAttackState)
             {
                 case CharacterAttackState.Stand:
-                    if(KeyPress(right))
+                    if (KeyPress(right))
                     {
-                        position.X += 5;
+                        position.X += 8;
                         currentAttackState = CharacterAttackState.Walk;
                         direction = Direction.Right;
                     }
-                    else if(KeyPress(left))
+                    else if (KeyPress(left))
                     {
-                        position.X -= 5;
+                        position.X -= 8;
                         currentAttackState = CharacterAttackState.Walk;
                         direction = Direction.Left;
                     }
-                    else if(KeyPress(up))
+                    else if (KeyPress(up))
                     {
                         currentAttackState = CharacterAttackState.Jump;
-                        yVelocity = 100;
+                        yVelocity = -20;
                         position.Y += yVelocity;
                     }
                     else if (KeyPress(down))
@@ -107,19 +107,20 @@ namespace Team_Majx_Game
                     else if (KeyPress(attack))
                     {
                         currentAttackState = CharacterAttackState.Jab;
+                        lagFrames = 20;
                     }
-                    else if(KeyPress(special))
+                    else if (KeyPress(special))
                     {
                         currentAttackState = CharacterAttackState.NeutralSpecial;
                     }
-                    else if(KeyPress(dodge))
+                    else if (KeyPress(dodge))
                     {
                         currentAttackState = CharacterAttackState.Dodge;
                     }
-                    else if(KeyPress(strong))
+                    else if (KeyPress(strong))
                     {
                         currentAttackState = CharacterAttackState.ForwardStrong;
-;
+                        ;
                     }
                     break;
 
@@ -129,7 +130,7 @@ namespace Team_Majx_Game
                     {
                         direction = Direction.Right;
                     }
-                    else if(kbState.IsKeyDown(left))
+                    else if (kbState.IsKeyDown(left))
                     {
                         direction = Direction.Left;
                     }
@@ -141,7 +142,7 @@ namespace Team_Majx_Game
                             if (KeyPress(up))
                             {
                                 currentAttackState = CharacterAttackState.Jump;
-                                yVelocity = 100;
+                                yVelocity = -20;
                                 position.Y += yVelocity;
                             }
                             else if (KeyPress(attack))
@@ -162,13 +163,13 @@ namespace Team_Majx_Game
                             }
                             else
                             {
-                                if(direction == Direction.Right)
+                                if (direction == Direction.Right)
                                 {
-                                    position.X += 5;
+                                    position.X += 8;
                                 }
                                 else
                                 {
-                                    position.X -= 5;
+                                    position.X -= 8;
                                 }
                             }
                         }
@@ -184,25 +185,27 @@ namespace Team_Majx_Game
                     {
                         currentAttackState = CharacterAttackState.Stand;
                     }
-                    
+
 
                     break;
 
+                //Do aerials and specials
                 case CharacterAttackState.Jump:
                     {
-                        if(StandingOnPlatform())
+                        position.Y += yVelocity;
+                        if (StandingOnPlatform())
                         {
-                            if(kbState.IsKeyDown(left))
+                            if (kbState.IsKeyDown(left))
                             {
                                 direction = Direction.Left;
                                 currentAttackState = CharacterAttackState.Walk;
-                                position.X -= 5;
+                                position.X -= 8;
                             }
                             else if (kbState.IsKeyDown(right))
                             {
                                 direction = Direction.Right;
                                 currentAttackState = CharacterAttackState.Walk;
-                                position.X += 5;
+                                position.X += 8;
                             }
                             else
                             {
@@ -211,21 +214,87 @@ namespace Team_Majx_Game
                         }
                         else
                         {
-                            if(kbState.IsKeyDown(right))
+                            if (kbState.IsKeyDown(right))
                             {
-                                position.X += 5;
-                               
-
+                                position.X += 8;
                             }
-                            else if(kbState.IsKeyDown(left))
-                            { 
-                                position.X -= 5;
+                            else if (kbState.IsKeyDown(left))
+                            {
+                                position.X -= 8;
                             }
-                            
+                            yVelocity += 1;
                         }
+
                         break;
                     }
+
+                case CharacterAttackState.Jab:
+                    if (lagFrames == 0)
+                    {
+                        currentAttackState = CharacterAttackState.Stand;
+                    }
+                    else
+                    {
+                        lagFrames -= 1;
+                    }
+                    break;
             }
+            prevKBState = kbState;
+        }
+
+        //Handles drawing the sprite
+        public void Draw(SpriteBatch spriteBatch, Texture2D spriteSheet, Texture2D hitboxSprite)
+        {
+            switch (currentAttackState)
+            {
+                case CharacterAttackState.Stand:
+                    if (direction == Direction.Left)
+                    {
+                        spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.White, 0, Vector2.Zero, SpriteEffects.None, 0);
+                    }
+                    else
+                    {
+                        spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
+                    }
+                    break;
+                case CharacterAttackState.Walk:
+                    if (direction == Direction.Left)
+                    {
+                        spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.White, 0, Vector2.Zero, SpriteEffects.None, 0);
+                    }
+                    else
+                    {
+                        spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
+                    }
+                    break;
+                case CharacterAttackState.Jump:
+                    if (direction == Direction.Left)
+                    {
+                        spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.White, 0, Vector2.Zero, SpriteEffects.None, 0);
+                    }
+                    else
+                    {
+                        spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
+                    }
+                    break;
+                case CharacterAttackState.Jab:
+
+                    if (direction == Direction.Left)
+                    {
+                        spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.White, 0, Vector2.Zero, SpriteEffects.None, 0);
+                        jabHitbox = new Hitbox(new Rectangle(position.X - 50, position.Y, 50, 50), 10, 10, 20);
+                    }
+                    else
+                    {
+                        spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
+                        jabHitbox = new Hitbox(new Rectangle(position.X+ position.Width, Position.Y, 50, 50), 10, 10, 20);
+                    }
+
+                    jabHitbox.Draw(spriteBatch, hitboxSprite);
+                    break;
+
+            }
+
         }
 
         //Returns and changes the position, width, and height of the character
@@ -240,18 +309,23 @@ namespace Team_Majx_Game
         }
 
         //Checks if a key was just pressed
-        private bool KeyPress(Keys key)
+        public bool KeyPress(Keys key)
         {
             if (prevKBState != null)
                 return kbState.IsKeyDown(key) && prevKBState.IsKeyUp(key);
             return true;
         }
 
-        //Checks if the character is standing on a platofrm
+        //Checks if the character is standing on a platform
         public bool StandingOnPlatform()
         {
-            foreach (Tile t in platform.Platforms)
+            foreach (Tile t in gameManager.platforms)
             {
+                if (position.Intersects(t.Position))
+                {
+                    return true;
+                }
+                /*
                 if (position.X - position.Height <= t.Position.Y)
                 {
                     return true;
@@ -260,6 +334,7 @@ namespace Team_Majx_Game
                 {
                     return true;
                 }
+                */
             }
             return false;
         }
