@@ -15,6 +15,7 @@ namespace Team_Majx_Game
         private int shieldHealth;
         private KeyboardState kbState;
         private KeyboardState prevKBState;
+        private Hitbox currentHitbox;
 
         public Knight(Texture2D texture, int x, int y, int width, int height, bool player1, GameManager gameManager, HurtBox hurtBox) : base(texture, x, y, width, height, player1, gameManager, hurtBox)
         {
@@ -46,6 +47,70 @@ namespace Team_Majx_Game
                     shieldHealth = 0;
                 }
             }
+        }
+
+        public override bool Attack(CharacterAttackState attack, Direction direction, int frame, SpriteBatch _spriteBatch, Texture2D hitboxSprite, Texture2D spriteSheet)
+        {
+            switch (attack)
+            {
+                case CharacterAttackState.Jab:
+                    if (frame > 2 && frame < 7 )
+                    {
+                        if (direction == Direction.Left)
+                        {
+                            _spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.White, 0, Vector2.Zero, SpriteEffects.None, 0);
+                            currentHitbox = new Hitbox(new Rectangle(position.X - 50, position.Y, 50, 50), 10, 10, 20);
+                        }
+                        else
+                        {
+                            _spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
+                            currentHitbox = new Hitbox(new Rectangle(position.X + position.Width, Position.Y, 50, 50), 10, 10, 20);
+                        }
+                        currentHitbox.Draw(_spriteBatch, hitboxSprite);
+                    }
+                    else if(frame > 6)
+                    {
+                        return true;
+                    }
+                    return false;
+                case CharacterAttackState.ForwardTilt:
+                    if (frame > 3 && frame < 10)
+                    {
+                        if (direction == Direction.Left)
+                        {
+                            _spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.White, 0, Vector2.Zero, SpriteEffects.None, 0);
+                            currentHitbox = new Hitbox(new Rectangle(position.X - 75, position.Y, 75, 50), 10, 10, 20);
+                        }
+                        else
+                        {
+                            _spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
+                            currentHitbox = new Hitbox(new Rectangle(position.X + position.Width, Position.Y, 75, 50), 10, 10, 20);
+                        }
+                        currentHitbox.Draw(_spriteBatch, hitboxSprite);
+                    }
+                    else if(frame > 9)
+                    {
+                        return true;
+                    }
+                    return false;
+
+            }
+            return false;
+
+        }
+
+        public override int getEndlag(CharacterAttackState attack)
+        {
+            switch (attack)
+            {
+                case CharacterAttackState.Jab:
+                    return 9;
+                case CharacterAttackState.ForwardTilt:
+                    return 13;
+                    
+            }
+            return 0;
+
         }
     }
 }

@@ -54,10 +54,11 @@ namespace Team_Majx_Game
         protected HurtBox hurtBox;
         protected int yVelocity;
         protected int lagFrames;
+        protected int currentFrame;
         private KeyboardState kbState;
         private KeyboardState prevKBState;
         private Tile platform;
-        private Hitbox jabHitbox;
+        private bool inEndlag;
 
 
         //Creates a character object with their position, textures, width, and height.
@@ -82,13 +83,13 @@ namespace Team_Majx_Game
             switch (currentAttackState)
             {
                 case CharacterAttackState.Stand:
-                    if (KeyPress(right))
+                    if (kbState.IsKeyDown(Keys.Right))
                     {
                         position.X += 8;
                         currentAttackState = CharacterAttackState.Walk;
                         direction = Direction.Right;
                     }
-                    else if (KeyPress(left))
+                    else if (kbState.IsKeyDown(Keys.Left))
                     {
                         position.X -= 8;
                         currentAttackState = CharacterAttackState.Walk;
@@ -107,7 +108,7 @@ namespace Team_Majx_Game
                     else if (KeyPress(attack))
                     {
                         currentAttackState = CharacterAttackState.Jab;
-                        lagFrames = 20;
+                        lagFrames = getEndlag(CharacterAttackState.Jab);
                     }
                     else if (KeyPress(special))
                     {
@@ -120,7 +121,6 @@ namespace Team_Majx_Game
                     else if (KeyPress(strong))
                     {
                         currentAttackState = CharacterAttackState.ForwardStrong;
-                        ;
                     }
                     break;
 
@@ -148,6 +148,7 @@ namespace Team_Majx_Game
                             else if (KeyPress(attack))
                             {
                                 currentAttackState = CharacterAttackState.ForwardTilt;
+                                lagFrames = getEndlag(CharacterAttackState.ForwardTilt);
                             }
                             else if (KeyPress(special))
                             {
@@ -232,12 +233,25 @@ namespace Team_Majx_Game
                     if (lagFrames == 0)
                     {
                         currentAttackState = CharacterAttackState.Stand;
+                        currentFrame = 1;
+                    }
+                    else
+                    {
+                        lagFrames -= 1;
+                        currentFrame++;
+                    }
+                    break;
+                case CharacterAttackState.ForwardTilt:
+                    if (lagFrames == 0)
+                    {
+                        currentAttackState = CharacterAttackState.Stand;
                     }
                     else
                     {
                         lagFrames -= 1;
                     }
                     break;
+
             }
             prevKBState = kbState;
         }
@@ -278,23 +292,57 @@ namespace Team_Majx_Game
                     }
                     break;
                 case CharacterAttackState.Jab:
-
-                    if (direction == Direction.Left)
-                    {
-                        spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.White, 0, Vector2.Zero, SpriteEffects.None, 0);
-                        jabHitbox = new Hitbox(new Rectangle(position.X - 50, position.Y, 50, 50), 10, 10, 20);
-                    }
+                    if(Attack(CharacterAttackState.Jab, direction, currentFrame, spriteBatch, hitboxSprite, spriteSheet))
+                        inEndlag = true;
                     else
+                        inEndlag = false;
+                    if (inEndlag)
                     {
-                        spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
-                        jabHitbox = new Hitbox(new Rectangle(position.X+ position.Width, Position.Y, 50, 50), 10, 10, 20);
+                        if (direction == Direction.Left)
+                        {
+                            spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.Gray, 0, Vector2.Zero, SpriteEffects.None, 0);
+                        }
+                        else
+                        {
+                            spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.Gray, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
+                        }
+                        break;
                     }
-
-                    jabHitbox.Draw(spriteBatch, hitboxSprite);
+                        
+                    break;
+                case CharacterAttackState.ForwardTilt:
+                    if (Attack(CharacterAttackState.ForwardTilt, direction, currentFrame, spriteBatch, hitboxSprite, spriteSheet))
+                        inEndlag = true;
+                    else
+                        inEndlag = false;
+                    if (inEndlag)
+                    {
+                        if (direction == Direction.Left)
+                        {
+                            spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.Gray, 0, Vector2.Zero, SpriteEffects.None, 0);
+                        }
+                        else
+                        {
+                            spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.Gray, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
+                        }
+                        break;
+                    }
                     break;
 
             }
 
+        }
+
+        //attack method to cover all the different attacks. It's virtual so the character classes and override them with their respective attacks.
+        public virtual bool Attack(CharacterAttackState attack, Direction direction, int frame, SpriteBatch _spriteBatch, Texture2D hitboxSprite, Texture2D spriteSheet)
+        {
+            return false;
+        }
+
+        //Returns the endlag of the current move. Overridden by each respective character class
+        public virtual int getEndlag(CharacterAttackState attack)
+        {
+            return 0;
         }
 
         //Returns and changes the position, width, and height of the character
@@ -338,7 +386,6 @@ namespace Team_Majx_Game
             }
             return false;
         }
-
 
     }
 }
