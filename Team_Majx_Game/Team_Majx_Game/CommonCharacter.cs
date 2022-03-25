@@ -190,6 +190,29 @@ namespace Team_Majx_Game
 
                     break;
 
+                case CharacterAttackState.Crouch:
+                    if (kbState.IsKeyDown(down))
+                    {
+                        if (KeyPress(attack))
+                        {
+                            currentAttackState = CharacterAttackState.DownTilt;
+                            lagFrames = getEndlag(CharacterAttackState.DownTilt);
+                        }
+                        else if (KeyPress(special))
+                        {
+                            currentAttackState = CharacterAttackState.DownSpecial;
+                        }
+                        else if (KeyPress(strong))
+                        {
+                            currentAttackState = CharacterAttackState.DownStrong;
+                        }
+                    }
+                    else
+                    {
+                        currentAttackState = CharacterAttackState.Stand;
+                    }
+                    break;
+
                 //Do aerials and specials
                 case CharacterAttackState.Jump:
                     {
@@ -230,6 +253,7 @@ namespace Team_Majx_Game
                     }
 
                 case CharacterAttackState.Jab:
+                case CharacterAttackState.ForwardTilt:
                     if (lagFrames == 0)
                     {
                         currentAttackState = CharacterAttackState.Stand;
@@ -241,16 +265,19 @@ namespace Team_Majx_Game
                         currentFrame++;
                     }
                     break;
-                case CharacterAttackState.ForwardTilt:
+                case CharacterAttackState.DownTilt:
                     if (lagFrames == 0)
                     {
-                        currentAttackState = CharacterAttackState.Stand;
+                        currentAttackState = CharacterAttackState.Crouch;
+                        currentFrame = 1;
                     }
                     else
                     {
                         lagFrames -= 1;
+                        currentFrame++;
                     }
                     break;
+
 
             }
             prevKBState = kbState;
@@ -261,6 +288,7 @@ namespace Team_Majx_Game
         {
             switch (currentAttackState)
             {
+                //Draws character based on their state
                 case CharacterAttackState.Stand:
                     if (direction == Direction.Left)
                     {
@@ -281,6 +309,16 @@ namespace Team_Majx_Game
                         spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
                     }
                     break;
+                case CharacterAttackState.Crouch:
+                    if (direction == Direction.Left)
+                    {
+                        spriteBatch.Draw(spriteSheet, new Rectangle(Position.X, Position.Y + Position.Height / 2, Position.Width, Position.Height / 2), new Rectangle(0, 0, 900, 660), Color.White, 0, Vector2.Zero, SpriteEffects.None, 0);
+                    }
+                    else
+                    {
+                        spriteBatch.Draw(spriteSheet, new Rectangle(Position.X, Position.Y + Position.Height / 2, Position.Width, Position.Height / 2), new Rectangle(0, 0, 900, 660), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
+                    }
+                    break;
                 case CharacterAttackState.Jump:
                     if (direction == Direction.Left)
                     {
@@ -291,52 +329,39 @@ namespace Team_Majx_Game
                         spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
                     }
                     break;
+                    //Runs the attack method in the character classes based on the move inputted and the current frame we are on.
                 case CharacterAttackState.Jab:
-                    if(Attack(CharacterAttackState.Jab, direction, currentFrame, spriteBatch, hitboxSprite, spriteSheet))
-                        inEndlag = true;
-                    else
-                        inEndlag = false;
-                    if (inEndlag)
-                    {
-                        if (direction == Direction.Left)
-                        {
-                            spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.Gray, 0, Vector2.Zero, SpriteEffects.None, 0);
-                        }
-                        else
-                        {
-                            spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.Gray, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
-                        }
-                        break;
-                    }
-                        
-                    break;
                 case CharacterAttackState.ForwardTilt:
-                    if (Attack(CharacterAttackState.ForwardTilt, direction, currentFrame, spriteBatch, hitboxSprite, spriteSheet))
-                        inEndlag = true;
-                    else
-                        inEndlag = false;
-                    if (inEndlag)
+                case CharacterAttackState.DownTilt:
+                    Attack(currentAttackState, direction, currentFrame, spriteBatch, hitboxSprite, spriteSheet);
+                    break;
+
+                    /*
+                case CharacterAttackState.DownTilt:
+                   Attack(CharacterAttackState.DownTilt, direction, currentFrame, spriteBatch, hitboxSprite, spriteSheet)
+                        tempColor = Color.White;
+                    if (direction == Direction.Left)
                     {
-                        if (direction == Direction.Left)
-                        {
-                            spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.Gray, 0, Vector2.Zero, SpriteEffects.None, 0);
-                        }
-                        else
-                        {
-                            spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.Gray, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
-                        }
-                        break;
+                        spriteBatch.Draw(spriteSheet, new Rectangle(Position.X, Position.Y + Position.Height / 2, Position.Width, Position.Height / 2), new Rectangle(0, 0, 900, 660), tempColor, 0, Vector2.Zero, SpriteEffects.None, 0);
                     }
+                    else
+                    {
+                        spriteBatch.Draw(spriteSheet, new Rectangle(Position.X, Position.Y + Position.Height / 2, Position.Width, Position.Height / 2), new Rectangle(0, 0, 900, 660), tempColor, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
+                    }
+                    break;
+                    */
                     break;
 
             }
 
-        }
+    }
+
+    
 
         //attack method to cover all the different attacks. It's virtual so the character classes and override them with their respective attacks.
-        public virtual bool Attack(CharacterAttackState attack, Direction direction, int frame, SpriteBatch _spriteBatch, Texture2D hitboxSprite, Texture2D spriteSheet)
+        public virtual void Attack(CharacterAttackState attack, Direction direction, int frame, SpriteBatch _spriteBatch, Texture2D hitboxSprite, Texture2D spriteSheet)
         {
-            return false;
+            
         }
 
         //Returns the endlag of the current move. Overridden by each respective character class
