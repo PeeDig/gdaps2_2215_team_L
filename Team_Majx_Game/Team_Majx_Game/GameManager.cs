@@ -19,14 +19,21 @@ namespace Team_Majx_Game
         //List of all the platforms
         public List<Tile> platforms;
 
+        private Tile[,] mapArray;
 
         // File IO fields
-        int stocks;
-        double health;
-        double gravity;
-        double timer;
-        double damage;
-        double speedX;
+        private int stocks;
+        private double health;
+        private double gravity;
+        private double timer;
+        private double damage;
+        private double speedX;
+
+
+        // Level fields
+        int levelWidth;
+        int levelHeight;
+        string boardLine;
 
         // properties for each IO field
         public int Stocks
@@ -121,7 +128,60 @@ namespace Team_Majx_Game
         // Reads in the files
         public void ReadLevelFile(string filename)
         {
+            try
+            {
+                input = new StreamReader("../../" + filename);
 
+                // Reads the size of the map
+                string line = input.ReadLine();
+                string[] data = line.Split(',');
+                levelWidth = int.Parse(data[0]);
+                levelHeight = int.Parse(data[1]);
+
+                // creates the array to hold all of the tiles
+                mapArray = new Tile[levelWidth, levelHeight];
+
+                for(int r = 0; r < levelWidth; r++)
+                {
+                    // gets a line ready to be read in the for loop
+                    line = input.ReadLine();
+                    char[] boardCode = boardLine.ToCharArray();
+
+                    for (int c = 0; c < levelHeight; c++)
+                    {
+                        // This if else chuck will create the specific tile,
+                        // with the specific tiletype depending on what it reads from the file
+                        if(boardCode[c] == '1')
+                        {
+                            mapArray[r, c] = new Tile(new Rectangle(r * 32, c * 32, 32, 32), TileType.Wall);
+                        }
+                        else if (boardCode[c] == 'z')
+                        {
+                            mapArray[r, c] = new Tile(new Rectangle(r * 32, c * 32, 32, 32), TileType.Platform);
+                        }
+                        else if (boardCode[c] == 'S')
+                        {
+                            mapArray[r, c] = new Tile(new Rectangle(r * 32, c * 32, 32, 32), TileType.StartingSpawnPoint);
+                        }
+                        else if (boardCode[c] == 'R')
+                        {
+                            mapArray[r, c] = new Tile(new Rectangle(r * 32, c * 32, 32, 32), TileType.RandomSpawnPoint);
+                        }
+                        else if (boardCode[c] == 'M')
+                        {
+                            mapArray[r, c] = new Tile(new Rectangle(r * 32, c * 32, 32, 32), TileType.Death);
+                        }
+                        else
+                        {
+                            mapArray[r, c] = new Tile(new Rectangle(r * 32, c * 32, 32, 32), TileType.Death);
+                        }
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine("Something went wrong: " + e.Message);
+            }
         }
     }
 }
