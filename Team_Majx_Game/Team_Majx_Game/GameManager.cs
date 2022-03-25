@@ -117,5 +117,11 @@ namespace Team_Majx_Game
                 // Implement the catch here
             }
         }
+
+        // Reads in the files
+        public void ReadLevelFile(string filename)
+        {
+
+        }
     }
 }
