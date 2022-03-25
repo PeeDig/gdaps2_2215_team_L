@@ -9,32 +9,34 @@ namespace Team_Majx_Game
     /// <summary>
     ///  This method inherits from the common character class
     /// </summary>
-    class Mage : CommonCharacter
+    class Archer : CommonCharacter
     {
-        private int mana;
-        public Mage(Texture2D texture, int x, int y, int width, int height, bool player1, GameManager gameManager) : base(texture, x, y, width, height, player1, gameManager)
+        private int arrows;
+
+        public Archer(Texture2D texture, int x, int y, int width, int height, bool player1, GameManager gameManager, HurtBox hurtBox) : base(texture, x, y, width, height, player1, gameManager, hurtBox)
         {
             this.gameManager = gameManager;
-            mana = 100;
+            arrows = 10;
             this.texture = texture;
             this.position = new Rectangle(x, y, width, height);
             speed = 1; //Default speed???
             this.player1 = player1;
+            this.hurtBox = hurtBox;
         }
 
-        //Returns and changes the mana. Sets mana to 100 if the inputted number is greater than it
-        public int Mana
+        public int Arrows
         {
-            get { return mana; }
+            get { return arrows; }
             set
             {
-                if (value >= 100)
+
+                if (value >= 10)
                 {
-                    mana = 100;
+                    arrows = 10;
                 }
-                else if (value <= 100 && value >= 0)
+                else if (value <= 10 && value >= 0)
                 {
-                    mana = value;
+                    arrows = value;
                 }
             }
         }

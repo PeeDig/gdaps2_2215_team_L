@@ -399,10 +399,10 @@ namespace Team_Majx_Game
 			Vector2 bottomLeft = new Vector2(x, y + height + 1); // This corner always rasterizes incorrectly, so adjust by 1 pixel
 
 			// Draw the four lines that make up the box
-			BatchLine(topLeft, topRight, colorTopLeft, colorTopRight);				// Top
-			BatchLine(topRight, bottomRight, colorTopRight, colorBottomRight);		// Right
-			BatchLine(bottomRight, bottomLeft, colorBottomRight, colorBottomLeft);	// Bottom
-			BatchLine(bottomLeft, topLeft, colorBottomLeft, colorTopLeft);			// Left
+			BatchLine(topLeft, topRight, colorTopLeft, colorTopRight);              // Top
+			BatchLine(topRight, bottomRight, colorTopRight, colorBottomRight);      // Right
+			BatchLine(bottomRight, bottomLeft, colorBottomRight, colorBottomLeft);  // Bottom
+			BatchLine(bottomLeft, topLeft, colorBottomLeft, colorTopLeft);          // Left
 
 			// Progress to the next depth
 			NextDepth();

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Team_Majx_Game
 {
@@ -13,6 +15,9 @@ namespace Team_Majx_Game
         // Stream objects
         StreamReader input;
         StreamWriter output;
+
+        //List of all the platforms
+        public List<Tile> platforms;
 
 
         // File IO fields
@@ -63,6 +68,8 @@ namespace Team_Majx_Game
             timer = 300;
             damage = 1;
             speedX = 1;
+            platforms = new List<Tile>();
+            platforms.Add(new Tile(new Rectangle(720, 505, 200, 100), TileType.Platform));
         }
 
         // Method for writing to the settings file
@@ -88,6 +95,7 @@ namespace Team_Majx_Game
                 // Write the error here to somewhere
             }
         }
+
 
         public void SaveFile()
         {
