@@ -16,6 +16,7 @@ namespace Team_Majx_Game
         private KeyboardState kbState;
         private KeyboardState prevKBState;
         private Hitbox currentHitbox;
+        private Color tempColor;
 
         public Knight(Texture2D texture, int x, int y, int width, int height, bool player1, GameManager gameManager, HurtBox hurtBox) : base(texture, x, y, width, height, player1, gameManager, hurtBox)
         {
@@ -49,7 +50,15 @@ namespace Team_Majx_Game
             }
         }
 
-        public override bool Attack(CharacterAttackState attack, Direction direction, int frame, SpriteBatch _spriteBatch, Texture2D hitboxSprite, Texture2D spriteSheet)
+        //Draws the hitboxes based on the number of frames in the attack. Returns true if the attack is over and the plyer is in the endlag of the move.
+        /*
+        HERE IS WORK FOR NEXT TIME
+        Every attack draws the character here during the attack, but it doesn't draw the character during the startupframes
+        Fix each case in the attack method so that the character is drawn in the starting frames, and try to make this neater with less code
+        use the tempColor variable to do this.
+
+        */
+        public override void Attack(CharacterAttackState attack, Direction direction, int frame, SpriteBatch _spriteBatch, Texture2D hitboxSprite, Texture2D spriteSheet)
         {
             switch (attack)
             {
@@ -70,9 +79,16 @@ namespace Team_Majx_Game
                     }
                     else if(frame > 6)
                     {
-                        return true;
+                        if (direction == Direction.Left)
+                        {
+                            _spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.Gray, 0, Vector2.Zero, SpriteEffects.None, 0);
+                        }
+                        else
+                        {
+                            _spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.Gray, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
+                        }
                     }
-                    return false;
+                    break;
                 case CharacterAttackState.ForwardTilt:
                     if (frame > 3 && frame < 10)
                     {
@@ -90,15 +106,50 @@ namespace Team_Majx_Game
                     }
                     else if(frame > 9)
                     {
-                        return true;
+                        if (direction == Direction.Left)
+                        {
+                            _spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.Gray, 0, Vector2.Zero, SpriteEffects.None, 0);
+                        }
+                        else
+                        {
+                            _spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.Gray, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
+                        }
                     }
-                    return false;
-
+                    break;
+                case CharacterAttackState.DownTilt:
+                    if(frame > 4 && frame < 14)
+                    {
+                        if (direction == Direction.Left)
+                        {
+                            currentHitbox = new Hitbox(new Rectangle(position.X - 75, position.Y + 50, 75, 50), 10, 10, 10);
+                            _spriteBatch.Draw(spriteSheet, new Rectangle(Position.X, Position.Y + Position.Height / 2, Position.Width, Position.Height / 2), new Rectangle(0, 0, 900, 660), Color.White, 0, Vector2.Zero, SpriteEffects.None, 0);
+                        }
+                        else
+                        {
+                            currentHitbox = new Hitbox(new Rectangle(position.X + position.Width, Position.Y + 50, 75, 50), 10, 10, 20);
+                            _spriteBatch.Draw(spriteSheet, new Rectangle(Position.X, Position.Y + Position.Height / 2, Position.Width, Position.Height / 2), new Rectangle(0, 0, 900, 660), Color.White, 0, Vector2.Zero, SpriteEffects.None, 0);
+                        }
+                        currentHitbox.Draw(_spriteBatch, hitboxSprite);
+                    }
+                    else if(frame > 13)
+                    {
+                        if (direction == Direction.Left)
+                        {
+                            currentHitbox = new Hitbox(new Rectangle(position.X - 75, position.Y + 50, 75, 50), 10, 10, 10);
+                            _spriteBatch.Draw(spriteSheet, new Rectangle(Position.X, Position.Y + Position.Height / 2, Position.Width, Position.Height / 2), new Rectangle(0, 0, 900, 660), Color.Gray, 0, Vector2.Zero, SpriteEffects.None, 0);
+                        }
+                        else
+                        {
+                            currentHitbox = new Hitbox(new Rectangle(position.X + position.Width, Position.Y + 50, 75, 50), 10, 10, 20);
+                            _spriteBatch.Draw(spriteSheet, new Rectangle(Position.X, Position.Y + Position.Height / 2, Position.Width, Position.Height / 2), new Rectangle(0, 0, 900, 660), Color.Gray, 0, Vector2.Zero, SpriteEffects.None, 0);
+                        }
+                    }
+                    break;
             }
-            return false;
 
         }
 
+        //Returns the number of endlag fram
         public override int getEndlag(CharacterAttackState attack)
         {
             switch (attack)
@@ -107,6 +158,8 @@ namespace Team_Majx_Game
                     return 9;
                 case CharacterAttackState.ForwardTilt:
                     return 13;
+                case CharacterAttackState.DownTilt:
+                    return 18;
                     
             }
             return 0;
