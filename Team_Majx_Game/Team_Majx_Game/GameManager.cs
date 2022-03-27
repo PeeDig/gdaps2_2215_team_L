@@ -66,6 +66,11 @@ namespace Team_Majx_Game
             get { return speedX; }
         }
 
+        public Tile[,] MapArray
+        {
+            get { return mapArray; }
+        }
+
         public GameManager()
         {
             // Defualt values
