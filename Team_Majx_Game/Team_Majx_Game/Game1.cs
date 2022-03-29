@@ -30,10 +30,12 @@ namespace Team_Majx_Game
         private Knight player1;
         private HurtBox player1HurtBox;
 
+        private Texture2D tempSquare;
+
+        private string levelFile = "level1.txt";
+
         //Temporary game manager class for the first demo
         private GameManager manager1;
-
-
 
         public Game1()
         {
@@ -61,6 +63,8 @@ namespace Team_Majx_Game
 
             player1 = new Knight(knight, 720, 405, 100, 100, true, manager1, player1HurtBox);
 
+
+            manager1.ReadLevelFile(levelFile);
             base.Initialize();
         }
 
@@ -69,6 +73,7 @@ namespace Team_Majx_Game
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             hitbox = Content.Load<Texture2D>("hitbox");
             knight = Content.Load<Texture2D>("knight1");
+            tempSquare = Content.Load<Texture2D>("red square");
             font = Content.Load<SpriteFont>("arial");
 
             // TODO: use this.Content to load your game content here
@@ -203,6 +208,19 @@ namespace Team_Majx_Game
                     player1.update(gameTime, Keys.Up, Keys.Down, Keys.Left, Keys.Right, Keys.P, Keys.O, Keys.I, Keys.L);
                     player1.Draw(_spriteBatch, knight, hitbox);
                     _spriteBatch.Draw(hitbox, new Rectangle(720, 505, 200, 100), Color.White);
+
+                    /*
+                    // Draws the map
+                    for(int r = 0; r < manager1.MapArray.GetLength(0); r++)
+                    {
+                        for(int c = 0; c < manager1.MapArray.GetLength(1); c++)
+                        {
+                            manager1.MapArray[r,c].Draw(_spriteBatch, tempSquare);
+                        }
+                    }
+                    */
+
+
                     break;
 
                 case GameState.Pause:
