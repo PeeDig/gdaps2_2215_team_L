@@ -60,6 +60,7 @@ namespace Team_Majx_Game
             //Creating a temporary knight for the purpose of the first demo
             player1HurtBox = new HurtBox(new Rectangle(720, 405, 100, 100));
             manager1 = new GameManager();
+            
 
             player1 = new Knight(knight, 720, 405, 100, 100, true, manager1, player1HurtBox);
 
@@ -207,7 +208,7 @@ namespace Team_Majx_Game
                 case GameState.Battle:
                     player1.update(gameTime, Keys.Up, Keys.Down, Keys.Left, Keys.Right, Keys.P, Keys.O, Keys.I, Keys.L);
                     player1.Draw(_spriteBatch, knight, hitbox);
-                    _spriteBatch.Draw(hitbox, new Rectangle(720, 505, 200, 100), Color.White);
+                    _spriteBatch.Draw(hitbox, new Rectangle(720, 505, 400, 100), Color.White);
 
                     /*
                     // Draws the map

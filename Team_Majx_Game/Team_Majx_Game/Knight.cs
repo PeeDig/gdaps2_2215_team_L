@@ -51,14 +51,8 @@ namespace Team_Majx_Game
             }
         }
 
-        //Draws the hitboxes based on the number of frames in the attack. Returns true if the attack is over and the plyer is in the endlag of the move.
-        /*
-        HERE IS WORK FOR NEXT TIME
-        Every attack draws the character here during the attack, but it doesn't draw the character during the startupframes
-        Fix each case in the attack method so that the character is drawn in the starting frames, and try to make this neater with less code
-        use the tempColor variable to do this.
+        //Draws the hitboxes and the player's current frame based on the number of frames in the attack.
 
-        */
         public override void Attack(CharacterAttackState attack, Direction direction, int frame, SpriteBatch _spriteBatch, Texture2D hitboxSprite, Texture2D spriteSheet)
         {
             switch (attack)

@@ -53,6 +53,7 @@ namespace Team_Majx_Game
         protected GameManager gameManager;
         protected HurtBox hurtBox;
         protected int yVelocity;
+        protected int xVelocity;
         protected int lagFrames;
         protected int currentFrame;
         private KeyboardState kbState;
@@ -72,11 +73,21 @@ namespace Team_Majx_Game
             this.player1 = player1;
             this.hurtBox = hurtBox;
             yVelocity = 0;
+            xVelocity = 0;
             lagFrames = 0;
             // platform = new Tile(new Rectangle(new Vector2(10, 10), 10, 10, ), TileType.Platform);
         }
 
         //Does the attacks and updates the state based on input or game environment
+        /*
+         * Details:
+         * Instead of edge cancelling we let them slide off the platform, but they stay in the endlag of their current move and finish the animation.
+         * Could lead to some cool combos, but wouldn't lead to edge cancelling being too strong.
+         * Start accelrating when the button is pressed and decelerate when an attack is used, or you stop running or you crouch.
+         * Should jumping lower your speed? Do we want a base air speed for each class?
+         * 
+         * 
+         */
         public void update(GameTime gameTime, Keys up, Keys down, Keys left, Keys right, Keys attack, Keys special, Keys strong, Keys dodge)
         {
             kbState = Keyboard.GetState();
@@ -85,15 +96,19 @@ namespace Team_Majx_Game
                 case CharacterAttackState.Stand:
                     if (kbState.IsKeyDown(Keys.Right))
                     {
-                        position.X += 8;
+                        //Does acceleration
+                        AccelerateRight();
                         currentAttackState = CharacterAttackState.Walk;
                         direction = Direction.Right;
+                        break;
                     }
                     else if (kbState.IsKeyDown(Keys.Left))
                     {
-                        position.X -= 8;
+                        //Does acceleration
+                        AccelerateLeft();
                         currentAttackState = CharacterAttackState.Walk;
                         direction = Direction.Left;
+                        break;
                     }
                     else if (KeyPress(up))
                     {
@@ -122,6 +137,7 @@ namespace Team_Majx_Game
                     {
                         currentAttackState = CharacterAttackState.ForwardStrong;
                     }
+                    Decelerate();
                     break;
 
                 case CharacterAttackState.Walk:
@@ -129,10 +145,12 @@ namespace Team_Majx_Game
                     if (kbState.IsKeyDown(right))
                     {
                         direction = Direction.Right;
+                        AccelerateRight();
                     }
                     else if (kbState.IsKeyDown(left))
                     {
                         direction = Direction.Left;
+                        AccelerateLeft();
                     }
                     if (kbState.IsKeyDown(right) || kbState.IsKeyDown(left))
                     {
@@ -147,37 +165,36 @@ namespace Team_Majx_Game
                             }
                             else if (KeyPress(attack))
                             {
+                                Decelerate();
                                 currentAttackState = CharacterAttackState.ForwardTilt;
                                 lagFrames = getEndlag(CharacterAttackState.ForwardTilt);
                             }
                             else if (KeyPress(special))
                             {
+                                Decelerate();
                                 currentAttackState = CharacterAttackState.ForwardSpecial;
                             }
                             else if (KeyPress(strong))
                             {
+                                Decelerate();
                                 currentAttackState = CharacterAttackState.ForwardStrong;
                             }
                             else if (KeyPress(dodge))
                             {
+                                Decelerate();
                                 currentAttackState = CharacterAttackState.Dodge;
                             }
-                            else
+                            else if(KeyPress(down))
                             {
-                                if (direction == Direction.Right)
-                                {
-                                    position.X += 8;
-                                }
-                                else
-                                {
-                                    position.X -= 8;
-                                }
+                                Decelerate();
+                                currentAttackState = CharacterAttackState.Crouch;
                             }
                         }
                         //If they are walking and not on a platform, set them to the jump state but don't give them initial velocity so they will fall.
                         else
                         {
                             currentAttackState = CharacterAttackState.Jump;
+                            yVelocity = 1;
                         }
                     }
 
@@ -186,8 +203,7 @@ namespace Team_Majx_Game
                     {
                         currentAttackState = CharacterAttackState.Stand;
                     }
-
-
+                    position.X += xVelocity;
                     break;
 
                 case CharacterAttackState.Crouch:
@@ -223,13 +239,13 @@ namespace Team_Majx_Game
                             {
                                 direction = Direction.Left;
                                 currentAttackState = CharacterAttackState.Walk;
-                                position.X -= 8;
+                                AccelerateLeft();
                             }
                             else if (kbState.IsKeyDown(right))
                             {
                                 direction = Direction.Right;
                                 currentAttackState = CharacterAttackState.Walk;
-                                position.X += 8;
+                                AccelerateRight();
                             }
                             else
                             {
@@ -240,15 +256,15 @@ namespace Team_Majx_Game
                         {
                             if (kbState.IsKeyDown(right))
                             {
-                                position.X += 8;
+                                AccelerateRight();
                             }
                             else if (kbState.IsKeyDown(left))
                             {
-                                position.X -= 8;
+                                AccelerateLeft();
                             }
                             yVelocity += 1;
                         }
-
+                        position.X += xVelocity;
                         break;
                     }
 
@@ -264,6 +280,8 @@ namespace Team_Majx_Game
                         lagFrames -= 1;
                         currentFrame++;
                     }
+                    Decelerate();
+                    position.X += xVelocity;
                     break;
                 case CharacterAttackState.DownTilt:
                     if (lagFrames == 0)
@@ -276,9 +294,9 @@ namespace Team_Majx_Game
                         lagFrames -= 1;
                         currentFrame++;
                     }
+                    Decelerate();
+                    position.X += xVelocity;
                     break;
-
-
             }
             prevKBState = kbState;
         }
@@ -350,7 +368,6 @@ namespace Team_Majx_Game
                     }
                     break;
                     */
-                    break;
 
             }
 
@@ -368,6 +385,58 @@ namespace Team_Majx_Game
         public virtual int getEndlag(CharacterAttackState attack)
         {
             return 0;
+        }
+
+        //Handles acceleration to make the update method simpler
+        public void AccelerateRight()
+        {
+            if (xVelocity < 8)
+            {
+                xVelocity += 3;
+                if (xVelocity > 8)
+                {
+                    xVelocity--;
+                }
+            }
+        }
+            public void AccelerateLeft()
+            {
+                if (xVelocity > -8)
+                {
+                    xVelocity -= 3;
+                    if (xVelocity < -8)
+                    {
+                        xVelocity++;
+                    }
+                }
+            }
+        
+
+        //Handles deceleration when you use a move while moving (sliding)
+        public void Decelerate()
+        {
+            if (direction == Direction.Right)
+            {
+                if (xVelocity > 0)
+                {
+                    xVelocity -= 4;
+                    if (xVelocity < 0)
+                    {
+                        xVelocity = 0;
+                    }
+                }
+            }
+            else
+            {
+                if (xVelocity < 0)
+                {
+                    xVelocity += 4;
+                    if (xVelocity > 0)
+                    {
+                        xVelocity = 0;
+                    }
+                }
+            }
         }
 
         //Returns and changes the position, width, and height of the character

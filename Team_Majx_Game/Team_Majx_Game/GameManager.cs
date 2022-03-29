@@ -81,7 +81,7 @@ namespace Team_Majx_Game
             damage = 1;
             speedX = 1;
             platforms = new List<Tile>();
-            platforms.Add(new Tile(new Rectangle(720, 505, 200, 100), TileType.Platform));
+            platforms.Add(new Tile(new Rectangle(720, 505, 400, 100), TileType.Platform));
         }
 
         // Method for writing to the settings file
