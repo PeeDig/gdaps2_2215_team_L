@@ -20,6 +20,13 @@
 /processorParam:TextureFormat=Compressed
 /build:arial.spritefont
 
+#begin dutchMediaeval.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:dutchMediaeval.spritefont
+
 #begin hitbox.png
 /importer:TextureImporter
 /processor:TextureProcessor
