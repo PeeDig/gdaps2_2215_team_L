@@ -20,13 +20,6 @@
 /processorParam:TextureFormat=Compressed
 /build:arial.spritefont
 
-#begin dutchMediaeval.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:dutchMediaeval.spritefont
-
 #begin hitbox.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -39,7 +32,7 @@
 /processorParam:TextureFormat=Color
 /build:hitbox.png
 
-#begin knight1.jpg
+#begin knight1.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -49,7 +42,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:knight1.jpg
+/build:knight1.png
 
 #begin red square.png
 /importer:TextureImporter

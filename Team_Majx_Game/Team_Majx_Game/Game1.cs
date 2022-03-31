@@ -77,7 +77,7 @@ namespace Team_Majx_Game
             knight = Content.Load<Texture2D>("knight1");
             tempSquare = Content.Load<Texture2D>("red square");
             font = Content.Load<SpriteFont>("arial");
-            medievalFont = Content.Load<SpriteFont>("dutchMediaeval");
+            //medievalFont = Content.Load<SpriteFont>("dutchMediaeval");
 
             // TODO: use this.Content to load your game content here
         }
@@ -192,7 +192,7 @@ namespace Team_Majx_Game
                     ShapeBatch.Box(buttonList[0], Color.PapayaWhip);
                     ShapeBatch.Box(buttonList[1], Color.PapayaWhip);
                     _spriteBatch.DrawString(font, "Gameplay demo", new Vector2(620, 620), Color.Black);
-                    _spriteBatch.DrawString(medievalFont, "test", new Vector2(0, 0), Color.Black);
+                    _spriteBatch.DrawString(font, "test", new Vector2(0, 0), Color.Black);
                     ShapeBatch.Box(buttonList[2], Color.PapayaWhip);
                     break;
 

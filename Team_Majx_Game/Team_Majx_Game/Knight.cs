@@ -73,6 +73,7 @@ namespace Team_Majx_Game
                         }
                         currentHitbox.Draw(_spriteBatch, hitboxSprite);
                     }
+
                     else if(frame > 6 || frame < 2)
                     {
                         tempColor = Color.Gray;
@@ -87,6 +88,7 @@ namespace Team_Majx_Game
                     }
                     _spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), tempColor, 0, Vector2.Zero, SpriteEffect, 0);
                     break;
+
                 case CharacterAttackState.ForwardTilt:
                     if (frame > 3 && frame < 10)
                     {
@@ -148,6 +150,38 @@ namespace Team_Majx_Game
                     _spriteBatch.Draw(spriteSheet, new Rectangle(Position.X, Position.Y + Position.Height / 2, Position.Width, Position.Height / 2), 
                         new Rectangle(0, 0, 900, 660), tempColor, 0, Vector2.Zero, SpriteEffect, 0);
                     break;
+
+                case CharacterAttackState.NeutralAir:
+                    if (frame > 4 && frame < 15)
+                    {
+                        tempColor = Color.White;
+                        if (direction == Direction.Left)
+                        {
+                            SpriteEffect = SpriteEffects.None;
+                            currentHitbox = new Hitbox(new Rectangle(position.X - 20, position.Y - 20 , position.Width + 20, position.Height + 20), 10, 10, 10);
+                        }
+                        else
+                        {
+                            SpriteEffect = SpriteEffects.FlipHorizontally;
+                            currentHitbox = new Hitbox(new Rectangle(position.X - 20, position.Y - 20, position.Width + 20, position.Height + 20), 10, 10, 10);
+                        }
+                        currentHitbox.Draw(_spriteBatch, hitboxSprite);
+                    }
+                    else if (frame > 14 || frame < 5)
+                    {
+                        tempColor = Color.Gray;
+                        if (direction == Direction.Left)
+                        {
+                            SpriteEffect = SpriteEffects.None;
+                        }
+                        else
+                        {
+                            SpriteEffect = SpriteEffects.FlipHorizontally;
+                        }
+                    }
+                    _spriteBatch.Draw(spriteSheet, new Rectangle(Position.X, Position.Y, Position.Width, Position.Height),
+                        new Rectangle(0, 0, 900, 660), tempColor, 0, Vector2.Zero, SpriteEffect, 0);
+                    break;
             }
 
         }
@@ -163,6 +197,10 @@ namespace Team_Majx_Game
                     return 13;
                 case CharacterAttackState.DownTilt:
                     return 18;
+
+
+                case CharacterAttackState.NeutralAir:
+                    return 19;
                     
             }
             return 0;
