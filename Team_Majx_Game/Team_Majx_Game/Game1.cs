@@ -31,7 +31,7 @@ namespace Team_Majx_Game
         private HurtBox player1HurtBox;
         private int width;
         private int height;
-
+        private SpriteFont medievalFont;
         private Texture2D tempSquare;
 
         private string levelFile = "level1.txt";
@@ -201,6 +201,7 @@ namespace Team_Majx_Game
                     ShapeBatch.Box(buttonList[1], Color.PapayaWhip);
                     ShapeBatch.Box(buttonList[2], Color.PapayaWhip);
                     _spriteBatch.DrawString(font, "Gameplay demo", new Vector2(width/2, height/2), Color.Black);
+                    _spriteBatch.DrawString(medievalFont, "test", new Vector2(0, 0), Color.Black);
                     break;
 
                 case GameState.Rules:

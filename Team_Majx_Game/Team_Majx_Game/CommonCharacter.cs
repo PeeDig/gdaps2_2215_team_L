@@ -332,7 +332,7 @@ namespace Team_Majx_Game
                                 }
                             }
 
-                            else if (KeyPress(attack) && !kbState.IsKeyDown(right) || !kbState.IsKeyDown(left) ||)
+                            else if (KeyPress(attack) && !kbState.IsKeyDown(right) || !kbState.IsKeyDown(left))
                             {
                                 currentAttackState = CharacterAttackState.NeutralAir;
                             }
