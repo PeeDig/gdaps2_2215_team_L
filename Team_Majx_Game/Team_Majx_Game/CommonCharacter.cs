@@ -484,21 +484,6 @@ namespace Team_Majx_Game
                     Attack(currentAttackState, direction, currentFrame, spriteBatch, hitboxSprite, spriteSheet);
                     break;
 
-                    /*
-                case CharacterAttackState.DownTilt:
-                   Attack(CharacterAttackState.DownTilt, direction, currentFrame, spriteBatch, hitboxSprite, spriteSheet)
-                        tempColor = Color.White;
-                    if (direction == Direction.Left)
-                    {
-                        spriteBatch.Draw(spriteSheet, new Rectangle(Position.X, Position.Y + Position.Height / 2, Position.Width, Position.Height / 2), new Rectangle(0, 0, 900, 660), tempColor, 0, Vector2.Zero, SpriteEffects.None, 0);
-                    }
-                    else
-                    {
-                        spriteBatch.Draw(spriteSheet, new Rectangle(Position.X, Position.Y + Position.Height / 2, Position.Width, Position.Height / 2), new Rectangle(0, 0, 900, 660), tempColor, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
-                    }
-                    break;
-                    */
-
             }
 
     }
