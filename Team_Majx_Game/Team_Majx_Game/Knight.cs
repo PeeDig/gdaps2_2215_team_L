@@ -17,6 +17,7 @@ namespace Team_Majx_Game
         private KeyboardState prevKBState;
         private Hitbox currentHitbox;
         private Color tempColor;
+        private SpriteEffects SpriteEffect;
 
         public Knight(Texture2D texture, int x, int y, int width, int height, bool player1, GameManager gameManager, HurtBox hurtBox) : base(texture, x, y, width, height, player1, gameManager, hurtBox)
         {
@@ -50,14 +51,8 @@ namespace Team_Majx_Game
             }
         }
 
-        //Draws the hitboxes based on the number of frames in the attack. Returns true if the attack is over and the plyer is in the endlag of the move.
-        /*
-        HERE IS WORK FOR NEXT TIME
-        Every attack draws the character here during the attack, but it doesn't draw the character during the startupframes
-        Fix each case in the attack method so that the character is drawn in the starting frames, and try to make this neater with less code
-        use the tempColor variable to do this.
+        //Draws the hitboxes and the player's current frame based on the number of frames in the attack.
 
-        */
         public override void Attack(CharacterAttackState attack, Direction direction, int frame, SpriteBatch _spriteBatch, Texture2D hitboxSprite, Texture2D spriteSheet)
         {
             switch (attack)
@@ -65,85 +60,93 @@ namespace Team_Majx_Game
                 case CharacterAttackState.Jab:
                     if (frame > 2 && frame < 7 )
                     {
+                        tempColor = Color.White;
                         if (direction == Direction.Left)
                         {
-                            _spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.White, 0, Vector2.Zero, SpriteEffects.None, 0);
+                            SpriteEffect = SpriteEffects.None;
                             currentHitbox = new Hitbox(new Rectangle(position.X - 50, position.Y, 50, 50), 10, 10, 20);
                         }
                         else
                         {
-                            _spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
+                            SpriteEffect = SpriteEffects.FlipHorizontally;
                             currentHitbox = new Hitbox(new Rectangle(position.X + position.Width, Position.Y, 50, 50), 10, 10, 20);
                         }
                         currentHitbox.Draw(_spriteBatch, hitboxSprite);
                     }
-                    else if(frame > 6)
+                    else if(frame > 6 || frame < 2)
                     {
+                        tempColor = Color.Gray;
                         if (direction == Direction.Left)
                         {
-                            _spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.Gray, 0, Vector2.Zero, SpriteEffects.None, 0);
+                            SpriteEffect = SpriteEffects.None;
                         }
                         else
                         {
-                            _spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.Gray, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
+                            SpriteEffect = SpriteEffects.FlipHorizontally;
                         }
                     }
+                    _spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), tempColor, 0, Vector2.Zero, SpriteEffect, 0);
                     break;
                 case CharacterAttackState.ForwardTilt:
                     if (frame > 3 && frame < 10)
                     {
+                        tempColor = Color.White;
                         if (direction == Direction.Left)
                         {
-                            _spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.White, 0, Vector2.Zero, SpriteEffects.None, 0);
+                            SpriteEffect = SpriteEffects.None;
                             currentHitbox = new Hitbox(new Rectangle(position.X - 75, position.Y, 75, 50), 10, 10, 20);
                         }
                         else
                         {
-                            _spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
+                            SpriteEffect = SpriteEffects.FlipHorizontally;
                             currentHitbox = new Hitbox(new Rectangle(position.X + position.Width, Position.Y, 75, 50), 10, 10, 20);
                         }
                         currentHitbox.Draw(_spriteBatch, hitboxSprite);
                     }
-                    else if(frame > 9)
+                    else if(frame > 9 || frame < 3)
                     {
+                        tempColor = Color.Gray;
                         if (direction == Direction.Left)
                         {
-                            _spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.Gray, 0, Vector2.Zero, SpriteEffects.None, 0);
+                            SpriteEffect = SpriteEffects.None;
                         }
                         else
                         {
-                            _spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.Gray, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
+                            SpriteEffect = SpriteEffects.FlipHorizontally;
                         }
                     }
+                    _spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), tempColor, 0, Vector2.Zero, SpriteEffect, 0);
                     break;
                 case CharacterAttackState.DownTilt:
                     if(frame > 4 && frame < 14)
                     {
+                        tempColor = Color.White;
                         if (direction == Direction.Left)
                         {
+                            SpriteEffect = SpriteEffects.None;
                             currentHitbox = new Hitbox(new Rectangle(position.X - 75, position.Y + 50, 75, 50), 10, 10, 10);
-                            _spriteBatch.Draw(spriteSheet, new Rectangle(Position.X, Position.Y + Position.Height / 2, Position.Width, Position.Height / 2), new Rectangle(0, 0, 900, 660), Color.White, 0, Vector2.Zero, SpriteEffects.None, 0);
                         }
                         else
                         {
+                            SpriteEffect = SpriteEffects.FlipHorizontally;
                             currentHitbox = new Hitbox(new Rectangle(position.X + position.Width, Position.Y + 50, 75, 50), 10, 10, 20);
-                            _spriteBatch.Draw(spriteSheet, new Rectangle(Position.X, Position.Y + Position.Height / 2, Position.Width, Position.Height / 2), new Rectangle(0, 0, 900, 660), Color.White, 0, Vector2.Zero, SpriteEffects.None, 0);
                         }
                         currentHitbox.Draw(_spriteBatch, hitboxSprite);
                     }
-                    else if(frame > 13)
+                    else if(frame > 13 || frame < 5)
                     {
+                        tempColor = Color.Gray;
                         if (direction == Direction.Left)
                         {
-                            currentHitbox = new Hitbox(new Rectangle(position.X - 75, position.Y + 50, 75, 50), 10, 10, 10);
-                            _spriteBatch.Draw(spriteSheet, new Rectangle(Position.X, Position.Y + Position.Height / 2, Position.Width, Position.Height / 2), new Rectangle(0, 0, 900, 660), Color.Gray, 0, Vector2.Zero, SpriteEffects.None, 0);
+                            SpriteEffect = SpriteEffects.None;
                         }
                         else
                         {
-                            currentHitbox = new Hitbox(new Rectangle(position.X + position.Width, Position.Y + 50, 75, 50), 10, 10, 20);
-                            _spriteBatch.Draw(spriteSheet, new Rectangle(Position.X, Position.Y + Position.Height / 2, Position.Width, Position.Height / 2), new Rectangle(0, 0, 900, 660), Color.Gray, 0, Vector2.Zero, SpriteEffects.None, 0);
+                            SpriteEffect = SpriteEffects.FlipHorizontally;
                         }
                     }
+                    _spriteBatch.Draw(spriteSheet, new Rectangle(Position.X, Position.Y + Position.Height / 2, Position.Width, Position.Height / 2), 
+                        new Rectangle(0, 0, 900, 660), tempColor, 0, Vector2.Zero, SpriteEffect, 0);
                     break;
             }
 

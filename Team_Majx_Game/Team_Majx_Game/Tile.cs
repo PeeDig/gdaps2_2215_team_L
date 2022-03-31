@@ -44,6 +44,35 @@ namespace Team_Majx_Game
             set { tileType = value; ; }
         }
 
+        // draws the correct block
+        public void Draw(SpriteBatch spriteBatch, Texture2D tempSquare)
+        {
+            switch (tileType)
+            {
+                case TileType.Platform:
+                    spriteBatch.Draw(tempSquare, position, Color.Red);
+                    break;
 
+                case TileType.Wall:
+                    spriteBatch.Draw(tempSquare, position, Color.Blue);
+                    break;
+
+                case TileType.StartingSpawnPoint:
+                    spriteBatch.Draw(tempSquare, position, Color.Green);
+                    break;
+
+                case TileType.RandomSpawnPoint:
+                    spriteBatch.Draw(tempSquare, position, Color.Yellow);
+                    break;
+
+                case TileType.Air:
+                    spriteBatch.Draw(tempSquare, position, Color.LightBlue);
+                    break;
+
+                case TileType.Death:
+                    spriteBatch.Draw(tempSquare, position, Color.Orange);
+                    break;
+            }
+        }
     }
 }
