@@ -29,8 +29,9 @@ namespace Team_Majx_Game
         private Texture2D knight;
         private Knight player1;
         private HurtBox player1HurtBox;
+        private int width;
+        private int height;
         private SpriteFont medievalFont;
-
         private Texture2D tempSquare;
 
         private string levelFile = "level1.txt";
@@ -47,16 +48,23 @@ namespace Team_Majx_Game
 
         protected override void Initialize()
         {
-            _graphics.PreferredBackBufferWidth = 1440;
-            _graphics.PreferredBackBufferHeight = 810;
+            width = 1440;
+            height = 810;
+            _graphics.PreferredBackBufferWidth = width;
+            _graphics.PreferredBackBufferHeight = height;
             _graphics.ApplyChanges();
             // TODO: Add your initialization logic here
             prevkbState = Keyboard.GetState();
             prevMsState = Mouse.GetState();
             buttonList = new List<Rectangle>();
+            //Each button seperated by 240
+            //Buttons split up by 3
             buttonList.Add(new Rectangle(260, 600, 200, 75));
             buttonList.Add(new Rectangle(620, 600, 200, 75));
             buttonList.Add(new Rectangle(980, 600, 200, 75));
+            //Buttons split up by 2
+            buttonList.Add(new Rectangle(500, 600, 200, 75));
+            buttonList.Add(new Rectangle(720, 600, 200, 75));
 
             //Creating a temporary knight for the purpose of the first demo
             player1HurtBox = new HurtBox(new Rectangle(720, 405, 100, 100));
@@ -100,38 +108,38 @@ namespace Team_Majx_Game
                     }
                     else if (ClickButton(buttonList[1], msState))
                     {
-                        currentState = GameState.Battle;
+                        currentState = GameState.CharSelect;
                     }
                     else if (ClickButton(buttonList[2], msState))
                     {
-                        currentState = GameState.CharSelect;
+                        currentState = GameState.Settings;
                     }
                     break;
 
                 case GameState.Rules:
-                    if (SingleKeyPress(Keys.Back, kbState))
+                    if (ClickButton(buttonList[1], msState))
                     {
                         currentState = GameState.Menu;
                     }
                     break;
 
                 case GameState.Settings:
-                    if (SingleKeyPress(Keys.Back, kbState))
+                    if (ClickButton(buttonList[1], msState))
                     {
                         currentState = GameState.Menu;
                     }
                     break;
 
                 case GameState.CharSelect:
-                    if (SingleKeyPress(Keys.Back, kbState))
+                    if (ClickButton(buttonList[0], msState))
                     {
                         currentState = GameState.Menu;
                     }
-                    else if (SingleKeyPress(Keys.S, kbState))
+                    else if (ClickButton(buttonList[1], msState))
                     {
                         currentState = GameState.Settings;
                     }
-                    else if (SingleKeyPress(Keys.Enter, kbState))
+                    else if (ClickButton(buttonList[2], msState))
                     {
                         currentState = GameState.Battle;
                     }
@@ -149,30 +157,30 @@ namespace Team_Majx_Game
                     break;
 
                 case GameState.Pause:
-                    if (SingleKeyPress(Keys.P, kbState))
+                    if (ClickButton(buttonList[3], msState))
                     {
                         currentState = GameState.Battle;
                     }
-                    else if (SingleKeyPress(Keys.M, kbState))
+                    else if (ClickButton(buttonList[4], msState))
                     {
                         currentState = GameState.Menu;
                     }
                     break;
 
                 case GameState.EndScreen:
-                    if (SingleKeyPress(Keys.Enter, kbState))
+                    if (ClickButton(buttonList[3], msState))
                     {
                         currentState = GameState.CharSelect;
                     }
-                    else if (SingleKeyPress(Keys.M, kbState))
+                    else if (ClickButton(buttonList[4], msState))
                     {
                         currentState = GameState.Menu;
                     }
                     break;
             }
 
-            kbState = prevkbState;
-            msState = prevMsState;
+            prevkbState = kbState;
+            prevMsState = msState;
 
             base.Update(gameTime);
         }
@@ -191,21 +199,26 @@ namespace Team_Majx_Game
                 case GameState.Menu:
                     ShapeBatch.Box(buttonList[0], Color.PapayaWhip);
                     ShapeBatch.Box(buttonList[1], Color.PapayaWhip);
-                    _spriteBatch.DrawString(font, "Gameplay demo", new Vector2(620, 620), Color.Black);
-                    _spriteBatch.DrawString(font, "test", new Vector2(0, 0), Color.Black);
                     ShapeBatch.Box(buttonList[2], Color.PapayaWhip);
+                    _spriteBatch.DrawString(font, "Gameplay demo", new Vector2(width/2, height/2), Color.Black);
+                    _spriteBatch.DrawString(medievalFont, "test", new Vector2(0, 0), Color.Black);
                     break;
 
                 case GameState.Rules:
-
+                    _spriteBatch.DrawString(font, "Rules", new Vector2(width / 2, height / 2), Color.Black);
+                    ShapeBatch.Box(buttonList[1], Color.PapayaWhip);
                     break;
 
                 case GameState.Settings:
-
+                    _spriteBatch.DrawString(font, "Settings", new Vector2(width / 2, height / 2), Color.Black);
+                    ShapeBatch.Box(buttonList[1], Color.PapayaWhip);
                     break;
 
                 case GameState.CharSelect:
-
+                    ShapeBatch.Box(buttonList[0], Color.PapayaWhip);
+                    ShapeBatch.Box(buttonList[1], Color.PapayaWhip);
+                    ShapeBatch.Box(buttonList[2], Color.PapayaWhip);
+                    _spriteBatch.DrawString(font, "Character Select", new Vector2(width / 2, height / 2), Color.Black);
                     break;
 
                 case GameState.Battle:
@@ -228,11 +241,15 @@ namespace Team_Majx_Game
                     break;
 
                 case GameState.Pause:
-
+                    ShapeBatch.Box(buttonList[3], Color.PapayaWhip);
+                    ShapeBatch.Box(buttonList[4], Color.PapayaWhip);
+                    _spriteBatch.DrawString(font, "Game Paused", new Vector2(width / 2, height / 2), Color.Black);
                     break;
 
                 case GameState.EndScreen:
-
+                    ShapeBatch.Box(buttonList[3], Color.PapayaWhip);
+                    ShapeBatch.Box(buttonList[4], Color.PapayaWhip);
+                    _spriteBatch.DrawString(font, "Game End", new Vector2(width / 2, height / 2), Color.Black);
                     break;
             }
 
@@ -255,7 +272,7 @@ namespace Team_Majx_Game
 
         public bool SingleMousePress(MouseState mState)
         {
-            if (mState.LeftButton == ButtonState.Pressed && prevMsState.LeftButton == ButtonState.Released)
+            if (mState.LeftButton == ButtonState.Released && prevMsState.LeftButton == ButtonState.Pressed)
             {
                 return true;
             }
