@@ -34,7 +34,7 @@ namespace Team_Majx_Game
         private SpriteFont medievalFont;
         private Texture2D tempSquare;
 
-        private string levelFile = "level1.txt";
+        private string levelFile = "Level1.txt";
 
         //Temporary game manager class for the first demo
         private GameManager manager1;
