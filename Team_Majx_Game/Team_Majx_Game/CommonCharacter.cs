@@ -56,6 +56,7 @@ namespace Team_Majx_Game
         protected int xVelocity;
         protected int lagFrames;
         protected int currentFrame;
+        protected bool hasDoubleJump = true;
         private KeyboardState kbState;
         private KeyboardState prevKBState;
         private Tile platform;
@@ -96,7 +97,6 @@ namespace Team_Majx_Game
                 case CharacterAttackState.Stand:
                     if (kbState.IsKeyDown(Keys.Right))
                     {
-                        //Does acceleration
                         AccelerateRight();
                         currentAttackState = CharacterAttackState.Walk;
                         direction = Direction.Right;
@@ -104,7 +104,6 @@ namespace Team_Majx_Game
                     }
                     else if (kbState.IsKeyDown(Keys.Left))
                     {
-                        //Does acceleration
                         AccelerateLeft();
                         currentAttackState = CharacterAttackState.Walk;
                         direction = Direction.Left;
@@ -227,14 +226,17 @@ namespace Team_Majx_Game
                     {
                         currentAttackState = CharacterAttackState.Stand;
                     }
+                    position.X += xVelocity;
+                    Decelerate();
                     break;
 
-                //Do aerials and specials
+                //Case for anytime the player is in the air
                 case CharacterAttackState.Jump:
                     {
                         position.Y += yVelocity;
                         if (StandingOnPlatform())
                         {
+                            hasDoubleJump = true;
                             if (kbState.IsKeyDown(left))
                             {
                                 direction = Direction.Left;
@@ -256,12 +258,89 @@ namespace Team_Majx_Game
                         {
                             if (kbState.IsKeyDown(right))
                             {
-                                AccelerateRight();
+                                AerialAccelerateRight();
+                                if (KeyPress(attack))
+                                {
+                                    if (direction == Direction.Right)
+                                    {
+                                        currentAttackState = CharacterAttackState.ForwardAir;
+                                    }
+                                    else
+                                    {
+                                        currentAttackState = CharacterAttackState.BackAir;
+                                    }
+                                }
+
+                                else if(KeyPress(special))
+                                {
+                                    currentAttackState = CharacterAttackState.ForwardSpecial;
+                                    direction = Direction.Right;
+                                }
                             }
                             else if (kbState.IsKeyDown(left))
                             {
-                                AccelerateLeft();
+                                AerialAccelerateLeft();
+                                if (KeyPress(attack))
+                                {
+                                    if (direction == Direction.Left)
+                                    {
+                                        currentAttackState = CharacterAttackState.ForwardAir;
+                                    }
+                                    else
+                                    {
+                                        currentAttackState = CharacterAttackState.BackAir;
+                                    }
+                                }
+
+                                else if (KeyPress(special))
+                                {
+                                    currentAttackState = CharacterAttackState.ForwardSpecial;
+                                    direction = Direction.Left;
+                                }
                             }
+
+                            if(KeyPress(up))
+                            {
+                                if(hasDoubleJump)
+                                {
+                                    yVelocity = -20;
+                                    hasDoubleJump = false;
+                                }
+                            }
+                            
+                            if (kbState.IsKeyDown(up))
+                            {
+                                if(KeyPress(attack))
+                                {
+                                    currentAttackState = CharacterAttackState.UpAir;
+                                }
+                                else if(KeyPress(special))
+                                {
+                                    currentAttackState = CharacterAttackState.UpSpecial;
+                                }
+                            }
+
+                            else if (kbState.IsKeyDown(down))
+                            {
+                                if (KeyPress(attack))
+                                {
+                                    currentAttackState = CharacterAttackState.DownAir;
+                                }
+                                else if (KeyPress(special))
+                                {
+                                    currentAttackState = CharacterAttackState.DownSpecial;
+                                }
+                            }
+
+                            else if (KeyPress(attack) && !kbState.IsKeyDown(right) || !kbState.IsKeyDown(left) ||)
+                            {
+                                currentAttackState = CharacterAttackState.NeutralAir;
+                            }
+                            else if (KeyPress(special))
+                            {
+                                currentAttackState = CharacterAttackState.NeutralSpecial;
+                            }
+
                             yVelocity += 1;
                         }
                         position.X += xVelocity;
@@ -280,8 +359,8 @@ namespace Team_Majx_Game
                         lagFrames -= 1;
                         currentFrame++;
                     }
-                    Decelerate();
                     position.X += xVelocity;
+                    Decelerate();
                     break;
                 case CharacterAttackState.DownTilt:
                     if (lagFrames == 0)
@@ -294,8 +373,8 @@ namespace Team_Majx_Game
                         lagFrames -= 1;
                         currentFrame++;
                     }
-                    Decelerate();
                     position.X += xVelocity;
+                    Decelerate();
                     break;
             }
             prevKBState = kbState;
@@ -399,18 +478,42 @@ namespace Team_Majx_Game
                 }
             }
         }
-            public void AccelerateLeft()
+
+        public void AccelerateLeft()
+        {
+            if (xVelocity > -8)
             {
-                if (xVelocity > -8)
+                xVelocity -= 3;
+                if (xVelocity < -8)
                 {
-                    xVelocity -= 3;
-                    if (xVelocity < -8)
-                    {
-                        xVelocity++;
-                    }
+                    xVelocity++;
                 }
             }
-        
+        }
+
+        public void AerialAccelerateRight()
+        {
+            if (xVelocity < 8)
+            {
+                xVelocity += 2;
+                if (xVelocity > 8)
+                {
+                    xVelocity--;
+                }
+            }
+        }
+
+        public void AerialAccelerateLeft()
+        {
+            if (xVelocity > -8)
+            {
+                xVelocity -= 2;
+                if (xVelocity < -8)
+                {
+                    xVelocity++;
+                }
+            }
+        }
 
         //Handles deceleration when you use a move while moving (sliding)
         public void Decelerate()
