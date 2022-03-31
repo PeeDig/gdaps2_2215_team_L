@@ -85,7 +85,7 @@ namespace Team_Majx_Game
             knight = Content.Load<Texture2D>("knight1");
             tempSquare = Content.Load<Texture2D>("red square");
             font = Content.Load<SpriteFont>("arial");
-            //medievalFont = Content.Load<SpriteFont>("dutchMediaeval");
+            medievalFont = Content.Load<SpriteFont>("dutchMediaeval");
 
             // TODO: use this.Content to load your game content here
         }
