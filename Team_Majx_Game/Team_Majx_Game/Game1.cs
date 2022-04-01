@@ -18,15 +18,26 @@ namespace Team_Majx_Game
     }
     public class Game1 : Game
     {
+        // monogame necessities
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+
+        // enum
         private GameState currentState;
+
+        // imput objects
         private KeyboardState prevkbState;
         private MouseState prevMsState;
         private List<Rectangle> buttonList;
+
+        // font
         private SpriteFont font;
+        
+        // textures
         private Texture2D hitbox;
         private Texture2D knight;
+
+        // knight objects
         private Knight player1;
         private Knight player2;
         private HurtBox player1HurtBox;
@@ -35,6 +46,10 @@ namespace Team_Majx_Game
         private SpriteFont medievalFont;
         private Texture2D tempSquare;
         private List<Button> buttons = new List<Button>();
+
+        // controls the game
+        private bool player1Alive = true;
+        private bool player2Alive = true;
 
         private string levelFile = "Level1.txt";
 
@@ -171,6 +186,12 @@ namespace Team_Majx_Game
                     {
                         currentState = GameState.EndScreen;
                     }
+
+                    // If a player dies, switch to the end screen
+                    if(!player2Alive || !player1Alive)
+                    {
+                        currentState = GameState.EndScreen;
+                    }
                     break;
 
                 case GameState.Pause:
@@ -273,6 +294,15 @@ namespace Team_Majx_Game
                     ShapeBatch.Box(buttonList[3], Color.PapayaWhip);
                     ShapeBatch.Box(buttonList[4], Color.PapayaWhip);
                     _spriteBatch.DrawString(medievalFont, "Game End", new Vector2(width / 2, height / 2), Color.Black);
+
+                    if (!player2Alive)
+                    {
+                        // Implement the player 1 win
+                    }
+                    else
+                    {
+                        // Implement the player 2 win
+                    }
                     break;
             }
 

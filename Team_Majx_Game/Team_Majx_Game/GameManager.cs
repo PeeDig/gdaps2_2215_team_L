@@ -174,7 +174,14 @@ namespace Team_Majx_Game
                         // with the specific tiletype depending on what it reads from the file
                         if (boardCode[c] == '1') // wall tile
                         {
-                            mapArray[r, c] = new Tile(new Rectangle(c * 32 - 7, r * 32 - 7, size, size), TileType.Wall);
+                            mapArray[r, c] = new Tile( // creates a new tile
+                                new Rectangle // makes a new rectangle for each
+                                (c * 32 - 7, // puts it at the correct x location
+                                r * 32 - 7, // puts it at the correct y location
+                                size, // specified x size in a var.
+                                size) // specified y size in a var.
+                                , TileType.Wall); // makes it a wall tile
+
                             platforms.Add(mapArray[r, c]);
                         }                                                   
                         else if (boardCode[c] == 'z') // platform                    
