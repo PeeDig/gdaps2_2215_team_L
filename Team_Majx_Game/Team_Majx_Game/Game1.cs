@@ -78,6 +78,7 @@ namespace Team_Majx_Game
             base.Initialize();
         }
 
+        // Load all of the Textures and all of the fonts
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -86,8 +87,6 @@ namespace Team_Majx_Game
             tempSquare = Content.Load<Texture2D>("red square");
             font = Content.Load<SpriteFont>("arial");
             medievalFont = Content.Load<SpriteFont>("dutchMediaeval");
-
-            // TODO: use this.Content to load your game content here
         }
 
         protected override void Update(GameTime gameTime)
@@ -196,6 +195,7 @@ namespace Team_Majx_Game
             // drawn to the screen at a specific state
             switch (currentState)
             {
+                // draws all of the menu items
                 case GameState.Menu:
                     ShapeBatch.Box(buttonList[0], Color.PapayaWhip);
                     ShapeBatch.Box(buttonList[1], Color.PapayaWhip);
@@ -204,16 +204,19 @@ namespace Team_Majx_Game
                     _spriteBatch.DrawString(medievalFont, "test", new Vector2(0, 0), Color.Black);
                     break;
 
+                // draws all of the rules items
                 case GameState.Rules:
                     _spriteBatch.DrawString(font, "Rules", new Vector2(width / 2, height / 2), Color.Black);
                     ShapeBatch.Box(buttonList[1], Color.PapayaWhip);
                     break;
 
+                // draws all of the items needed in settings
                 case GameState.Settings:
                     _spriteBatch.DrawString(font, "Settings", new Vector2(width / 2, height / 2), Color.Black);
                     ShapeBatch.Box(buttonList[1], Color.PapayaWhip);
                     break;
 
+                // draws all of the character select items
                 case GameState.CharSelect:
                     ShapeBatch.Box(buttonList[0], Color.PapayaWhip);
                     ShapeBatch.Box(buttonList[1], Color.PapayaWhip);
@@ -221,6 +224,7 @@ namespace Team_Majx_Game
                     _spriteBatch.DrawString(font, "Character Select", new Vector2(width / 2, height / 2), Color.Black);
                     break;
 
+                // draws everything in the battle scene
                 case GameState.Battle:
                     player1.update(gameTime, Keys.Up, Keys.Down, Keys.Left, Keys.Right, Keys.P, Keys.O, Keys.I, Keys.L);
                     player1.Draw(_spriteBatch, knight, hitbox);
@@ -235,8 +239,6 @@ namespace Team_Majx_Game
                             manager1.MapArray[r,c].Draw(_spriteBatch, tempSquare);
                         }
                     }
-                    
-
 
                     break;
 
@@ -253,11 +255,12 @@ namespace Team_Majx_Game
                     break;
             }
 
-            ShapeBatch.End();
-            _spriteBatch.End();
+            ShapeBatch.End(); // ends shapebatch
+            _spriteBatch.End(); // ends spritebatch
             base.Draw(gameTime);
         }
 
+        // method for controling a key press
         public bool SingleKeyPress(Keys key, KeyboardState kbState)
         {
             if (kbState.IsKeyUp(key) && prevkbState.IsKeyDown(key))
@@ -270,6 +273,7 @@ namespace Team_Majx_Game
             }
         }
 
+        // method controls a single mouse button click
         public bool SingleMousePress(MouseState mState)
         {
             if (mState.LeftButton == ButtonState.Released && prevMsState.LeftButton == ButtonState.Pressed)
@@ -282,6 +286,7 @@ namespace Team_Majx_Game
             }
         }
 
+        // controls the button clicks in monogame
         public bool ClickButton(Rectangle button, MouseState mState)
         {
             if (SingleMousePress(mState) && button.Contains(mState.X, mState.Y))

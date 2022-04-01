@@ -21,6 +21,7 @@ namespace Team_Majx_Game
 
         private Tile[,] mapArray;
         private List<Tile> randomSpawnList;
+        private List<Tile> spawnPoints;
 
         // File IO fields
         private int stocks;
@@ -86,6 +87,7 @@ namespace Team_Majx_Game
             speedX = 1;
             randomSpawnList = new List<Tile>();
             platforms = new List<Tile>();
+            spawnPoints = new List<Tile>();
             platforms.Add(new Tile(new Rectangle(720, 505, 400, 100), TileType.Platform));
         }
 
@@ -176,6 +178,7 @@ namespace Team_Majx_Game
                         else if (boardCode[c] == 'S')                       
                         {                                                   
                             mapArray[r, c] = new Tile(new Rectangle(c * 32 - 7, r * 32 - 7, size, size), TileType.StartingSpawnPoint);
+                            spawnPoints.Add(mapArray[r, c]);
                         }                                                   
                         else if (boardCode[c] == 'R')                       
                         {                                                   
