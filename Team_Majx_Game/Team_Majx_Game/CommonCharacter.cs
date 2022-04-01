@@ -63,6 +63,11 @@ namespace Team_Majx_Game
         private Tile platform;
         private bool inEndlag;
 
+        public int Stocks
+        {
+            get { return stockCount; }
+        }
+
 
         //Creates a character object with their position, textures, width, and height.
         protected CommonCharacter(Texture2D texture, int x, int y, int width, int height, bool player1, GameManager gameManager, HurtBox hurtBox)
@@ -70,8 +75,8 @@ namespace Team_Majx_Game
             this.gameManager = gameManager;
             this.texture = texture;
             this.position = new Rectangle(x, y, width, height);
-            this.health = 100; //gameManager.Health; //GET HEALTH HERE FROM FILE
-            this.stockCount = 3; //gameManager.Stocks; //GET STOCKS FROM FILE
+            this.health = gameManager.Health; //GET HEALTH HERE FROM FILE
+            this.stockCount = gameManager.Stocks;  //GET STOCKS FROM FILE
             this.player1 = player1;
             this.hurtBox = hurtBox;
             yVelocity = 0;
