@@ -36,6 +36,7 @@ namespace Team_Majx_Game
         // textures
         private Texture2D hitbox;
         private Texture2D knight;
+        private Texture2D heart;
 
         // knight objects
         private Knight player1;
@@ -50,6 +51,8 @@ namespace Team_Majx_Game
         // controls the game
         private bool player1Alive = true;
         private bool player2Alive = true;
+
+        private int p2StockCt;
 
         private string levelFile = "Level1.txt";
 
@@ -106,8 +109,6 @@ namespace Team_Majx_Game
                 manager1, // reference
                 player1HurtBox);
 
-
-
             base.Initialize();
         }
 
@@ -117,6 +118,7 @@ namespace Team_Majx_Game
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             hitbox = Content.Load<Texture2D>("hitbox");
             knight = Content.Load<Texture2D>("knight1");
+            heart = Content.Load<Texture2D>("heart");
             tempSquare = Content.Load<Texture2D>("red square");
             font = Content.Load<SpriteFont>("arial");
             medievalFont = Content.Load<SpriteFont>("dutchMediaeval");
@@ -280,6 +282,41 @@ namespace Team_Majx_Game
                         {
                             manager1.MapArray[r,c].Draw(_spriteBatch, tempSquare);
                         }
+                    }
+
+                    // Draws the words "Player 1: 
+                    _spriteBatch.DrawString(medievalFont, "Player 1:", new Vector2(40, 38), Color.Black);
+
+                    // Draws player 1 hearts
+                    for (int i = 0; i < player1.Stocks; i++)
+                    {
+                        _spriteBatch.Draw(heart, // texture
+                            new Rectangle( // new rectangle
+                            (150) + (35 * i),
+                            40,
+                            32,
+                            32),
+                            Color.White);
+                    }
+
+                    // Draws the words "Player 2: 
+                    _spriteBatch.DrawString(medievalFont,
+                        "Player 2:",
+                        new Vector2((_graphics.PreferredBackBufferWidth - (35 * player2.Stocks) - 150), 38),
+                        Color.Black);
+
+
+                    // Drawing the hearts/ stock for player 2
+                    for (int i = 0; i < player1.Stocks; i++)
+                    {
+                        _spriteBatch.Draw(heart, // texture
+                            new Rectangle( // new rectangle
+                            // puts every heart to the right of the previous.
+                            (_graphics.PreferredBackBufferWidth - 35*player1.Stocks - 40) + (35*i), 
+                            40,
+                            32,
+                            32),
+                            Color.White);
                     }
 
                     break;
