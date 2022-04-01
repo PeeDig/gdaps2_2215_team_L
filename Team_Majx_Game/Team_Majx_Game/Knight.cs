@@ -64,12 +64,12 @@ namespace Team_Majx_Game
                         if (direction == Direction.Left)
                         {
                             SpriteEffect = SpriteEffects.None;
-                            currentHitbox = new Hitbox(new Rectangle(position.X - 50, position.Y, 50, 50), 10, 10, 20);
+                            currentHitbox = new Hitbox(new Rectangle(position.X - 50, position.Y, 50, 50), 10, new Vector2(-10, 10));
                         }
                         else
                         {
                             SpriteEffect = SpriteEffects.FlipHorizontally;
-                            currentHitbox = new Hitbox(new Rectangle(position.X + position.Width, Position.Y, 50, 50), 10, 10, 20);
+                            currentHitbox = new Hitbox(new Rectangle(position.X + position.Width, Position.Y, 50, 50), 10, new Vector2(10, 10));
                         }
                         currentHitbox.Draw(_spriteBatch, hitboxSprite);
                     }
@@ -86,7 +86,7 @@ namespace Team_Majx_Game
                             SpriteEffect = SpriteEffects.FlipHorizontally;
                         }
                     }
-                    _spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), tempColor, 0, Vector2.Zero, SpriteEffect, 0);
+                    _spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 510, 510), tempColor, 0, Vector2.Zero, SpriteEffect, 0);
                     break;
 
                 case CharacterAttackState.ForwardTilt:
@@ -96,12 +96,12 @@ namespace Team_Majx_Game
                         if (direction == Direction.Left)
                         {
                             SpriteEffect = SpriteEffects.None;
-                            currentHitbox = new Hitbox(new Rectangle(position.X - 75, position.Y, 75, 50), 10, 10, 20);
+                            currentHitbox = new Hitbox(new Rectangle(position.X - 75, position.Y, 75, 50), 10, new Vector2(-10, 10));
                         }
                         else
                         {
                             SpriteEffect = SpriteEffects.FlipHorizontally;
-                            currentHitbox = new Hitbox(new Rectangle(position.X + position.Width, Position.Y, 75, 50), 10, 10, 20);
+                            currentHitbox = new Hitbox(new Rectangle(position.X + position.Width, Position.Y, 75, 50), 10, new Vector2(10, 10));
                         }
                         currentHitbox.Draw(_spriteBatch, hitboxSprite);
                     }
@@ -117,7 +117,7 @@ namespace Team_Majx_Game
                             SpriteEffect = SpriteEffects.FlipHorizontally;
                         }
                     }
-                    _spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), tempColor, 0, Vector2.Zero, SpriteEffect, 0);
+                    _spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 510, 510), tempColor, 0, Vector2.Zero, SpriteEffect, 0);
                     break;
                 case CharacterAttackState.DownTilt:
                     if(frame > 4 && frame < 14)
@@ -126,12 +126,12 @@ namespace Team_Majx_Game
                         if (direction == Direction.Left)
                         {
                             SpriteEffect = SpriteEffects.None;
-                            currentHitbox = new Hitbox(new Rectangle(position.X - 75, position.Y + 50, 75, 50), 10, 10, 10);
+                            currentHitbox = new Hitbox(new Rectangle(position.X - 75, position.Y + 50, 75, 50), 10, new Vector2(-10, 10));
                         }
                         else
                         {
                             SpriteEffect = SpriteEffects.FlipHorizontally;
-                            currentHitbox = new Hitbox(new Rectangle(position.X + position.Width, Position.Y + 50, 75, 50), 10, 10, 20);
+                            currentHitbox = new Hitbox(new Rectangle(position.X + position.Width, Position.Y + 50, 75, 50), 10, new Vector2(10, 10));
                         }
                         currentHitbox.Draw(_spriteBatch, hitboxSprite);
                     }
@@ -148,7 +148,7 @@ namespace Team_Majx_Game
                         }
                     }
                     _spriteBatch.Draw(spriteSheet, new Rectangle(Position.X, Position.Y + Position.Height / 2, Position.Width, Position.Height / 2), 
-                        new Rectangle(0, 0, 900, 660), tempColor, 0, Vector2.Zero, SpriteEffect, 0);
+                        new Rectangle(0, 0, 510, 510), tempColor, 0, Vector2.Zero, SpriteEffect, 0);
                     break;
 
                 case CharacterAttackState.NeutralAir:
@@ -158,12 +158,12 @@ namespace Team_Majx_Game
                         if (direction == Direction.Left)
                         {
                             SpriteEffect = SpriteEffects.None;
-                            currentHitbox = new Hitbox(new Rectangle(position.X - 20, position.Y - 20 , position.Width + 20, position.Height + 20), 10, 10, 10);
+                            currentHitbox = new Hitbox(new Rectangle(position.X - 20, position.Y - 20 , position.Width + 20, position.Height + 20), 10, new Vector2(-10,10));
                         }
                         else
                         {
                             SpriteEffect = SpriteEffects.FlipHorizontally;
-                            currentHitbox = new Hitbox(new Rectangle(position.X - 20, position.Y - 20, position.Width + 20, position.Height + 20), 10, 10, 10);
+                            currentHitbox = new Hitbox(new Rectangle(position.X - 20, position.Y - 20, position.Width + 20, position.Height + 20), 10, new Vector2(10, 10));
                         }
                         currentHitbox.Draw(_spriteBatch, hitboxSprite);
                     }
@@ -180,7 +180,7 @@ namespace Team_Majx_Game
                         }
                     }
                     _spriteBatch.Draw(spriteSheet, new Rectangle(Position.X, Position.Y, Position.Width, Position.Height),
-                        new Rectangle(0, 0, 900, 660), tempColor, 0, Vector2.Zero, SpriteEffect, 0);
+                        new Rectangle(0, 0, 510, 510), tempColor, 0, Vector2.Zero, SpriteEffect, 0);
                     break;
             }
 

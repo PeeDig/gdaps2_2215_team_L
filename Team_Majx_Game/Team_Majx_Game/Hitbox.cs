@@ -11,15 +11,13 @@ namespace Team_Majx_Game
     {
         private Rectangle position;
         private double damage;
-        private double knockback;
-        private double knockbackDirection;
+        private Vector2 knockback;
 
-        public Hitbox(Rectangle position, double damage, double knockback, double knockbackDirection)
+        public Hitbox(Rectangle position, double damage, Vector2 knockback)
         {
             this.position = position;
             this.damage = damage;
             this.knockback = knockback;
-            this.knockbackDirection = knockbackDirection;
         }
 
         public Rectangle Position
@@ -34,16 +32,10 @@ namespace Team_Majx_Game
             set { damage = value; }
         }
 
-        public double Knockback
+        public Vector2 Knockback
         {
             get { return knockback; }
             set { knockback = value; }
-        }
-
-        public double KnockbackDireciton
-        {
-            get { return knockbackDirection; }
-            set { knockbackDirection = value; }
         }
 
         //Draw the hurtbox for the demo and potential future testing

@@ -163,7 +163,7 @@ namespace Team_Majx_Game
                             if (KeyPress(up))
                             {
                                 currentAttackState = CharacterAttackState.Jump;
-                                yVelocity = -20;
+                                yVelocity = -16;
                                 position.Y += yVelocity;
                             }
                             else if (KeyPress(attack))
@@ -239,7 +239,7 @@ namespace Team_Majx_Game
                 case CharacterAttackState.JumpSquat:
                     if(lagFrames == 0)
                     {
-                        yVelocity = -20;
+                        yVelocity = -16;
                         position.Y += yVelocity;
                         currentAttackState = CharacterAttackState.Jump;
                     }
@@ -347,7 +347,7 @@ namespace Team_Majx_Game
                             {
                                 if(hasDoubleJump)
                                 {
-                                    yVelocity = -20;
+                                    yVelocity = -16;
                                     hasDoubleJump = false;
                                 }
                             }
@@ -420,15 +420,28 @@ namespace Team_Majx_Game
                     }
                     else if (lagFrames == 0)
                     {
-                        currentAttackState = CharacterAttackState.Crouch;
+                        currentAttackState = CharacterAttackState.Jump;
                         currentFrame = 1;
+                        yVelocity += 1;
                     }
                     else
                     {
-                        lagFrames -= 1;
+                        lagFrames --;
                         currentFrame++;
+                        yVelocity += 1;
                     }
                     position.X += xVelocity;
+                    break;
+
+                case CharacterAttackState.LandingLag:
+                    if(lagFrames <= 0)
+                    {
+                        currentAttackState = CharacterAttackState.Stand;
+                    }
+                    else
+                    {
+                        lagFrames--;
+                    }
                     break;
                     
 
@@ -447,31 +460,32 @@ namespace Team_Majx_Game
                 case CharacterAttackState.Jump:
                     if (direction == Direction.Left)
                     {
-                        spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.White, 0, Vector2.Zero, SpriteEffects.None, 0);
+                        spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 510, 510), Color.White, 0, Vector2.Zero, SpriteEffects.None, 0);
                     }
                     else
                     {
-                        spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 900, 660), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
+                        spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 510, 510), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
                     }
                     break;      
                 case CharacterAttackState.Crouch:
-                    if (direction == Direction.Left)
-                    {
-                        spriteBatch.Draw(spriteSheet, new Rectangle(Position.X, Position.Y + Position.Height / 2, Position.Width, Position.Height / 2), new Rectangle(0, 0, 900, 660), Color.White, 0, Vector2.Zero, SpriteEffects.None, 0);
-                    }
-                    else
-                    {
-                        spriteBatch.Draw(spriteSheet, new Rectangle(Position.X, Position.Y + Position.Height / 2, Position.Width, Position.Height / 2), new Rectangle(0, 0, 900, 660), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
-                    }
-                    break;
                 case CharacterAttackState.JumpSquat:
                     if (direction == Direction.Left)
                     {
-                        spriteBatch.Draw(spriteSheet, new Rectangle(Position.X, Position.Y + Position.Height / 2, Position.Width, Position.Height / 2), new Rectangle(0, 0, 900, 660), Color.White, 0, Vector2.Zero, SpriteEffects.None, 0);
+                        spriteBatch.Draw(spriteSheet, new Rectangle(Position.X, Position.Y + Position.Height / 2, Position.Width, Position.Height / 2), new Rectangle(0, 0, 510, 510), Color.White, 0, Vector2.Zero, SpriteEffects.None, 0);
                     }
                     else
                     {
-                        spriteBatch.Draw(spriteSheet, new Rectangle(Position.X, Position.Y + Position.Height / 2, Position.Width, Position.Height / 2), new Rectangle(0, 0, 900, 660), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
+                        spriteBatch.Draw(spriteSheet, new Rectangle(Position.X, Position.Y + Position.Height / 2, Position.Width, Position.Height / 2), new Rectangle(0, 0, 510, 510), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
+                    }
+                    break;
+                case CharacterAttackState.LandingLag:
+                    if (direction == Direction.Left)
+                    {
+                        spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 510, 510), Color.Gray, 0, Vector2.Zero, SpriteEffects.None, 0);
+                    }
+                    else
+                    {
+                        spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 510, 510), Color.Gray, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
                     }
                     break;
 

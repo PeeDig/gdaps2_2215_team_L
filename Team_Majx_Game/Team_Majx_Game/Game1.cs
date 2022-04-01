@@ -91,8 +91,8 @@ namespace Team_Majx_Game
             player1 = new Knight(knight, //texture
                 manager1.SpawnPoints[0].Position.X, // x starting position
                 manager1.SpawnPoints[0].Position.Y - 50, // y starting position
-                100, // size
-                100,  // size
+                80, // size
+                80,  // size
                 true,
                 manager1, // reference
                 player1HurtBox);
@@ -100,8 +100,8 @@ namespace Team_Majx_Game
             player2 = new Knight(knight, //texture
                 manager1.SpawnPoints[1].Position.X, // x starting position
                 manager1.SpawnPoints[1].Position.Y - 50, // y starting position
-                100, // size
-                100,  // size
+                80, // size
+                80,  // size
                 false,
                 manager1, // reference
                 player1HurtBox);
