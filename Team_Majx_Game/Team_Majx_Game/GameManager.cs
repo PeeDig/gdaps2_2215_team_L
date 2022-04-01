@@ -20,6 +20,7 @@ namespace Team_Majx_Game
         public List<Tile> platforms;
 
         private Tile[,] mapArray;
+        private List<Tile> randomSpawnList;
 
         // File IO fields
         private int stocks;
@@ -68,6 +69,7 @@ namespace Team_Majx_Game
             get { return speedX; }
         }
 
+        // allows Game1 to draw the array
         public Tile[,] MapArray
         {
             get { return mapArray; }
@@ -82,6 +84,7 @@ namespace Team_Majx_Game
             timer = 300;
             damage = 1;
             speedX = 1;
+            randomSpawnList = new List<Tile>();
             platforms = new List<Tile>();
             platforms.Add(new Tile(new Rectangle(720, 505, 400, 100), TileType.Platform));
         }
@@ -148,7 +151,7 @@ namespace Team_Majx_Game
                 // creates the array to hold all of the tiles
                 mapArray = new Tile[levelHeight, levelWidth];
 
-                for(int r = 0; r < levelHeight; r++) // needs to run 45 times
+                for(int r = 0; r < levelHeight; r++)
                 {
                     // gets a line ready to be read in the for loop
                     
@@ -156,34 +159,36 @@ namespace Team_Majx_Game
                     char[] boardCode = boardLine.ToCharArray();
                     
 
-                    for (int c = 0; c < levelWidth; c++)  // needs to run 
+                    for (int c = 0; c < levelWidth; c++)
                     {
                         
                         // This if else chuck will create the specific tile,
                         // with the specific tiletype depending on what it reads from the file
                         if (boardCode[c] == '1')
                         {
-                            mapArray[r, c] = new Tile(new Rectangle(c * 32, r * 32, size, size), TileType.Wall);
+                            mapArray[r, c] = new Tile(new Rectangle(c * 32 - 7, r * 32 - 7, size, size), TileType.Wall);
                         }                                                   
                         else if (boardCode[c] == 'z')                       
                         {                                                   
-                            mapArray[r, c] = new Tile(new Rectangle(c * 32, r * 32, size, size), TileType.Platform);
+                            mapArray[r, c] = new Tile(new Rectangle(c * 32 - 7, r * 32 - 7, size, size), TileType.Platform);
+                            platforms.Add(mapArray[r, c]);
                         }                                                   
                         else if (boardCode[c] == 'S')                       
                         {                                                   
-                            mapArray[r, c] = new Tile(new Rectangle(c * 32, r * 32, size, size), TileType.StartingSpawnPoint);
+                            mapArray[r, c] = new Tile(new Rectangle(c * 32 - 7, r * 32 - 7, size, size), TileType.StartingSpawnPoint);
                         }                                                   
                         else if (boardCode[c] == 'R')                       
                         {                                                   
-                            mapArray[r, c] = new Tile(new Rectangle(c * 32, r * 32, size, size), TileType.RandomSpawnPoint);
+                            mapArray[r, c] = new Tile(new Rectangle(c * 32 - 7, r * 32 - 7, size, size), TileType.RandomSpawnPoint);
+                            randomSpawnList.Add(mapArray[r, c]);
                         }                                                   
                         else if (boardCode[c] == 'M')                       
                         {                                                   
-                            mapArray[r, c] = new Tile(new Rectangle(c * 32, r * 32, size, size), TileType.Death);
+                            mapArray[r, c] = new Tile(new Rectangle(c * 32 - 7, r * 32 - 7, size, size), TileType.Death);
                         }                                                   
                         else                                                
                         {                                                   
-                            mapArray[r, c] = new Tile(new Rectangle(c * 32, r * 32, size, size), TileType.Air);
+                            mapArray[r, c] = new Tile(new Rectangle(c * 32 - 7, r * 32 - 7, size, size), TileType.Air);
                         }
                     }
                 }
