@@ -146,7 +146,7 @@ namespace Team_Majx_Game
                     break;
 
                 case GameState.Battle:
-                    if (SingleKeyPress(Keys.P, kbState))
+                    if (SingleKeyPress(Keys.Q, kbState))
                     {
                         currentState = GameState.Pause;
                     }
