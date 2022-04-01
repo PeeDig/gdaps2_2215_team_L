@@ -54,7 +54,7 @@ namespace Team_Majx_Game
                     break;
 
                 case TileType.Wall:
-                    spriteBatch.Draw(tempSquare, position, Color.Blue);
+                    spriteBatch.Draw(tempSquare, position, Color.Black);
                     break;
 
                 case TileType.StartingSpawnPoint:
