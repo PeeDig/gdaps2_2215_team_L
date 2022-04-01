@@ -29,6 +29,8 @@ namespace Team_Majx_Game
         private double damage;
         private double speedX;
 
+        private int size = 32 + 32/2;
+
 
         // Level fields
         int levelWidth;
@@ -161,27 +163,27 @@ namespace Team_Majx_Game
                         // with the specific tiletype depending on what it reads from the file
                         if (boardCode[c] == '1')
                         {
-                            mapArray[r, c] = new Tile(new Rectangle(c * 32, r * 32, 32, 32), TileType.Wall);
+                            mapArray[r, c] = new Tile(new Rectangle(c * 32, r * 32, size, size), TileType.Wall);
                         }                                                   
                         else if (boardCode[c] == 'z')                       
                         {                                                   
-                            mapArray[r, c] = new Tile(new Rectangle(c * 32, r * 32, 32, 32), TileType.Platform);
+                            mapArray[r, c] = new Tile(new Rectangle(c * 32, r * 32, size, size), TileType.Platform);
                         }                                                   
                         else if (boardCode[c] == 'S')                       
                         {                                                   
-                            mapArray[r, c] = new Tile(new Rectangle(c * 32, r * 32, 32, 32), TileType.StartingSpawnPoint);
+                            mapArray[r, c] = new Tile(new Rectangle(c * 32, r * 32, size, size), TileType.StartingSpawnPoint);
                         }                                                   
                         else if (boardCode[c] == 'R')                       
                         {                                                   
-                            mapArray[r, c] = new Tile(new Rectangle(c * 32, r * 32, 32, 32), TileType.RandomSpawnPoint);
+                            mapArray[r, c] = new Tile(new Rectangle(c * 32, r * 32, size, size), TileType.RandomSpawnPoint);
                         }                                                   
                         else if (boardCode[c] == 'M')                       
                         {                                                   
-                            mapArray[r, c] = new Tile(new Rectangle(c * 32, r * 32, 32, 32), TileType.Death);
+                            mapArray[r, c] = new Tile(new Rectangle(c * 32, r * 32, size, size), TileType.Death);
                         }                                                   
                         else                                                
                         {                                                   
-                            mapArray[r, c] = new Tile(new Rectangle(c * 32, r * 32, 32, 32), TileType.Air);
+                            mapArray[r, c] = new Tile(new Rectangle(c * 32, r * 32, size, size), TileType.Air);
                         }
                     }
                 }
