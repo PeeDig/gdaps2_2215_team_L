@@ -58,11 +58,11 @@ namespace Team_Majx_Game
                     break;
 
                 case TileType.StartingSpawnPoint:
-                    spriteBatch.Draw(tempSquare, position, Color.Green);
+                    // spriteBatch.Draw(tempSquare, position, Color.Green);
                     break;
 
                 case TileType.RandomSpawnPoint:
-                    spriteBatch.Draw(tempSquare, position, Color.Yellow);
+                    // spriteBatch.Draw(tempSquare, position, Color.Yellow);
                     break;
 
                 case TileType.Air:
@@ -70,7 +70,7 @@ namespace Team_Majx_Game
                     break;
 
                 case TileType.Death:
-                    spriteBatch.Draw(tempSquare, position, Color.Orange);
+                    spriteBatch.Draw(tempSquare, position, Color.Yellow);
                     break;
             }
         }

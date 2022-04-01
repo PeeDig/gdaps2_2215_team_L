@@ -76,6 +76,12 @@ namespace Team_Majx_Game
             get { return mapArray; }
         }
 
+        public List<Tile> SpawnPoints
+        {
+            get { return spawnPoints; }
+        }
+
+
         public GameManager()
         {
             // Defualt values
@@ -166,30 +172,31 @@ namespace Team_Majx_Game
                         
                         // This if else chuck will create the specific tile,
                         // with the specific tiletype depending on what it reads from the file
-                        if (boardCode[c] == '1')
+                        if (boardCode[c] == '1') // wall tile
                         {
                             mapArray[r, c] = new Tile(new Rectangle(c * 32 - 7, r * 32 - 7, size, size), TileType.Wall);
+                            platforms.Add(mapArray[r, c]);
                         }                                                   
-                        else if (boardCode[c] == 'z')                       
+                        else if (boardCode[c] == 'z') // platform                    
                         {                                                   
                             mapArray[r, c] = new Tile(new Rectangle(c * 32 - 7, r * 32 - 7, size, size), TileType.Platform);
                             platforms.Add(mapArray[r, c]);
                         }                                                   
-                        else if (boardCode[c] == 'S')                       
+                        else if (boardCode[c] == 'S') // original spawn point                      
                         {                                                   
                             mapArray[r, c] = new Tile(new Rectangle(c * 32 - 7, r * 32 - 7, size, size), TileType.StartingSpawnPoint);
                             spawnPoints.Add(mapArray[r, c]);
                         }                                                   
-                        else if (boardCode[c] == 'R')                       
+                        else if (boardCode[c] == 'R') // random spawn point A.D                   
                         {                                                   
                             mapArray[r, c] = new Tile(new Rectangle(c * 32 - 7, r * 32 - 7, size, size), TileType.RandomSpawnPoint);
                             randomSpawnList.Add(mapArray[r, c]);
                         }                                                   
-                        else if (boardCode[c] == 'M')                       
+                        else if (boardCode[c] == 'M') // death floor                   
                         {                                                   
                             mapArray[r, c] = new Tile(new Rectangle(c * 32 - 7, r * 32 - 7, size, size), TileType.Death);
                         }                                                   
-                        else                                                
+                        else // air                                                
                         {                                                   
                             mapArray[r, c] = new Tile(new Rectangle(c * 32 - 7, r * 32 - 7, size, size), TileType.Air);
                         }
@@ -198,7 +205,9 @@ namespace Team_Majx_Game
             }
             catch(Exception e)
             {
-                Console.WriteLine("Something went wrong: " + e.Message);
+                // i dont know what to put here...
+                Console.WriteLine("Something went wrong: " + e.Message); 
+                // this doesnt prints to console, but monogame....
             }
         }
     }

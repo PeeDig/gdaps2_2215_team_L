@@ -28,6 +28,7 @@ namespace Team_Majx_Game
         private Texture2D hitbox;
         private Texture2D knight;
         private Knight player1;
+        private Knight player2;
         private HurtBox player1HurtBox;
         private int width;
         private int height;
@@ -69,12 +70,28 @@ namespace Team_Majx_Game
             //Creating a temporary knight for the purpose of the first demo
             player1HurtBox = new HurtBox(new Rectangle(720, 405, 100, 100));
             manager1 = new GameManager();
-            
-
-            player1 = new Knight(knight, 720, 405, 100, 100, true, manager1, player1HurtBox);
-
-
             manager1.ReadLevelFile(levelFile);
+
+            player1 = new Knight(knight, //texture
+                manager1.SpawnPoints[0].Position.X, // x starting position
+                manager1.SpawnPoints[0].Position.Y - 50, // y starting position
+                100, // size
+                100,  // size
+                true,
+                manager1, // reference
+                player1HurtBox);
+
+            player2 = new Knight(knight, //texture
+                manager1.SpawnPoints[1].Position.X, // x starting position
+                manager1.SpawnPoints[1].Position.Y - 50, // y starting position
+                100, // size
+                100,  // size
+                false,
+                manager1, // reference
+                player1HurtBox);
+
+
+
             base.Initialize();
         }
 
@@ -149,7 +166,7 @@ namespace Team_Majx_Game
                     {
                         currentState = GameState.Pause;
                     }
-                    else if (SingleKeyPress(Keys.W, kbState))
+                    else if (SingleKeyPress(Keys.Escape, kbState))
                     {
                         currentState = GameState.EndScreen;
                     }
@@ -228,11 +245,15 @@ namespace Team_Majx_Game
                 case GameState.Battle:
                     player1.update(gameTime, Keys.Up, Keys.Down, Keys.Left, Keys.Right, Keys.P, Keys.O, Keys.I, Keys.L);
                     player1.Draw(_spriteBatch, knight, hitbox);
-                    _spriteBatch.Draw(hitbox, new Rectangle(720, 505, 400, 100), Color.White);
 
-                    
+
+                    player2.update(gameTime, Keys.W, Keys.S, Keys.A, Keys.D, Keys.Y, Keys.T, Keys.R, Keys.G);
+                    player2.Draw(_spriteBatch, knight, hitbox);
+                    // _spriteBatch.Draw(hitbox, new Rectangle(720, 505, 400, 100), Color.White);
+
+
                     // Draws the map
-                    for(int r = 0; r < manager1.MapArray.GetLength(0); r++)
+                    for (int r = 0; r < manager1.MapArray.GetLength(0); r++)
                     {
                         for(int c = 0; c < manager1.MapArray.GetLength(1); c++)
                         {
