@@ -226,7 +226,7 @@ namespace Team_Majx_Game
                     player1.Draw(_spriteBatch, knight, hitbox);
                     _spriteBatch.Draw(hitbox, new Rectangle(720, 505, 400, 100), Color.White);
 
-                    /*
+                    
                     // Draws the map
                     for(int r = 0; r < manager1.MapArray.GetLength(0); r++)
                     {
@@ -235,7 +235,7 @@ namespace Team_Majx_Game
                             manager1.MapArray[r,c].Draw(_spriteBatch, tempSquare);
                         }
                     }
-                    */
+                    
 
 
                     break;

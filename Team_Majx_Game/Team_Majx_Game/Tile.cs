@@ -66,7 +66,7 @@ namespace Team_Majx_Game
                     break;
 
                 case TileType.Air:
-                    spriteBatch.Draw(tempSquare, position, Color.LightBlue);
+                    // spriteBatch.Draw(tempSquare, position, Color.LightBlue);
                     break;
 
                 case TileType.Death:
