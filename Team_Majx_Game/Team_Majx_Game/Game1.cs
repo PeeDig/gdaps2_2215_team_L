@@ -33,6 +33,7 @@ namespace Team_Majx_Game
         private int height;
         private SpriteFont medievalFont;
         private Texture2D tempSquare;
+        private List<Button> buttons = new List<Button>();
 
         private string levelFile = "Level1.txt";
 
@@ -136,11 +137,11 @@ namespace Team_Majx_Game
                     }
                     else if (ClickButton(buttonList[1], msState))
                     {
-                        currentState = GameState.Settings;
+                        currentState = GameState.Battle;
                     }
                     else if (ClickButton(buttonList[2], msState))
                     {
-                        currentState = GameState.Battle;
+                        currentState = GameState.Settings;
                     }
                     break;
 
@@ -200,19 +201,18 @@ namespace Team_Majx_Game
                     ShapeBatch.Box(buttonList[0], Color.PapayaWhip);
                     ShapeBatch.Box(buttonList[1], Color.PapayaWhip);
                     ShapeBatch.Box(buttonList[2], Color.PapayaWhip);
-                    _spriteBatch.DrawString(font, "Gameplay demo", new Vector2(width/2, height/2), Color.Black);
-                    _spriteBatch.DrawString(medievalFont, "test", new Vector2(0, 0), Color.Black);
+                    _spriteBatch.DrawString(medievalFont, "Gameplay demo", new Vector2(width/2, height/2), Color.Black);
                     break;
 
                 // draws all of the rules items
                 case GameState.Rules:
-                    _spriteBatch.DrawString(font, "Rules", new Vector2(width / 2, height / 2), Color.Black);
+                    _spriteBatch.DrawString(medievalFont, "Rules", new Vector2(width / 2, height / 2), Color.Black);
                     ShapeBatch.Box(buttonList[1], Color.PapayaWhip);
                     break;
 
                 // draws all of the items needed in settings
                 case GameState.Settings:
-                    _spriteBatch.DrawString(font, "Settings", new Vector2(width / 2, height / 2), Color.Black);
+                    _spriteBatch.DrawString(medievalFont, "Settings", new Vector2(width / 2, height / 2), Color.Black);
                     ShapeBatch.Box(buttonList[1], Color.PapayaWhip);
                     break;
 
@@ -221,7 +221,7 @@ namespace Team_Majx_Game
                     ShapeBatch.Box(buttonList[0], Color.PapayaWhip);
                     ShapeBatch.Box(buttonList[1], Color.PapayaWhip);
                     ShapeBatch.Box(buttonList[2], Color.PapayaWhip);
-                    _spriteBatch.DrawString(font, "Character Select", new Vector2(width / 2, height / 2), Color.Black);
+                    _spriteBatch.DrawString(medievalFont, "Character Select", new Vector2(width / 2, height / 2), Color.Black);
                     break;
 
                 // draws everything in the battle scene
@@ -245,13 +245,13 @@ namespace Team_Majx_Game
                 case GameState.Pause:
                     ShapeBatch.Box(buttonList[3], Color.PapayaWhip);
                     ShapeBatch.Box(buttonList[4], Color.PapayaWhip);
-                    _spriteBatch.DrawString(font, "Game Paused", new Vector2(width / 2, height / 2), Color.Black);
+                    _spriteBatch.DrawString(medievalFont, "Game Paused", new Vector2(width / 2, height / 2), Color.Black);
                     break;
 
                 case GameState.EndScreen:
                     ShapeBatch.Box(buttonList[3], Color.PapayaWhip);
                     ShapeBatch.Box(buttonList[4], Color.PapayaWhip);
-                    _spriteBatch.DrawString(font, "Game End", new Vector2(width / 2, height / 2), Color.Black);
+                    _spriteBatch.DrawString(medievalFont, "Game End", new Vector2(width / 2, height / 2), Color.Black);
                     break;
             }
 
@@ -259,6 +259,7 @@ namespace Team_Majx_Game
             _spriteBatch.End(); // ends spritebatch
             base.Draw(gameTime);
         }
+
 
         // method for controling a key press
         public bool SingleKeyPress(Keys key, KeyboardState kbState)
