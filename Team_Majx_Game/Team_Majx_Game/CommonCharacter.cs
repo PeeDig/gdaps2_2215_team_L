@@ -96,14 +96,14 @@ namespace Team_Majx_Game
             switch (currentAttackState)
             {
                 case CharacterAttackState.Stand:
-                    if (kbState.IsKeyDown(Keys.Right))
+                    if (kbState.IsKeyDown(right))
                     {
                         AccelerateRight();
                         currentAttackState = CharacterAttackState.Walk;
                         direction = Direction.Right;
                         break;
                     }
-                    else if (kbState.IsKeyDown(Keys.Left))
+                    else if (kbState.IsKeyDown(left))
                     {
                         AccelerateLeft();
                         currentAttackState = CharacterAttackState.Walk;
