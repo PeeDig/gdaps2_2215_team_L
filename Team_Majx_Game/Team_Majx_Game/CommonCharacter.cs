@@ -587,6 +587,12 @@ namespace Team_Majx_Game
             }
         }
 
+        // Recursion Method to create an explosion
+        public void RecursionExplosion(float size, Vector2 position)
+        {
+
+        }
+
         public void AerialAccelerateRight()
         {
             if (xVelocity < 8)
