@@ -76,6 +76,13 @@ namespace Team_Majx_Game
             get { return mapArray; }
         }
 
+        // Next two properties allow for other classes
+        // to access the character spawn points
+        public List<Tile> RandomSpawnPoints
+        {
+            get { return randomSpawnList; }
+        }
+
         public List<Tile> SpawnPoints
         {
             get { return spawnPoints; }
@@ -94,7 +101,7 @@ namespace Team_Majx_Game
             randomSpawnList = new List<Tile>();
             platforms = new List<Tile>();
             spawnPoints = new List<Tile>();
-            platforms.Add(new Tile(new Rectangle(720, 505, 400, 100), TileType.Platform));
+            // platforms.Add(new Tile(new Rectangle(720, 505, 400, 100), TileType.Platform));
         }
 
         // Method for writing to the settings file

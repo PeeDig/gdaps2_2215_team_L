@@ -70,7 +70,8 @@ namespace Team_Majx_Game
 
 
         //Creates a character object with their position, textures, width, and height.
-        protected CommonCharacter(Texture2D texture, int x, int y, int width, int height, bool player1, GameManager gameManager, HurtBox hurtBox)
+        protected CommonCharacter(Texture2D texture, int x, int y, int width, int height,
+            bool player1, GameManager gameManager, HurtBox hurtBox)
         {
             this.gameManager = gameManager;
             this.texture = texture;
@@ -88,14 +89,17 @@ namespace Team_Majx_Game
         //Does the attacks and updates the state based on input or game environment
         /*
          * Details:
-         * Instead of edge cancelling we let them slide off the platform, but they stay in the endlag of their current move and finish the animation.
+         * Instead of edge cancelling we let them slide off the platform, but they stay in 
+         * the endlag of their current move and finish the animation.
          * Could lead to some cool combos, but wouldn't lead to edge cancelling being too strong.
-         * Start accelrating when the button is pressed and decelerate when an attack is used, or you stop running or you crouch.
+         * Start accelrating when the button is pressed and decelerate when an attack
+         * is used, or you stop running or you crouch.
          * Should jumping lower your speed? Do we want a base air speed for each class?
          * 
          * 
          */
-        public void update(GameTime gameTime, Keys up, Keys down, Keys left, Keys right, Keys attack, Keys special, Keys strong, Keys dodge)
+        public void update(GameTime gameTime, Keys up, Keys down,
+            Keys left, Keys right, Keys attack, Keys special, Keys strong, Keys dodge)
         {
             kbState = Keyboard.GetState();
             switch (currentAttackState)
@@ -198,7 +202,8 @@ namespace Team_Majx_Game
                                 currentAttackState = CharacterAttackState.Crouch;
                             }
                         }
-                        //If they are walking and not on a platform, set them to the jump state but don't give them initial velocity so they will fall.
+                        //If they are walking and not on a platform, set them to the
+                        //jump state but don't give them initial velocity so they will fall.
                         else
                         {
                             currentAttackState = CharacterAttackState.Jump;
@@ -452,6 +457,9 @@ namespace Team_Majx_Game
 
             }
             prevKBState = kbState;
+
+            // runs the losestock method and respawn
+            LoseStockandRespawn();
         }
 
         //Handles drawing the sprite
@@ -465,32 +473,40 @@ namespace Team_Majx_Game
                 case CharacterAttackState.Jump:
                     if (direction == Direction.Left)
                     {
-                        spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 510, 510), Color.White, 0, Vector2.Zero, SpriteEffects.None, 0);
+                        spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 510, 510),
+                            Color.White, 0, Vector2.Zero, SpriteEffects.None, 0);
                     }
                     else
                     {
-                        spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 510, 510), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
+                        spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 510, 510),
+                            Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
                     }
                     break;      
                 case CharacterAttackState.Crouch:
                 case CharacterAttackState.JumpSquat:
                     if (direction == Direction.Left)
                     {
-                        spriteBatch.Draw(spriteSheet, new Rectangle(Position.X, Position.Y + Position.Height / 2, Position.Width, Position.Height / 2), new Rectangle(0, 0, 510, 510), Color.White, 0, Vector2.Zero, SpriteEffects.None, 0);
+                        spriteBatch.Draw(spriteSheet, new Rectangle(Position.X, Position.Y + Position.Height / 2,
+                            Position.Width, Position.Height / 2), new Rectangle(0, 0, 510, 510),
+                            Color.White, 0, Vector2.Zero, SpriteEffects.None, 0);
                     }
                     else
                     {
-                        spriteBatch.Draw(spriteSheet, new Rectangle(Position.X, Position.Y + Position.Height / 2, Position.Width, Position.Height / 2), new Rectangle(0, 0, 510, 510), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
+                        spriteBatch.Draw(spriteSheet, new Rectangle(Position.X, Position.Y + Position.Height / 2,
+                            Position.Width, Position.Height / 2), new Rectangle(0, 0, 510, 510), 
+                            Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
                     }
                     break;
                 case CharacterAttackState.LandingLag:
                     if (direction == Direction.Left)
                     {
-                        spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 510, 510), Color.Gray, 0, Vector2.Zero, SpriteEffects.None, 0);
+                        spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 510, 510),
+                            Color.Gray, 0, Vector2.Zero, SpriteEffects.None, 0);
                     }
                     else
                     {
-                        spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 510, 510), Color.Gray, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
+                        spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 510, 510),
+                            Color.Gray, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
                     }
                     break;
 
@@ -509,8 +525,10 @@ namespace Team_Majx_Game
 
     
 
-        //attack method to cover all the different attacks. It's virtual so the character classes and override them with their respective attacks.
-        public virtual void Attack(CharacterAttackState attack, Direction direction, int frame, SpriteBatch _spriteBatch, Texture2D hitboxSprite, Texture2D spriteSheet)
+        //attack method to cover all the different attacks. It's virtual so the character classes
+        //and override them with their respective attacks.
+        public virtual void Attack(CharacterAttackState attack, Direction direction,
+            int frame, SpriteBatch _spriteBatch, Texture2D hitboxSprite, Texture2D spriteSheet)
         {
             
         }
@@ -543,6 +561,29 @@ namespace Team_Majx_Game
                 {
                     xVelocity++;
                 }
+            }
+        }
+
+        // Determines if the player will lose a life.
+        public void LoseStockandRespawn()
+        {
+            if(health <= 0)
+            {
+                stockCount--; // takes away life
+                health = 100; // resets the health to full
+
+
+                // ---- TODO ----Have the charcter respawn at a random spawn point ----
+                /*
+                 * 
+                 */
+
+
+
+                // ---- TODO ---- Have a quick exposion appear ----
+                /*
+                 * 
+                 */
             }
         }
 
