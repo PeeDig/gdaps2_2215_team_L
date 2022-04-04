@@ -300,6 +300,9 @@ namespace Team_Majx_Game
                     // Draws the words "Player 1: 
                     _spriteBatch.DrawString(medievalFont, "Player 1:", new Vector2(40, 38), Color.Black);
 
+                    //Draws the player 1 state for testing
+                    _spriteBatch.DrawString(medievalFont, player1.ToString(), new Vector2(60, 70), Color.Black);
+
                     // Draws player 1 hearts
                     for (int i = 0; i < player1.Stocks; i++)
                     {

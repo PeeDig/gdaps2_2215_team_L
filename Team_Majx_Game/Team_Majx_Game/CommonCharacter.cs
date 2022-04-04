@@ -318,10 +318,12 @@ namespace Team_Majx_Game
                                     if (direction == Direction.Right)
                                     {
                                         currentAttackState = CharacterAttackState.ForwardAir;
+                                        lagFrames = getEndlag(CharacterAttackState.ForwardAir);
                                     }
                                     else
                                     {
                                         currentAttackState = CharacterAttackState.BackAir;
+                                        lagFrames = getEndlag(CharacterAttackState.BackAir);
                                     }
                                 }
 
@@ -339,10 +341,12 @@ namespace Team_Majx_Game
                                     if (direction == Direction.Left)
                                     {
                                         currentAttackState = CharacterAttackState.ForwardAir;
+                                        lagFrames = getEndlag(CharacterAttackState.ForwardAir);
                                     }
                                     else
                                     {
                                         currentAttackState = CharacterAttackState.BackAir;
+                                        lagFrames = getEndlag(CharacterAttackState.BackAir);
                                     }
                                 }
 
@@ -367,6 +371,7 @@ namespace Team_Majx_Game
                                 if(KeyPress(attack))
                                 {
                                     currentAttackState = CharacterAttackState.UpAir;
+                                    lagFrames = getEndlag(CharacterAttackState.UpAir);
                                 }
                                 else if(KeyPress(special))
                                 {
@@ -379,6 +384,7 @@ namespace Team_Majx_Game
                                 if (KeyPress(attack))
                                 {
                                     currentAttackState = CharacterAttackState.DownAir;
+                                    lagFrames = getEndlag(CharacterAttackState.DownAir);
                                 }
                                 else if (KeyPress(special))
                                 {
@@ -394,6 +400,7 @@ namespace Team_Majx_Game
 
                 case CharacterAttackState.Jab:
                 case CharacterAttackState.ForwardTilt:
+                case CharacterAttackState.UpTilt:
                     if (lagFrames == 0)
                     {
                         currentAttackState = CharacterAttackState.Stand;
@@ -422,11 +429,16 @@ namespace Team_Majx_Game
                     Decelerate();
                     break;
                 case CharacterAttackState.NeutralAir:
+                case CharacterAttackState.ForwardAir:
+                case CharacterAttackState.UpAir:
+                case CharacterAttackState.BackAir:
+                case CharacterAttackState.DownAir:
                     position.Y += yVelocity;
                     if(StandingOnPlatform())
                     {
                         currentAttackState = CharacterAttackState.LandingLag;
                         lagFrames = 10;
+                        currentFrame = 1;
                     }
                     else if (lagFrames == 0)
                     {
@@ -510,12 +522,9 @@ namespace Team_Majx_Game
                     }
                     break;
 
-                //Runs the attack method in the character classes based on the move inputted and the current frame we are on.
-                case CharacterAttackState.Jab:
-                case CharacterAttackState.ForwardTilt:
-                case CharacterAttackState.DownTilt:
-                case CharacterAttackState.UpTilt:
-                case CharacterAttackState.NeutralAir:
+                //Runs the attack method in the character classes based on the move inputted and the current frame we are on (uses default because the 
+                //method for each attack is the same so I can just use one case for all of them.
+                default:
                     Attack(currentAttackState, direction, currentFrame, spriteBatch, hitboxSprite, spriteSheet);
                     break;
 
@@ -523,7 +532,14 @@ namespace Team_Majx_Game
 
     }
 
-    
+    //returns character state
+
+        public string ToString()
+
+        {
+            return currentAttackState.ToString();
+        }
+
 
         //attack method to cover all the different attacks. It's virtual so the character classes
         //and override them with their respective attacks.
@@ -664,6 +680,8 @@ namespace Team_Majx_Game
         }
 
         //Checks if the character is standing on a platform
+
+        //TODO: Check if character is actually standing on a platform and not touching it from the side or the top.
         public bool StandingOnPlatform()
         {
             foreach (Tile t in gameManager.platforms)
