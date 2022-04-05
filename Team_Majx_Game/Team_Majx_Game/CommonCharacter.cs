@@ -169,7 +169,7 @@ namespace Team_Majx_Game
                     {
                         currentAttackState = CharacterAttackState.ForwardStrong;
                     }
-                    else if(kbState.IsKeyDown(up))
+                    else if (kbState.IsKeyDown(up))
                     {
 
                     }
@@ -220,7 +220,7 @@ namespace Team_Majx_Game
                                 Decelerate();
                                 currentAttackState = CharacterAttackState.Dodge;
                             }
-                            else if(KeyPress(down))
+                            else if (KeyPress(down))
                             {
                                 Decelerate();
                                 currentAttackState = CharacterAttackState.Crouch;
@@ -271,23 +271,23 @@ namespace Team_Majx_Game
                 //Case for when you press jump on the ground and you "charge" up the jump for a few frames before jumping.
                 //Up tilt, up strong, and up special can be inputted during these frames.
                 case CharacterAttackState.JumpSquat:
-                    if(lagFrames == 0)
+                    if (lagFrames == 0)
                     {
                         yVelocity = -16;
                         position.Y += yVelocity;
                         currentAttackState = CharacterAttackState.Jump;
                     }
-                    else if(KeyPress(attack))
+                    else if (KeyPress(attack))
                     {
                         currentAttackState = CharacterAttackState.UpTilt;
                         lagFrames = getEndlag(CharacterAttackState.UpTilt);
                     }
-                    else if(KeyPress(strong))
+                    else if (KeyPress(strong))
                     {
                         currentAttackState = CharacterAttackState.UpStrong;
                         lagFrames = getEndlag(CharacterAttackState.UpStrong);
                     }
-                    else if(KeyPress(special))
+                    else if (KeyPress(special))
                     {
                         currentAttackState = CharacterAttackState.UpSpecial;
                         lagFrames = getEndlag(CharacterAttackState.UpSpecial);
@@ -351,7 +351,7 @@ namespace Team_Majx_Game
                                     }
                                 }
 
-                                else if(KeyPress(special))
+                                else if (KeyPress(special))
                                 {
                                     currentAttackState = CharacterAttackState.ForwardSpecial;
                                     direction = Direction.Right;
@@ -381,23 +381,23 @@ namespace Team_Majx_Game
                                 }
                             }
 
-                            if(KeyPress(up))
+                            if (KeyPress(up))
                             {
-                                if(hasDoubleJump)
+                                if (hasDoubleJump)
                                 {
                                     yVelocity = -16;
                                     hasDoubleJump = false;
                                 }
                             }
-                            
+
                             if (kbState.IsKeyDown(up))
                             {
-                                if(KeyPress(attack))
+                                if (KeyPress(attack))
                                 {
                                     currentAttackState = CharacterAttackState.UpAir;
                                     lagFrames = getEndlag(CharacterAttackState.UpAir);
                                 }
-                                else if(KeyPress(special))
+                                else if (KeyPress(special))
                                 {
                                     currentAttackState = CharacterAttackState.UpSpecial;
                                 }
@@ -426,7 +426,7 @@ namespace Team_Majx_Game
                 case CharacterAttackState.ForwardTilt:
                 case CharacterAttackState.UpTilt:
                     yVelocity = 0;
-                
+
                     if (lagFrames == 0)
                     {
                         currentAttackState = CharacterAttackState.Stand;
@@ -478,7 +478,7 @@ namespace Team_Majx_Game
                 case CharacterAttackState.BackAir:
                 case CharacterAttackState.DownAir:
                     position.Y += yVelocity;
-                    if(StandingOnPlatform())
+                    if (StandingOnPlatform())
                     {
                         currentAttackState = CharacterAttackState.LandingLag;
                         lagFrames = 10;
@@ -492,7 +492,7 @@ namespace Team_Majx_Game
                     }
                     else
                     {
-                        lagFrames --;
+                        lagFrames--;
                         currentFrame++;
                         yVelocity += 1;
                     }
@@ -500,7 +500,7 @@ namespace Team_Majx_Game
                     break;
 
                 case CharacterAttackState.LandingLag:
-                    if(lagFrames <= 0)
+                    if (lagFrames <= 0)
                     {
                         currentAttackState = CharacterAttackState.Stand;
                     }
@@ -510,7 +510,7 @@ namespace Team_Majx_Game
                     }
                     break;
 
-                    
+
 
             }
 
@@ -522,19 +522,13 @@ namespace Team_Majx_Game
 
             hurtBox.Position = position;
 
-            Knight temp = new Knight(texture, position.X, position.Y, position.Width, Position.Height, player1, gameManager, hurtBox);
-            //Checks if the hurtbox if the
-            
-
-            // runs the losestock method and respawn
-            LoseStockandRespawn();
-        }
             // controls death and respawn
             if (health <= 0 || position.Y >= gameManager.ScreenHeight)
             {
                 // runs the losestock method and respawn
                 LoseStockandRespawn();
             }
+        }
 
 
        public void gotHit(int hitStun)
