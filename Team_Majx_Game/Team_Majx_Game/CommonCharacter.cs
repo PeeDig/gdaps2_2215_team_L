@@ -63,9 +63,33 @@ namespace Team_Majx_Game
         private Tile platform;
         private bool inEndlag;
 
+        // controls the game
+        private bool playerAlive = true;
+
+        Random rng = new Random();
+
         public int Stocks
         {
             get { return stockCount; }
+            set { stockCount = value; }
+        }
+
+        public bool PlayerAlive
+        {
+            get { return playerAlive; }
+            set { playerAlive = value; }
+        }
+
+        public Rectangle PlayerPosition
+        {
+            get { return position; }
+            set { position = value; }
+        }
+
+        public double Health
+        {
+            get { return health; }
+            set { health = value; }
         }
 
 
@@ -465,13 +489,27 @@ namespace Team_Majx_Game
                         lagFrames--;
                     }
                     break;
+
                     
 
             }
+
+            // keeps track if the player is alive
+            if (stockCount <= 0)
+            {
+                playerAlive = false;
+            }
+
+            // controls death and respawn
+            if (health <= 0 || position.Y >= gameManager.ScreenHeight)
+            {
+                // runs the losestock method and respawn
+                LoseStockandRespawn();
+            }
+
+
             prevKBState = kbState;
 
-            // runs the losestock method and respawn
-            LoseStockandRespawn();
         }
 
         //Handles drawing the sprite
@@ -530,7 +568,7 @@ namespace Team_Majx_Game
 
             }
 
-    }
+        }
 
     //returns character state
 
@@ -583,24 +621,20 @@ namespace Team_Majx_Game
         // Determines if the player will lose a life.
         public void LoseStockandRespawn()
         {
-            if(health <= 0)
-            {
-                stockCount--; // takes away life
-                health = 100; // resets the health to full
+            stockCount--; // takes away life
+            health = 100; // resets the health to full
 
 
-                // ---- TODO ----Have the charcter respawn at a random spawn point ----
-                /*
-                 * 
-                 */
-
-
-
-                // ---- TODO ---- Have a quick exposion appear ----
-                /*
-                 * 
-                 */
-            }
+            // ---- TODO ----Have the charcter respawn at a random spawn point ----
+            Tile spawnTile = gameManager.RandomSpawnPoints[rng.Next(0, gameManager.RandomSpawnPoints.Count)];
+            position.X = spawnTile.Position.X;
+            position.Y = spawnTile.Position.Y - 64;
+            
+            
+            // ---- TODO ---- Have a quick exposion appear ----
+            /*
+             * 
+             */
         }
 
         // Recursion Method to create an explosion

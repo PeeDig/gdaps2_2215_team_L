@@ -88,6 +88,17 @@ namespace Team_Majx_Game
             get { return spawnPoints; }
         }
 
+        // will be used for setting the screen size
+        public int ScreenHeight
+        {
+            get { return levelHeight * 32; }
+        }
+
+        public int ScreenWidth
+        {
+            get { return levelWidth * 32; }
+        }
+
 
         public GameManager()
         {
