@@ -425,6 +425,8 @@ namespace Team_Majx_Game
                 case CharacterAttackState.Jab:
                 case CharacterAttackState.ForwardTilt:
                 case CharacterAttackState.UpTilt:
+                    yVelocity = 0;
+                
                     if (lagFrames == 0)
                     {
                         currentAttackState = CharacterAttackState.Stand;
@@ -436,8 +438,26 @@ namespace Team_Majx_Game
                         currentFrame++;
                     }
                     position.X += xVelocity;
+                    position.Y += yVelocity;
                     Decelerate();
                     break;
+
+                case CharacterAttackState.Hitstun:
+                    if (lagFrames == 0)
+                    {
+                        currentAttackState = CharacterAttackState.Jump;
+                        currentFrame = 1;
+                    }
+                    else
+                    {
+                        lagFrames -= 1;
+                        currentFrame++;
+                    }
+                    position.X += xVelocity;
+                    position.Y += yVelocity;
+                    Decelerate();
+                    break;
+
                 case CharacterAttackState.DownTilt:
                     if (lagFrames == 0)
                     {
@@ -500,6 +520,15 @@ namespace Team_Majx_Game
                 playerAlive = false;
             }
 
+            hurtBox.Position = position;
+
+            Knight temp = new Knight(texture, position.X, position.Y, position.Width, Position.Height, player1, gameManager, hurtBox);
+            //Checks if the hurtbox if the
+            
+
+            // runs the losestock method and respawn
+            LoseStockandRespawn();
+        }
             // controls death and respawn
             if (health <= 0 || position.Y >= gameManager.ScreenHeight)
             {
@@ -508,9 +537,12 @@ namespace Team_Majx_Game
             }
 
 
-            prevKBState = kbState;
-
+       public void gotHit(int hitStun)
+        {
+            currentAttackState = CharacterAttackState.Hitstun;
+            lagFrames = hitStun;
         }
+
 
         //Handles drawing the sprite
         public void Draw(SpriteBatch spriteBatch, Texture2D spriteSheet, Texture2D hitboxSprite)
@@ -548,6 +580,7 @@ namespace Team_Majx_Game
                     }
                     break;
                 case CharacterAttackState.LandingLag:
+                case CharacterAttackState.Hitstun:
                     if (direction == Direction.Left)
                     {
                         spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 510, 510),
@@ -563,7 +596,7 @@ namespace Team_Majx_Game
                 //Runs the attack method in the character classes based on the move inputted and the current frame we are on (uses default because the 
                 //method for each attack is the same so I can just use one case for all of them.
                 default:
-                    Attack(currentAttackState, direction, currentFrame, spriteBatch, hitboxSprite, spriteSheet);
+                    Attack(currentAttackState, direction, currentFrame, spriteBatch, hitboxSprite, spriteSheet, player1);
                     break;
 
             }
@@ -575,14 +608,14 @@ namespace Team_Majx_Game
         public string ToString()
 
         {
-            return currentAttackState.ToString();
+            return currentAttackState.ToString() + " x: " + xVelocity.ToString() + "y: " + yVelocity.ToString();
         }
 
 
         //attack method to cover all the different attacks. It's virtual so the character classes
         //and override them with their respective attacks.
         public virtual void Attack(CharacterAttackState attack, Direction direction,
-            int frame, SpriteBatch _spriteBatch, Texture2D hitboxSprite, Texture2D spriteSheet)
+            int frame, SpriteBatch _spriteBatch, Texture2D hitboxSprite, Texture2D spriteSheet, bool isPlayer1)
         {
             
         }
