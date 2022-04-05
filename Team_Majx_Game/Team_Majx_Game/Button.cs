@@ -11,8 +11,6 @@ namespace Team_Majx_Game
     class Button
     {
         //Declares all needed fields
-        private SpriteFont medievalFont;
-        private string buttonTxt;
         private Rectangle postion;
         private Vector2 buttonTxtLoc;
 
@@ -22,27 +20,10 @@ namespace Team_Majx_Game
             get { return postion; }
         }
 
-        public string ButtonTxt
-        {
-            get { return buttonTxt; }
-            set { buttonTxt = value; }
-        }
-
         //Parameterized constructor
-        public Button(Rectangle postion, SpriteFont medievalFont)
+        public Button(Rectangle postion)
         {
             this.postion = postion;
-            this.medievalFont = medievalFont;
-            //this.buttonTxt = buttonTxt;
-        }
-
-        // button's text location
-        public void TextLocation()
-        {
-            Vector2 textSize = medievalFont.MeasureString(buttonTxt);
-            buttonTxtLoc = new Vector2(
-                (postion.X + postion.Width / 2) - textSize.X / 2,
-                (postion.Y + postion.Height / 2) - textSize.Y / 2);
         }
 
         // method controls a single mouse button click
@@ -72,8 +53,12 @@ namespace Team_Majx_Game
         }
 
         //Draws the button's text
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, string buttonTxt, SpriteFont medievalFont)
         {
+            Vector2 textSize = medievalFont.MeasureString(buttonTxt);
+            buttonTxtLoc = new Vector2(
+                (postion.X + postion.Width / 2) - textSize.X / 2,
+                (postion.Y + postion.Height / 2) - textSize.Y / 2);
             spriteBatch.DrawString(medievalFont, buttonTxt, buttonTxtLoc, Color.Black);
         }
     }
