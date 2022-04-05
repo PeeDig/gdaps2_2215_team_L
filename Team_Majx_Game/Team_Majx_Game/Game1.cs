@@ -41,7 +41,8 @@ namespace Team_Majx_Game
         // knight objects
         private Knight player1;
         private Knight player2;
-        private HurtBox player1HurtBox;
+        private HurtBox Player1HurtBox;
+        private HurtBox Player2HurtBox;
         private int width;
         private int height;
         private SpriteFont medievalFont;
@@ -100,9 +101,12 @@ namespace Team_Majx_Game
             buttonList.Add(new Button(new Rectangle(720, 600, 200, 75), medievalFont));
 
             //Creating a temporary knight for the purpose of the first demo
-            player1HurtBox = new HurtBox(new Rectangle(720, 405, 100, 100));
+           
             manager1 = new GameManager();
             manager1.ReadLevelFile(levelFile);
+
+            Player1HurtBox = new HurtBox(new Rectangle(manager1.SpawnPoints[0].Position.X, manager1.SpawnPoints[0].Position.Y, 80, 80));
+            Player2HurtBox = new HurtBox(new Rectangle(manager1.SpawnPoints[1].Position.X, manager1.SpawnPoints[1].Position.Y, 80, 80));
 
             player1 = new Knight(knight, //texture
                 manager1.SpawnPoints[0].Position.X, // x starting position
@@ -111,7 +115,7 @@ namespace Team_Majx_Game
                 80,  // size
                 true,
                 manager1, // reference
-                player1HurtBox);
+                Player1HurtBox);
 
             player2 = new Knight(knight, //texture
                 manager1.SpawnPoints[1].Position.X, // x starting position
@@ -120,7 +124,9 @@ namespace Team_Majx_Game
                 80,  // size
                 false,
                 manager1, // reference
-                player1HurtBox);
+                Player2HurtBox);
+
+            
 
             base.Initialize();
         }
@@ -281,10 +287,12 @@ namespace Team_Majx_Game
                 case GameState.Battle:
                     player1.update(gameTime, Keys.Up, Keys.Down, Keys.Left, Keys.Right, Keys.P, Keys.O, Keys.I, Keys.L);
                     player1.Draw(_spriteBatch, knight, hitbox);
+                    player1.DealDamage(player2);
 
 
                     player2.update(gameTime, Keys.W, Keys.S, Keys.A, Keys.D, Keys.Y, Keys.T, Keys.R, Keys.G);
                     player2.Draw(_spriteBatch, knight, hitbox);
+                    player2.DealDamage(player1);
                     // _spriteBatch.Draw(hitbox, new Rectangle(720, 505, 400, 100), Color.White);
 
 
@@ -301,6 +309,7 @@ namespace Team_Majx_Game
                     _spriteBatch.DrawString(medievalFont, "Player 1:", new Vector2(40, 38), Color.Black);
 
                     //Draws the player 1 state for testing
+                    _spriteBatch.DrawString(medievalFont, player1.ToString(), new Vector2(60, 70), Color.Black);
                     _spriteBatch.DrawString(medievalFont, player1.ToString(), new Vector2(60, 70), Color.Black);
 
                     // Draws player 1 hearts
@@ -320,6 +329,13 @@ namespace Team_Majx_Game
                         "Player 2:",
                         new Vector2((_graphics.PreferredBackBufferWidth - (35 * player2.Stocks) - 150), 38),
                         Color.Black);
+
+                    _spriteBatch.DrawString(medievalFont, player1.Health.ToString(), new Vector2(40, 60), Color.Black);
+
+                    _spriteBatch.DrawString(medievalFont,
+                       player2.Health.ToString(),
+                       new Vector2((_graphics.PreferredBackBufferWidth - (35 * player2.Stocks) - 150), 60),
+                       Color.Black);
 
 
                     // Drawing the hearts/ stock for player 2
