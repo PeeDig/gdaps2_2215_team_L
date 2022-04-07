@@ -80,10 +80,17 @@ namespace Team_Majx_Game
             set { playerAlive = value; }
         }
 
-        public Rectangle PlayerPosition
+        // Next 2 properties get the x and y of the characters
+        public int PlayerPositionX
         {
-            get { return position; }
-            set { position = value; }
+            get { return position.X; }
+            set { position.X = value; }
+        }
+
+        public int PlayerPositionY
+        {
+            get { return position.Y; }
+            set { position.Y = value; }
         }
 
         public double Health

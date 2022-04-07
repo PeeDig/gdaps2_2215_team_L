@@ -231,10 +231,12 @@ namespace Team_Majx_Game
                     if (buttonList[3].ClickButton(msState, prevMsState))
                     {
                         currentState = GameState.CharSelect;
+                        ResetPlayers();
                     }
                     else if (buttonList[4].ClickButton(msState, prevMsState))
                     {
                         currentState = GameState.Menu;
+                        ResetPlayers();
                     }
                     break;
             }
@@ -407,14 +409,16 @@ namespace Team_Majx_Game
         {
             // resets player 1
             player1.Stocks = manager1.Stocks;
-            player1.Health = 100;
-            player1.PlayerPosition = manager1.SpawnPoints[1].Position;
+            player1.Health = manager1.Health;
+            player1.PlayerPositionX = manager1.SpawnPoints[0].Position.X;
+            player1.PlayerPositionY = manager1.SpawnPoints[1].Position.Y - 40;
             player1.PlayerAlive = true;
 
             // resets player 2
             player2.Stocks = manager1.Stocks;
-            player2.Health = 100;
-            player2.PlayerPosition = manager1.SpawnPoints[2].Position;
+            player2.Health = manager1.Health;
+            player2.PlayerPositionX = manager1.SpawnPoints[1].Position.X;
+            player2.PlayerPositionY = manager1.SpawnPoints[1].Position.Y - 40;
             player2.PlayerAlive = true;
         }
     }
