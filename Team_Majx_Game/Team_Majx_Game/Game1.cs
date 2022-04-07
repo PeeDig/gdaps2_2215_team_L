@@ -60,6 +60,17 @@ namespace Team_Majx_Game
         //Temporary game manager class for the first demo
         private GameManager manager1;
 
+        // property so the cc class can get texturd
+        public Texture2D Explosion
+        {
+            get { return explosion; }
+        }
+
+        public SpriteBatch SpriteBatch
+        {
+            get { return _spriteBatch; }
+        }
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -312,13 +323,13 @@ namespace Team_Majx_Game
 
                 // draws everything in the battle scene
                 case GameState.Battle:
-                    player1.update(gameTime, Keys.Up, Keys.Down, Keys.Left, Keys.Right, Keys.P, Keys.O, Keys.I, Keys.L);
-                    player1.Draw(_spriteBatch, knight, hitbox);
+                    player1.update(gameTime, Keys.Up, Keys.Down, Keys.Left, Keys.Right, Keys.P, Keys.O, Keys.I, Keys.L, _spriteBatch);
+                    player1.Draw(_spriteBatch, knight, hitbox, explosion);
                     player1.DealDamage(player2);
 
 
-                    player2.update(gameTime, Keys.W, Keys.S, Keys.A, Keys.D, Keys.Y, Keys.T, Keys.R, Keys.G);
-                    player2.Draw(_spriteBatch, knight, hitbox);
+                    player2.update(gameTime, Keys.W, Keys.S, Keys.A, Keys.D, Keys.Y, Keys.T, Keys.R, Keys.G, _spriteBatch);
+                    player2.Draw(_spriteBatch, knight, hitbox, explosion);
                     player2.DealDamage(player1);
                     // _spriteBatch.Draw(hitbox, new Rectangle(720, 505, 400, 100), Color.White);
 
@@ -447,6 +458,8 @@ namespace Team_Majx_Game
             player1.PlayerPositionX = manager1.SpawnPoints[0].Position.X;
             player1.PlayerPositionY = manager1.SpawnPoints[1].Position.Y - 40;
             player1.PlayerAlive = true;
+            player1.XVelocity = 0;
+            player1.YVelocity = 0;
 
             // resets player 2
             player2.Stocks = manager1.Stocks;
@@ -454,6 +467,8 @@ namespace Team_Majx_Game
             player2.PlayerPositionX = manager1.SpawnPoints[1].Position.X;
             player2.PlayerPositionY = manager1.SpawnPoints[1].Position.Y - 40;
             player2.PlayerAlive = true;
+            player2.XVelocity = 0;
+            player2.YVelocity = 0;
         }
     }
 }
