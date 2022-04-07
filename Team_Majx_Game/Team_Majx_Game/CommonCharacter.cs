@@ -65,6 +65,7 @@ namespace Team_Majx_Game
 
         // controls the game
         private bool playerAlive = true;
+        private bool playerDied = false;
 
         Random rng = new Random();
 
@@ -130,7 +131,7 @@ namespace Team_Majx_Game
          * 
          */
         public void update(GameTime gameTime, Keys up, Keys down,
-            Keys left, Keys right, Keys attack, Keys special, Keys strong, Keys dodge)
+            Keys left, Keys right, Keys attack, Keys special, Keys strong, Keys dodge, SpriteBatch sb)
         {
             kbState = Keyboard.GetState();
             switch (currentAttackState)
@@ -547,7 +548,7 @@ namespace Team_Majx_Game
 
 
         //Handles drawing the sprite
-        public void Draw(SpriteBatch spriteBatch, Texture2D spriteSheet, Texture2D hitboxSprite)
+        public void Draw(SpriteBatch spriteBatch, Texture2D spriteSheet, Texture2D hitboxSprite, Texture2D ex)
         {
             switch (currentAttackState)
             {
@@ -603,6 +604,11 @@ namespace Team_Majx_Game
 
             }
 
+            if (!playerDied)
+            {
+                spriteBatch.Draw(ex, position, Color.White);
+            }
+
         }
 
     //returns character state
@@ -656,20 +662,21 @@ namespace Team_Majx_Game
         // Determines if the player will lose a life.
         public void LoseStockandRespawn()
         {
+            playerDied = true;
             stockCount--; // takes away life
             health = 100; // resets the health to full
+
+            // ---- TODO ---- Have a quick exposion appear ----
+            // SpriteBatch.Draw(game1Object.Explosion, position, Color.White);  // draws the explosion
 
 
             // ---- TODO ----Have the charcter respawn at a random spawn point ----
             Tile spawnTile = gameManager.RandomSpawnPoints[rng.Next(0, gameManager.RandomSpawnPoints.Count)];
             position.X = spawnTile.Position.X;
             position.Y = spawnTile.Position.Y - 64;
+
+            playerDied = false;
             
-            
-            // ---- TODO ---- Have a quick exposion appear ----
-            /*
-             * 
-             */
         }
 
         // Recursion Method to create an explosion
