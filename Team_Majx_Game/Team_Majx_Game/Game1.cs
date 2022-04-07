@@ -247,7 +247,7 @@ namespace Team_Majx_Game
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Tan);
 
             _spriteBatch.Begin();
             ShapeBatch.Begin(GraphicsDevice);
@@ -262,9 +262,9 @@ namespace Team_Majx_Game
                     //_spriteBatch.Draw(castleBackground, backgroundPosition, Color.White);
                     
                     //Draws all the Buttons for the menu
-                    ShapeBatch.Box(buttonList[0].Postion, Color.PapayaWhip);
-                    ShapeBatch.Box(buttonList[1].Postion, Color.PapayaWhip);
-                    ShapeBatch.Box(buttonList[2].Postion, Color.PapayaWhip);
+                    ShapeBatch.Box(buttonList[0].Postion, Color.SlateGray);
+                    ShapeBatch.Box(buttonList[1].Postion, Color.SlateGray);
+                    ShapeBatch.Box(buttonList[2].Postion, Color.SlateGray);
 
                     //Draws the menu text and button text
                     _spriteBatch.DrawString(bigMedievalFont, "Medieval Kombat", new Vector2
@@ -279,7 +279,10 @@ namespace Team_Majx_Game
                     //Draws the rules menu and buttons
                     _spriteBatch.DrawString(bigMedievalFont, "Rules", new Vector2
                         ((width / 2) - (bigMedievalFont.MeasureString("Rules").X/2), 200), Color.Black);
-                    ShapeBatch.Box(buttonList[1].Postion, Color.PapayaWhip);
+                    _spriteBatch.DrawString(medievalFont, "Be the first knight to bring your opponents health to 0! Try not to fall off!" +
+                        "\nPlayer 1\tPlayer 2\nMove - Arrow Keys\tMove - WASD\nJab - P\tJab - Y\n"
+                        , new Vector2 ((width / 2) - (medievalFont.MeasureString("Rules").X / 2), 200), Color.Black);
+                    ShapeBatch.Box(buttonList[1].Postion, Color.SlateGray);
                     buttonList[1].Draw(_spriteBatch, "Back", medievalFont);
                     break;
 
@@ -287,7 +290,7 @@ namespace Team_Majx_Game
                 case GameState.Settings:
                     _spriteBatch.DrawString(bigMedievalFont, "Settings", new Vector2
                         ((width / 2) - (bigMedievalFont.MeasureString("Settings").X/2), 200), Color.Black);
-                    ShapeBatch.Box(buttonList[1].Postion, Color.PapayaWhip);
+                    ShapeBatch.Box(buttonList[1].Postion, Color.SlateGray);
                     buttonList[1].Draw(_spriteBatch, "Back", medievalFont);
                     break;
 
@@ -379,8 +382,8 @@ namespace Team_Majx_Game
 
                 case GameState.Pause:
                     //Draws the Pause buttons
-                    ShapeBatch.Box(buttonList[3].Postion, Color.PapayaWhip);
-                    ShapeBatch.Box(buttonList[4].Postion, Color.PapayaWhip);
+                    ShapeBatch.Box(buttonList[3].Postion, Color.SlateGray);
+                    ShapeBatch.Box(buttonList[4].Postion, Color.SlateGray);
 
                     //Draws the Pause menu and button text
                     _spriteBatch.DrawString(bigMedievalFont, "Game Paused", new Vector2
@@ -391,7 +394,7 @@ namespace Team_Majx_Game
 
                 case GameState.EndScreen:
                     //Draws the End Screen buttons
-                    ShapeBatch.Box(buttonList[1].Postion, Color.PapayaWhip);
+                    ShapeBatch.Box(buttonList[1].Postion, Color.SlateGray);
 
                     //Draws the End Screen menu and button text
                     _spriteBatch.DrawString(bigMedievalFont, "Game End", new Vector2
