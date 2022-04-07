@@ -63,9 +63,40 @@ namespace Team_Majx_Game
         private Tile platform;
         private bool inEndlag;
 
+        // controls the game
+        private bool playerAlive = true;
+
+        Random rng = new Random();
+
         public int Stocks
         {
             get { return stockCount; }
+            set { stockCount = value; }
+        }
+
+        public bool PlayerAlive
+        {
+            get { return playerAlive; }
+            set { playerAlive = value; }
+        }
+
+        // Next 2 properties get the x and y of the characters
+        public int PlayerPositionX
+        {
+            get { return position.X; }
+            set { position.X = value; }
+        }
+
+        public int PlayerPositionY
+        {
+            get { return position.Y; }
+            set { position.Y = value; }
+        }
+
+        public double Health
+        {
+            get { return health; }
+            set { health = value; }
         }
 
 
@@ -145,7 +176,7 @@ namespace Team_Majx_Game
                     {
                         currentAttackState = CharacterAttackState.ForwardStrong;
                     }
-                    else if(kbState.IsKeyDown(up))
+                    else if (kbState.IsKeyDown(up))
                     {
 
                     }
@@ -196,7 +227,7 @@ namespace Team_Majx_Game
                                 Decelerate();
                                 currentAttackState = CharacterAttackState.Dodge;
                             }
-                            else if(KeyPress(down))
+                            else if (KeyPress(down))
                             {
                                 Decelerate();
                                 currentAttackState = CharacterAttackState.Crouch;
@@ -247,23 +278,23 @@ namespace Team_Majx_Game
                 //Case for when you press jump on the ground and you "charge" up the jump for a few frames before jumping.
                 //Up tilt, up strong, and up special can be inputted during these frames.
                 case CharacterAttackState.JumpSquat:
-                    if(lagFrames == 0)
+                    if (lagFrames == 0)
                     {
                         yVelocity = -16;
                         position.Y += yVelocity;
                         currentAttackState = CharacterAttackState.Jump;
                     }
-                    else if(KeyPress(attack))
+                    else if (KeyPress(attack))
                     {
                         currentAttackState = CharacterAttackState.UpTilt;
                         lagFrames = getEndlag(CharacterAttackState.UpTilt);
                     }
-                    else if(KeyPress(strong))
+                    else if (KeyPress(strong))
                     {
                         currentAttackState = CharacterAttackState.UpStrong;
                         lagFrames = getEndlag(CharacterAttackState.UpStrong);
                     }
-                    else if(KeyPress(special))
+                    else if (KeyPress(special))
                     {
                         currentAttackState = CharacterAttackState.UpSpecial;
                         lagFrames = getEndlag(CharacterAttackState.UpSpecial);
@@ -327,7 +358,7 @@ namespace Team_Majx_Game
                                     }
                                 }
 
-                                else if(KeyPress(special))
+                                else if (KeyPress(special))
                                 {
                                     currentAttackState = CharacterAttackState.ForwardSpecial;
                                     direction = Direction.Right;
@@ -357,23 +388,23 @@ namespace Team_Majx_Game
                                 }
                             }
 
-                            if(KeyPress(up))
+                            if (KeyPress(up))
                             {
-                                if(hasDoubleJump)
+                                if (hasDoubleJump)
                                 {
                                     yVelocity = -16;
                                     hasDoubleJump = false;
                                 }
                             }
-                            
+
                             if (kbState.IsKeyDown(up))
                             {
-                                if(KeyPress(attack))
+                                if (KeyPress(attack))
                                 {
                                     currentAttackState = CharacterAttackState.UpAir;
                                     lagFrames = getEndlag(CharacterAttackState.UpAir);
                                 }
-                                else if(KeyPress(special))
+                                else if (KeyPress(special))
                                 {
                                     currentAttackState = CharacterAttackState.UpSpecial;
                                 }
@@ -401,6 +432,8 @@ namespace Team_Majx_Game
                 case CharacterAttackState.Jab:
                 case CharacterAttackState.ForwardTilt:
                 case CharacterAttackState.UpTilt:
+                    yVelocity = 0;
+
                     if (lagFrames == 0)
                     {
                         currentAttackState = CharacterAttackState.Stand;
@@ -412,8 +445,26 @@ namespace Team_Majx_Game
                         currentFrame++;
                     }
                     position.X += xVelocity;
+                    position.Y += yVelocity;
                     Decelerate();
                     break;
+
+                case CharacterAttackState.Hitstun:
+                    if (lagFrames == 0)
+                    {
+                        currentAttackState = CharacterAttackState.Jump;
+                        currentFrame = 1;
+                    }
+                    else
+                    {
+                        lagFrames -= 1;
+                        currentFrame++;
+                    }
+                    position.X += xVelocity;
+                    position.Y += yVelocity;
+                    Decelerate();
+                    break;
+
                 case CharacterAttackState.DownTilt:
                     if (lagFrames == 0)
                     {
@@ -434,7 +485,7 @@ namespace Team_Majx_Game
                 case CharacterAttackState.BackAir:
                 case CharacterAttackState.DownAir:
                     position.Y += yVelocity;
-                    if(StandingOnPlatform())
+                    if (StandingOnPlatform())
                     {
                         currentAttackState = CharacterAttackState.LandingLag;
                         lagFrames = 10;
@@ -448,7 +499,7 @@ namespace Team_Majx_Game
                     }
                     else
                     {
-                        lagFrames --;
+                        lagFrames--;
                         currentFrame++;
                         yVelocity += 1;
                     }
@@ -456,7 +507,7 @@ namespace Team_Majx_Game
                     break;
 
                 case CharacterAttackState.LandingLag:
-                    if(lagFrames <= 0)
+                    if (lagFrames <= 0)
                     {
                         currentAttackState = CharacterAttackState.Stand;
                     }
@@ -465,14 +516,34 @@ namespace Team_Majx_Game
                         lagFrames--;
                     }
                     break;
-                    
+
+
 
             }
-            prevKBState = kbState;
 
-            // runs the losestock method and respawn
-            LoseStockandRespawn();
+            // keeps track if the player is alive
+            if (stockCount <= 0)
+            {
+                playerAlive = false;
+            }
+
+            hurtBox.Position = position;
+
+            // controls death and respawn
+            if (health <= 0 || position.Y >= gameManager.ScreenHeight)
+            {
+                // runs the losestock method and respawn
+                LoseStockandRespawn();
+            }
         }
+
+
+       public void gotHit(int hitStun)
+        {
+            currentAttackState = CharacterAttackState.Hitstun;
+            lagFrames = hitStun;
+        }
+
 
         //Handles drawing the sprite
         public void Draw(SpriteBatch spriteBatch, Texture2D spriteSheet, Texture2D hitboxSprite)
@@ -510,6 +581,7 @@ namespace Team_Majx_Game
                     }
                     break;
                 case CharacterAttackState.LandingLag:
+                case CharacterAttackState.Hitstun:
                     if (direction == Direction.Left)
                     {
                         spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 510, 510),
@@ -525,26 +597,26 @@ namespace Team_Majx_Game
                 //Runs the attack method in the character classes based on the move inputted and the current frame we are on (uses default because the 
                 //method for each attack is the same so I can just use one case for all of them.
                 default:
-                    Attack(currentAttackState, direction, currentFrame, spriteBatch, hitboxSprite, spriteSheet);
+                    Attack(currentAttackState, direction, currentFrame, spriteBatch, hitboxSprite, spriteSheet, player1);
                     break;
 
             }
 
-    }
+        }
 
     //returns character state
 
         public string ToString()
 
         {
-            return currentAttackState.ToString();
+            return currentAttackState.ToString() + " x: " + xVelocity.ToString() + "y: " + yVelocity.ToString();
         }
 
 
         //attack method to cover all the different attacks. It's virtual so the character classes
         //and override them with their respective attacks.
         public virtual void Attack(CharacterAttackState attack, Direction direction,
-            int frame, SpriteBatch _spriteBatch, Texture2D hitboxSprite, Texture2D spriteSheet)
+            int frame, SpriteBatch _spriteBatch, Texture2D hitboxSprite, Texture2D spriteSheet, bool isPlayer1)
         {
             
         }
@@ -583,24 +655,20 @@ namespace Team_Majx_Game
         // Determines if the player will lose a life.
         public void LoseStockandRespawn()
         {
-            if(health <= 0)
-            {
-                stockCount--; // takes away life
-                health = 100; // resets the health to full
+            stockCount--; // takes away life
+            health = 100; // resets the health to full
 
 
-                // ---- TODO ----Have the charcter respawn at a random spawn point ----
-                /*
-                 * 
-                 */
-
-
-
-                // ---- TODO ---- Have a quick exposion appear ----
-                /*
-                 * 
-                 */
-            }
+            // ---- TODO ----Have the charcter respawn at a random spawn point ----
+            Tile spawnTile = gameManager.RandomSpawnPoints[rng.Next(0, gameManager.RandomSpawnPoints.Count)];
+            position.X = spawnTile.Position.X;
+            position.Y = spawnTile.Position.Y - 64;
+            
+            
+            // ---- TODO ---- Have a quick exposion appear ----
+            /*
+             * 
+             */
         }
 
         // Recursion Method to create an explosion

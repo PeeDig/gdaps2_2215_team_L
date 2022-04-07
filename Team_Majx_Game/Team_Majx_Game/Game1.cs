@@ -43,17 +43,15 @@ namespace Team_Majx_Game
         // knight objects
         private Knight player1;
         private Knight player2;
-        private HurtBox player1HurtBox;
+        private HurtBox Player1HurtBox;
+        private HurtBox Player2HurtBox;
         private int width;
         private int height;
         private Texture2D tempSquare;
+        private Texture2D explosion;
 
         // buttons
         private List<Button> buttonList;
-
-        // controls the game
-        private bool player1Alive = true;
-        private bool player2Alive = true;
 
         private int p2StockCt;
 
@@ -71,8 +69,10 @@ namespace Team_Majx_Game
 
         protected override void Initialize()
         {
-            width = 1440;
-            height = 810;
+            manager1 = new GameManager();
+            manager1.ReadLevelFile(levelFile);
+            width = manager1.ScreenWidth;
+            height = manager1.ScreenHeight - 20;
             _graphics.PreferredBackBufferWidth = width;
             _graphics.PreferredBackBufferHeight = height;
             _graphics.ApplyChanges();
@@ -93,9 +93,12 @@ namespace Team_Majx_Game
             buttonList.Add(new Button(new Rectangle(774, 600, 200, 75)));
 
             //Creating a temporary knight for the purpose of the first demo
-            player1HurtBox = new HurtBox(new Rectangle(720, 405, 100, 100));
+           
             manager1 = new GameManager();
             manager1.ReadLevelFile(levelFile);
+
+            Player1HurtBox = new HurtBox(new Rectangle(manager1.SpawnPoints[0].Position.X, manager1.SpawnPoints[0].Position.Y, 80, 80));
+            Player2HurtBox = new HurtBox(new Rectangle(manager1.SpawnPoints[1].Position.X, manager1.SpawnPoints[1].Position.Y, 80, 80));
 
             player1 = new Knight(knight, //texture
                 manager1.SpawnPoints[0].Position.X, // x starting position
@@ -104,7 +107,7 @@ namespace Team_Majx_Game
                 80,  // size
                 true,
                 manager1, // reference
-                player1HurtBox);
+                Player1HurtBox);
 
             player2 = new Knight(knight, //texture
                 manager1.SpawnPoints[1].Position.X, // x starting position
@@ -113,7 +116,9 @@ namespace Team_Majx_Game
                 80,  // size
                 false,
                 manager1, // reference
-                player1HurtBox);
+                Player2HurtBox);
+
+            
 
             //Background variables
             backgroundPosition = new Rectangle(0, 0, width, height);
@@ -136,6 +141,7 @@ namespace Team_Majx_Game
             font = Content.Load<SpriteFont>("arial");
             medievalFont = Content.Load<SpriteFont>("dutchMediaeval");
             bigMedievalFont = Content.Load<SpriteFont>("bigDutchMediaeval");
+            explosion = Content.Load<Texture2D>("explosion");
         }
 
         protected override void Update(GameTime gameTime)
@@ -206,10 +212,11 @@ namespace Team_Majx_Game
                     }
 
                     // If a player dies, switch to the end screen
-                    if(!player2Alive || !player1Alive)
+                    if(!player1.PlayerAlive || !player2.PlayerAlive)
                     {
                         currentState = GameState.EndScreen;
                     }
+                    
                     break;
 
                 case GameState.Pause:
@@ -227,6 +234,7 @@ namespace Team_Majx_Game
                     if (buttonList[1].ClickButton(msState, prevMsState))
                     {
                         currentState = GameState.Menu;
+                        ResetPlayers();
                     }
                     break;
             }
@@ -303,10 +311,12 @@ namespace Team_Majx_Game
                 case GameState.Battle:
                     player1.update(gameTime, Keys.Up, Keys.Down, Keys.Left, Keys.Right, Keys.P, Keys.O, Keys.I, Keys.L);
                     player1.Draw(_spriteBatch, knight, hitbox);
+                    player1.DealDamage(player2);
 
 
                     player2.update(gameTime, Keys.W, Keys.S, Keys.A, Keys.D, Keys.Y, Keys.T, Keys.R, Keys.G);
                     player2.Draw(_spriteBatch, knight, hitbox);
+                    player2.DealDamage(player1);
                     // _spriteBatch.Draw(hitbox, new Rectangle(720, 505, 400, 100), Color.White);
 
 
@@ -323,6 +333,7 @@ namespace Team_Majx_Game
                     _spriteBatch.DrawString(medievalFont, "Player 1:", new Vector2(40, 38), Color.Black);
 
                     //Draws the player 1 state for testing
+                    _spriteBatch.DrawString(medievalFont, player1.ToString(), new Vector2(60, 70), Color.Black);
                     _spriteBatch.DrawString(medievalFont, player1.ToString(), new Vector2(60, 70), Color.Black);
 
                     // Draws player 1 hearts
@@ -343,14 +354,21 @@ namespace Team_Majx_Game
                         new Vector2((_graphics.PreferredBackBufferWidth - (35 * player2.Stocks) - 150), 38),
                         Color.Black);
 
+                    _spriteBatch.DrawString(medievalFont, player1.Health.ToString(), new Vector2(40, 60), Color.Black);
+
+                    _spriteBatch.DrawString(medievalFont,
+                       player2.Health.ToString(),
+                       new Vector2((_graphics.PreferredBackBufferWidth - (35 * player2.Stocks) - 150), 60),
+                       Color.Black);
+
 
                     // Drawing the hearts/ stock for player 2
-                    for (int i = 0; i < player1.Stocks; i++)
+                    for (int i = 0; i < player2.Stocks; i++)
                     {
                         _spriteBatch.Draw(heart, // texture
                             new Rectangle( // new rectangle
                             // puts every heart to the right of the previous.
-                            (_graphics.PreferredBackBufferWidth - 35*player1.Stocks - 40) + (35*i), 
+                            (_graphics.PreferredBackBufferWidth - 35*player2.Stocks - 40) + (35*i), 
                             40,
                             32,
                             32),
@@ -380,14 +398,21 @@ namespace Team_Majx_Game
                         ((width / 2) - (bigMedievalFont.MeasureString("Game End").X/2), 250), Color.Black);
                     buttonList[1].Draw(_spriteBatch, "Menu", medievalFont);
 
-                    if (!player2Alive)
+                    if (!player2.PlayerAlive)
                     {
-                        // Implement the player 1 win
+                        _spriteBatch.DrawString(medievalFont,
+                            "Player 1 Wins!",
+                            new Vector2(width / 2, height/2),
+                            Color.Black);
                     }
                     else
                     {
-                        // Implement the player 2 win
+                        _spriteBatch.DrawString(medievalFont,
+                            "Player 2 Wins!",
+                            new Vector2(width / 2, height / 2),
+                            Color.Black);
                     }
+
                     break;
             }
 
@@ -408,6 +433,24 @@ namespace Team_Majx_Game
             {
                 return false;
             }
+        }
+
+        // resets the players
+        public void ResetPlayers()
+        {
+            // resets player 1
+            player1.Stocks = manager1.Stocks;
+            player1.Health = manager1.Health;
+            player1.PlayerPositionX = manager1.SpawnPoints[0].Position.X;
+            player1.PlayerPositionY = manager1.SpawnPoints[1].Position.Y - 40;
+            player1.PlayerAlive = true;
+
+            // resets player 2
+            player2.Stocks = manager1.Stocks;
+            player2.Health = manager1.Health;
+            player2.PlayerPositionX = manager1.SpawnPoints[1].Position.X;
+            player2.PlayerPositionY = manager1.SpawnPoints[1].Position.Y - 40;
+            player2.PlayerAlive = true;
         }
     }
 }
