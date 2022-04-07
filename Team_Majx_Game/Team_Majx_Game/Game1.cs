@@ -209,12 +209,11 @@ namespace Team_Majx_Game
                     }
 
                     // If a player dies, switch to the end screen
-                    /*
                     if(!player1.PlayerAlive || !player2.PlayerAlive)
                     {
                         currentState = GameState.EndScreen;
                     }
-                    */
+                    
                     break;
 
                 case GameState.Pause:
