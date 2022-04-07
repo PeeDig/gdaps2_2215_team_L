@@ -62,6 +62,7 @@ namespace Team_Majx_Game
         private KeyboardState prevKBState;
         private Tile platform;
         private bool inEndlag;
+        private Game1 game1Object;
 
         // controls the game
         private bool playerAlive = true;
@@ -130,7 +131,7 @@ namespace Team_Majx_Game
          * 
          */
         public void update(GameTime gameTime, Keys up, Keys down,
-            Keys left, Keys right, Keys attack, Keys special, Keys strong, Keys dodge)
+            Keys left, Keys right, Keys attack, Keys special, Keys strong, Keys dodge, SpriteBatch sb)
         {
             kbState = Keyboard.GetState();
             switch (currentAttackState)
@@ -658,6 +659,9 @@ namespace Team_Majx_Game
             stockCount--; // takes away life
             health = 100; // resets the health to full
 
+            // ---- TODO ---- Have a quick exposion appear ----
+            // SpriteBatch.Draw(game1Object.Explosion, position, Color.White);  // draws the explosion
+
 
             // ---- TODO ----Have the charcter respawn at a random spawn point ----
             Tile spawnTile = gameManager.RandomSpawnPoints[rng.Next(0, gameManager.RandomSpawnPoints.Count)];
@@ -665,10 +669,7 @@ namespace Team_Majx_Game
             position.Y = spawnTile.Position.Y - 64;
             
             
-            // ---- TODO ---- Have a quick exposion appear ----
-            /*
-             * 
-             */
+            
         }
 
         // Recursion Method to create an explosion
