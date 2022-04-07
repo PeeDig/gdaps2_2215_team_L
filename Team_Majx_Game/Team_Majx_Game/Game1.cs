@@ -321,12 +321,12 @@ namespace Team_Majx_Game
                 // draws everything in the battle scene
                 case GameState.Battle:
                     player1.update(gameTime, Keys.Up, Keys.Down, Keys.Left, Keys.Right, Keys.P, Keys.O, Keys.I, Keys.L, _spriteBatch);
-                    player1.Draw(_spriteBatch, knight, hitbox);
+                    player1.Draw(_spriteBatch, knight, hitbox, explosion);
                     player1.DealDamage(player2);
 
 
                     player2.update(gameTime, Keys.W, Keys.S, Keys.A, Keys.D, Keys.Y, Keys.T, Keys.R, Keys.G, _spriteBatch);
-                    player2.Draw(_spriteBatch, knight, hitbox);
+                    player2.Draw(_spriteBatch, knight, hitbox, explosion);
                     player2.DealDamage(player1);
                     // _spriteBatch.Draw(hitbox, new Rectangle(720, 505, 400, 100), Color.White);
 
