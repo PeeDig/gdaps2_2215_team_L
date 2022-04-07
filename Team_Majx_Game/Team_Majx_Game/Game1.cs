@@ -11,7 +11,6 @@ namespace Team_Majx_Game
         Menu,
         Rules,
         Settings,
-        CharSelect,
         Battle,
         Pause,
         EndScreen
@@ -28,10 +27,13 @@ namespace Team_Majx_Game
         // imput objects
         private KeyboardState prevkbState;
         private MouseState prevMsState;
-        //private List<Rectangle> buttonList;
 
-        // font
+        // font and backgrounds
         private SpriteFont font;
+        private SpriteFont medievalFont;
+        private SpriteFont bigMedievalFont;
+        private Texture2D castleBackground;
+        private Rectangle backgroundPosition;
         
         // textures
         private Texture2D hitbox;
@@ -45,13 +47,11 @@ namespace Team_Majx_Game
         private HurtBox Player2HurtBox;
         private int width;
         private int height;
-        private SpriteFont medievalFont;
         private Texture2D tempSquare;
         private Texture2D explosion;
 
         // buttons
         private List<Button> buttonList;
-        private List<string> buttonLabelList;
 
         private int p2StockCt;
 
@@ -93,22 +93,15 @@ namespace Team_Majx_Game
 
             //buttonList = new List<Rectangle>();
             buttonList = new List<Button>();
-            //All labels of the buttons
-            buttonLabelList = new List<string>();
-            buttonLabelList.Add("Rules");
-            buttonLabelList.Add("Character\nSelect");
-            buttonLabelList.Add("Settings");
-            buttonLabelList.Add("Main\nMenu");
-            buttonLabelList.Add("Fight!");
 
             //Each button seperated by 240
-            //Buttons split up by 3
-            buttonList.Add(new Button(new Rectangle(260, 600, 200, 75), medievalFont));
-            buttonList.Add(new Button(new Rectangle(620, 600, 200, 75), medievalFont));
-            buttonList.Add(new Button(new Rectangle(980, 600, 200, 75), medievalFont));
+            //Buttons split up by 3 (and 1 for the middle)
+            buttonList.Add(new Button(new Rectangle(260, 600, 200, 75)));
+            buttonList.Add(new Button(new Rectangle(620, 600, 200, 75)));
+            buttonList.Add(new Button(new Rectangle(980, 600, 200, 75)));
             //Buttons split up by 2
-            buttonList.Add(new Button(new Rectangle(500, 600, 200, 75), medievalFont));
-            buttonList.Add(new Button(new Rectangle(720, 600, 200, 75), medievalFont));
+            buttonList.Add(new Button(new Rectangle(466, 600, 200, 75)));
+            buttonList.Add(new Button(new Rectangle(774, 600, 200, 75)));
 
             //Creating a temporary knight for the purpose of the first demo
            
@@ -138,19 +131,27 @@ namespace Team_Majx_Game
 
             
 
+            //Background variables
+            backgroundPosition = new Rectangle(0, 0, width, height);
+
             base.Initialize();
         }
 
         // Load all of the Textures and all of the fonts
         protected override void LoadContent()
         {
+            //Textures
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             hitbox = Content.Load<Texture2D>("hitbox");
             knight = Content.Load<Texture2D>("knight1");
             heart = Content.Load<Texture2D>("heart");
             tempSquare = Content.Load<Texture2D>("red square");
+            castleBackground = Content.Load<Texture2D>("castle");
+
+            //Fonts
             font = Content.Load<SpriteFont>("arial");
             medievalFont = Content.Load<SpriteFont>("dutchMediaeval");
+            bigMedievalFont = Content.Load<SpriteFont>("bigDutchMediaeval");
             explosion = Content.Load<Texture2D>("explosion");
         }
 
@@ -172,7 +173,7 @@ namespace Team_Majx_Game
                     }
                     else if (buttonList[1].ClickButton(msState, prevMsState))
                     {
-                        currentState = GameState.CharSelect;
+                        currentState = GameState.Battle;
                     }
                     else if (buttonList[2].ClickButton(msState, prevMsState))
                     {
@@ -194,6 +195,7 @@ namespace Team_Majx_Game
                     }
                     break;
 
+                    /*
                 case GameState.CharSelect:
                     if (buttonList[0].ClickButton(msState, prevMsState))
                     {
@@ -208,13 +210,14 @@ namespace Team_Majx_Game
                         currentState = GameState.Settings;
                     }
                     break;
+                    */
 
                 case GameState.Battle:
                     if (SingleKeyPress(Keys.Q, kbState))
                     {
                         currentState = GameState.Pause;
                     }
-                    else if (SingleKeyPress(Keys.Escape, kbState))
+                    else if (SingleKeyPress(Keys.Enter, kbState))
                     {
                         currentState = GameState.EndScreen;
                     }
@@ -239,12 +242,7 @@ namespace Team_Majx_Game
                     break;
 
                 case GameState.EndScreen:
-                    if (buttonList[3].ClickButton(msState, prevMsState))
-                    {
-                        currentState = GameState.CharSelect;
-                        ResetPlayers();
-                    }
-                    else if (buttonList[4].ClickButton(msState, prevMsState))
+                    if (buttonList[1].ClickButton(msState, prevMsState))
                     {
                         currentState = GameState.Menu;
                         ResetPlayers();
@@ -271,31 +269,54 @@ namespace Team_Majx_Game
             {
                 // draws all of the menu items
                 case GameState.Menu:
+                    //Background image
+                    //_spriteBatch.Draw(castleBackground, backgroundPosition, Color.White);
+                    
+                    //Draws all the Buttons for the menu
                     ShapeBatch.Box(buttonList[0].Postion, Color.PapayaWhip);
                     ShapeBatch.Box(buttonList[1].Postion, Color.PapayaWhip);
                     ShapeBatch.Box(buttonList[2].Postion, Color.PapayaWhip);
-                    _spriteBatch.DrawString(medievalFont, "Gameplay demo", new Vector2(width/2, height/2), Color.Black);
+
+                    //Draws the menu text and button text
+                    _spriteBatch.DrawString(bigMedievalFont, "Medieval Kombat", new Vector2
+                        ((width/2) - (bigMedievalFont.MeasureString("Medieval Kombat").X/2), 250), Color.Black);
+                    buttonList[0].Draw(_spriteBatch, "Rules", medievalFont);
+                    buttonList[1].Draw(_spriteBatch, "To Battle!", medievalFont);
+                    buttonList[2].Draw(_spriteBatch, "Settings", medievalFont);
                     break;
 
                 // draws all of the rules items
                 case GameState.Rules:
-                    _spriteBatch.DrawString(medievalFont, "Rules", new Vector2(width / 2, height / 2), Color.Black);
+                    //Draws the rules menu and buttons
+                    _spriteBatch.DrawString(bigMedievalFont, "Rules", new Vector2
+                        ((width / 2) - (bigMedievalFont.MeasureString("Rules").X/2), 200), Color.Black);
                     ShapeBatch.Box(buttonList[1].Postion, Color.PapayaWhip);
+                    buttonList[1].Draw(_spriteBatch, "Back", medievalFont);
                     break;
 
                 // draws all of the items needed in settings
                 case GameState.Settings:
-                    _spriteBatch.DrawString(medievalFont, "Settings", new Vector2(width / 2, height / 2), Color.Black);
+                    _spriteBatch.DrawString(bigMedievalFont, "Settings", new Vector2
+                        ((width / 2) - (bigMedievalFont.MeasureString("Settings").X/2), 200), Color.Black);
                     ShapeBatch.Box(buttonList[1].Postion, Color.PapayaWhip);
+                    buttonList[1].Draw(_spriteBatch, "Back", medievalFont);
                     break;
 
+                    /*
                 // draws all of the character select items
                 case GameState.CharSelect:
+                    //Draws all the character select buttons
                     ShapeBatch.Box(buttonList[0].Postion, Color.PapayaWhip);
                     ShapeBatch.Box(buttonList[1].Postion, Color.PapayaWhip);
                     ShapeBatch.Box(buttonList[2].Postion, Color.PapayaWhip);
-                    _spriteBatch.DrawString(medievalFont, "Character Select", new Vector2(width / 2, height / 2), Color.Black);
+
+                    //Draws the character select menu and button text
+                    _spriteBatch.DrawString(bigMedievalFont, "Character Select", new Vector2(width / 2, height / 2), Color.Black);
+                    buttonList[0].Draw(_spriteBatch, "Menu", medievalFont);
+                    buttonList[1].Draw(_spriteBatch, "To Battle!", medievalFont);
+                    buttonList[2].Draw(_spriteBatch, "Settings", medievalFont);
                     break;
+                    */
 
                 // draws everything in the battle scene
                 case GameState.Battle:
@@ -368,15 +389,25 @@ namespace Team_Majx_Game
                     break;
 
                 case GameState.Pause:
+                    //Draws the Pause buttons
                     ShapeBatch.Box(buttonList[3].Postion, Color.PapayaWhip);
                     ShapeBatch.Box(buttonList[4].Postion, Color.PapayaWhip);
-                    _spriteBatch.DrawString(medievalFont, "Game Paused", new Vector2(width / 2, height / 2), Color.Black);
+
+                    //Draws the Pause menu and button text
+                    _spriteBatch.DrawString(bigMedievalFont, "Game Paused", new Vector2
+                        ((width / 2) - (bigMedievalFont.MeasureString("Game Paused").X/2), 250), Color.Black);
+                    buttonList[3].Draw(_spriteBatch, "Unpause", medievalFont);
+                    buttonList[4].Draw(_spriteBatch, "Menu", medievalFont);
                     break;
 
                 case GameState.EndScreen:
-                    ShapeBatch.Box(buttonList[3].Postion, Color.PapayaWhip);
-                    ShapeBatch.Box(buttonList[4].Postion, Color.PapayaWhip);
-                    // _spriteBatch.DrawString(medievalFont, "Game End", new Vector2(width / 2, height / 2), Color.Black);
+                    //Draws the End Screen buttons
+                    ShapeBatch.Box(buttonList[1].Postion, Color.PapayaWhip);
+
+                    //Draws the End Screen menu and button text
+                    _spriteBatch.DrawString(bigMedievalFont, "Game End", new Vector2
+                        ((width / 2) - (bigMedievalFont.MeasureString("Game End").X/2), 250), Color.Black);
+                    buttonList[1].Draw(_spriteBatch, "Menu", medievalFont);
 
                     if (!player2.PlayerAlive)
                     {
