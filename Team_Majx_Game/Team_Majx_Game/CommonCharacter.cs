@@ -535,6 +535,7 @@ namespace Team_Majx_Game
                 // runs the losestock method and respawn
                 LoseStockandRespawn();
             }
+            prevKBState = kbState;
         }
 
 
@@ -609,7 +610,7 @@ namespace Team_Majx_Game
         public string ToString()
 
         {
-            return currentAttackState.ToString() + " x: " + xVelocity.ToString() + "y: " + yVelocity.ToString();
+            return currentAttackState.ToString() + " x: " + xVelocity.ToString() + "y: " + yVelocity.ToString() + hasDoubleJump.ToString();
         }
 
 
@@ -739,12 +740,24 @@ namespace Team_Majx_Game
             get { return speed; }
         }
 
+        public int XVelocity
+        {
+            get { return XVelocity; }
+            set { xVelocity = value; }
+        }
+
+        public int YVelocity
+        {
+            get { return yVelocity; }
+            set { yVelocity = value; }
+        }
+
         //Checks if a key was just pressed
         public bool KeyPress(Keys key)
         {
             if (prevKBState != null)
                 return kbState.IsKeyDown(key) && prevKBState.IsKeyUp(key);
-            return true;
+            return false;
         }
 
         //Checks if the character is standing on a platform
@@ -754,20 +767,28 @@ namespace Team_Majx_Game
         {
             foreach (Tile t in gameManager.platforms)
             {
-                if (position.Intersects(t.Position))
-                {
-                    return true;
-                }
                 /*
-                if (position.X - position.Height <= t.Position.Y)
+                if (position.X >= t.Position.X && position.X <= t.Position.X + t.Position.Width && t.TileType == TileType.Platform
+                    && (position.Y + position.Height <= t.Position.Y) && position.Y >= t.Position.Y && yVelocity >= -14)
                 {
+                    yVelocity = 0;
                     return true;
                 }
-                else if (position.X + position.Y - position.Height <= t.Position.Y)
+                else if (position.X + position.Width >= t.Position.X && position.X + position.Width <= t.Position.X + t.Position.Width && t.TileType == TileType.Platform
+                    && position.Y - position.Height <= t.Position.Y && position.Y <= t.Position.Y && yVelocity >= -14)
                 {
+                    yVelocity = 0;
                     return true;
                 }
                 */
+
+                if(t.TileType == TileType.Platform && position.X + position.Width >= t.Position.X && position.X <= t.Position.X + t.Position.Width &&
+                    position.Y + position.Height >= t.Position.Y && position.Y <= t.Position.Y + t.Position.Height)
+                {
+                    yVelocity = 0;
+                    return true;
+                }
+
             }
             return false;
         }

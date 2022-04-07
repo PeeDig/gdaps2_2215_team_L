@@ -444,6 +444,8 @@ namespace Team_Majx_Game
             player1.PlayerPositionX = manager1.SpawnPoints[0].Position.X;
             player1.PlayerPositionY = manager1.SpawnPoints[1].Position.Y - 40;
             player1.PlayerAlive = true;
+            player1.XVelocity = 0;
+            player1.YVelocity = 0;
 
             // resets player 2
             player2.Stocks = manager1.Stocks;
@@ -451,6 +453,8 @@ namespace Team_Majx_Game
             player2.PlayerPositionX = manager1.SpawnPoints[1].Position.X;
             player2.PlayerPositionY = manager1.SpawnPoints[1].Position.Y - 40;
             player2.PlayerAlive = true;
+            player2.XVelocity = 0;
+            player2.YVelocity = 0;
         }
     }
 }
