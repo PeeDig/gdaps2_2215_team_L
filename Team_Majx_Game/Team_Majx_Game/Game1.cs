@@ -303,24 +303,24 @@ namespace Team_Majx_Game
                         medievalFont, 230), Color.Black);
                     _spriteBatch.DrawString(medievalFont, "Jab - P", CenterFont("Jab - P",
                         medievalFont, 260), Color.Black);
-                    _spriteBatch.DrawString(medievalFont, "Special - O", CenterFont("Special - O",
-                        medievalFont, 290), Color.Black);
-                    _spriteBatch.DrawString(medievalFont, "Strong Attack - I", CenterFont("Strong Attack - I",
-                        medievalFont, 320), Color.Black);
+                 //   _spriteBatch.DrawString(medievalFont, "Special - O", CenterFont("Special - O",
+                 //       medievalFont, 290), Color.Black);
+                 //   _spriteBatch.DrawString(medievalFont, "Strong Attack - I", CenterFont("Strong Attack - I",
+                 //       medievalFont, 320), Color.Black);
                     _spriteBatch.DrawString(medievalFont, "Dodge - L", CenterFont("Dodge - L",
-                        medievalFont, 350), Color.Black);
+                        medievalFont, 290), Color.Black); //CHANGE TO 350 
                     _spriteBatch.DrawString(medievalFont, "Player 2:", CenterFont("Player 2:",
                         medievalFont, 390), Color.Black);
                     _spriteBatch.DrawString(medievalFont, "Move - WASD", CenterFont("Move - WASD",
                         medievalFont, 420), Color.Black);
                     _spriteBatch.DrawString(medievalFont, "Jab - Y", CenterFont("Jab - Y",
                         medievalFont, 450), Color.Black);
-                    _spriteBatch.DrawString(medievalFont, "Special - T", CenterFont("Special - T",
-                        medievalFont, 480), Color.Black);
-                    _spriteBatch.DrawString(medievalFont, "Strong Attack - R", CenterFont("Strong Attack - R",
-                        medievalFont, 510), Color.Black);
+                 //   _spriteBatch.DrawString(medievalFont, "Special - T", CenterFont("Special - T",
+                 //       medievalFont, 480), Color.Black);
+                 //   _spriteBatch.DrawString(medievalFont, "Strong Attack - R", CenterFont("Strong Attack - R",
+                  //      medievalFont, 510), Color.Black);
                     _spriteBatch.DrawString(medievalFont, "Dodge - G", CenterFont("Dodge - G",
-                        medievalFont, 540), Color.Black);
+                        medievalFont, 480), Color.Black); // CHANGE TO 540
                     ShapeBatch.Box(buttonList[1].Postion, Color.SlateGray);
                     buttonList[1].Draw(_spriteBatch, "Back", medievalFont);
                     break;
@@ -353,6 +353,7 @@ namespace Team_Majx_Game
 
                 // draws everything in the battle scene
                 case GameState.Battle:
+                    GraphicsDevice.Clear(Color.Tan);
                     player1.update(gameTime, Keys.Up, Keys.Down, Keys.Left, Keys.Right, Keys.P, Keys.O, Keys.I, Keys.L, _spriteBatch);
                     player1.Draw(_spriteBatch, knight, hitbox, explosion);
                     player1.DealDamage(player2);
@@ -377,8 +378,7 @@ namespace Team_Majx_Game
                     _spriteBatch.DrawString(medievalFont, "Player 1:", new Vector2(40, 38), Color.Black);
 
                     //Draws the player 1 state for testing
-                    _spriteBatch.DrawString(medievalFont, player1.ToString(), new Vector2(60, 70), Color.Black);
-                    _spriteBatch.DrawString(medievalFont, player1.ToString(), new Vector2(60, 70), Color.Black);
+                    //_spriteBatch.DrawString(medievalFont, player1.ToString(), new Vector2(60, 70), Color.Black);
 
                     // Draws player 1 hearts
                     for (int i = 0; i < player1.Stocks; i++)

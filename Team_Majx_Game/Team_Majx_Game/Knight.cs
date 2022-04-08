@@ -91,8 +91,8 @@ namespace Team_Majx_Game
 
                     else if (frame < 2 || frame > 6)
                     {
-                        if (allHitboxes.Contains(currentHitbox))
-                            allHitboxes.Remove(currentHitbox);
+                        allHitboxes.Clear();
+                        currentHitbox = null;
                         attackDidDamage = false;
                         tempColor = Color.Gray;
                         if (direction == Direction.Left)
@@ -130,8 +130,7 @@ namespace Team_Majx_Game
                     }
                     else if (frame < 3 || frame > 9)
                     {
-                        if (allHitboxes.Contains(currentHitbox))
-                            allHitboxes.Remove(currentHitbox);
+                        allHitboxes.Clear();
                         attackDidDamage = false;
                         tempColor = Color.Gray;
                         if (direction == Direction.Left)
@@ -168,8 +167,7 @@ namespace Team_Majx_Game
                     }
                     else if (frame < 5 || frame > 13)
                     {
-                        if (allHitboxes.Contains(currentHitbox))
-                            allHitboxes.Remove(currentHitbox);
+                        allHitboxes.Clear();
                         attackDidDamage = false;
                         tempColor = Color.Gray;
                         if (direction == Direction.Left)
@@ -208,8 +206,7 @@ namespace Team_Majx_Game
                     }
                     else if (frame < 7 || frame > 11)
                     {
-                        if (allHitboxes.Contains(currentHitbox))
-                            allHitboxes.Remove(currentHitbox);
+                        allHitboxes.Clear();
                         attackDidDamage = false;
                         tempColor = Color.Gray;
                         if (direction == Direction.Left)
@@ -248,8 +245,7 @@ namespace Team_Majx_Game
                     }
                     else if (frame < 5 || frame > 14)
                     {
-                        if (allHitboxes.Contains(currentHitbox))
-                            allHitboxes.Remove(currentHitbox);
+                        allHitboxes.Clear();
                         attackDidDamage = false;
                         tempColor = Color.Gray;
                         if (direction == Direction.Left)
@@ -288,8 +284,7 @@ namespace Team_Majx_Game
                     }
                     else if (frame < 4 || frame > 9)
                     {
-                        if (allHitboxes.Contains(currentHitbox))
-                            allHitboxes.Remove(currentHitbox);
+                        allHitboxes.Clear();
                         attackDidDamage = false;
                         tempColor = Color.Gray;
                         if (direction == Direction.Left)
@@ -328,8 +323,7 @@ namespace Team_Majx_Game
                     }
                     else if (frame < 4 || frame > 7)
                     {
-                        if (allHitboxes.Contains(currentHitbox))
-                            allHitboxes.Remove(currentHitbox);
+                        allHitboxes.Clear();
                         attackDidDamage = false;
                         tempColor = Color.Gray;
                         if (direction == Direction.Left)
@@ -368,8 +362,7 @@ namespace Team_Majx_Game
                     }
                     else if (frame < 8 || frame > 16)
                     {
-                        if (allHitboxes.Contains(currentHitbox))
-                            allHitboxes.Remove(currentHitbox);
+                        allHitboxes.Clear();
                         attackDidDamage = false;
                         tempColor = Color.Gray;
                         if (direction == Direction.Left)
@@ -408,8 +401,7 @@ namespace Team_Majx_Game
                     }
                     else if (frame < 5 || frame > 9)
                     {
-                        if (allHitboxes.Contains(currentHitbox))
-                            allHitboxes.Remove(currentHitbox);
+                        allHitboxes.Clear();
                         attackDidDamage = false;
                         tempColor = Color.Gray;
                         if (direction == Direction.Left)
@@ -423,7 +415,12 @@ namespace Team_Majx_Game
                     }
                     _spriteBatch.Draw(spriteSheet, position,
                         new Rectangle(0, 0, 510, 510), tempColor, 0, Vector2.Zero, SpriteEffect, 0);
-                    break;   
+                    break;
+                default:
+                    _spriteBatch.Draw(spriteSheet, position,
+                        new Rectangle(0, 0, 510, 510), tempColor, 0, Vector2.Zero, SpriteEffect, 0);
+                    break;
+
             }
 
         }
