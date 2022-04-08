@@ -276,8 +276,9 @@ namespace Team_Majx_Game
                     {
                         currentAttackState = CharacterAttackState.Stand;
                     }
-                    position.X += xVelocity;
                     Decelerate();
+                    position.X += xVelocity;
+                    
                     break;
 
                 //Case for when you press jump on the ground and you "charge" up the jump for a few frames before jumping.
@@ -793,8 +794,6 @@ namespace Team_Majx_Game
         //Handles deceleration when you use a move while moving (sliding)
         public void Decelerate()
         {
-            if (direction == Direction.Right)
-            {
                 if (xVelocity > 0)
                 {
                     xVelocity -= 4;
@@ -803,10 +802,8 @@ namespace Team_Majx_Game
                         xVelocity = 0;
                     }
                 }
-            }
-            else
-            {
-                if (xVelocity < 0)
+            
+                else if (xVelocity < 0)
                 {
                     xVelocity += 4;
                     if (xVelocity > 0)
@@ -814,7 +811,7 @@ namespace Team_Majx_Game
                         xVelocity = 0;
                     }
                 }
-            }
+            
         }
 
         //Returns and changes the position, width, and height of the character
