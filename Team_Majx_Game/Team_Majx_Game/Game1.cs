@@ -309,6 +309,9 @@ namespace Team_Majx_Game
                  //       medievalFont, 320), Color.Black);
                     _spriteBatch.DrawString(medievalFont, "Dodge - L", CenterFont("Dodge - L",
                         medievalFont, 290), Color.Black); //CHANGE TO 350 
+                       _spriteBatch.DrawString(medievalFont, "Jump - Up arrow", CenterFont("Jump - Up arrow",
+                        medievalFont, 320), Color.Black);
+
                     _spriteBatch.DrawString(medievalFont, "Player 2:", CenterFont("Player 2:",
                         medievalFont, 390), Color.Black);
                     _spriteBatch.DrawString(medievalFont, "Move - WASD", CenterFont("Move - WASD",
@@ -321,6 +324,9 @@ namespace Team_Majx_Game
                   //      medievalFont, 510), Color.Black);
                     _spriteBatch.DrawString(medievalFont, "Dodge - G", CenterFont("Dodge - G",
                         medievalFont, 480), Color.Black); // CHANGE TO 540
+                    _spriteBatch.DrawString(medievalFont, "Jump - W", CenterFont("Jump - W",
+                        medievalFont, 510), Color.Black);
+
                     ShapeBatch.Box(buttonList[1].Postion, Color.SlateGray);
                     buttonList[1].Draw(_spriteBatch, "Back", medievalFont);
                     break;
