@@ -289,10 +289,38 @@ namespace Team_Majx_Game
                 case GameState.Rules:
                     //Draws the rules menu and buttons
                     _spriteBatch.DrawString(bigMedievalFont, "Rules", new Vector2
-                        ((width / 2) - (bigMedievalFont.MeasureString("Rules").X/2), 200), Color.Black);
-                    _spriteBatch.DrawString(medievalFont, "Be the first knight to bring your opponents health to 0! Try not to fall off!" +
-                        "\nPlayer 1\tPlayer 2\nMove - Arrow Keys\tMove - WASD\nJab - P\tJab - Y\n"
-                        , new Vector2 ((width / 2) - (medievalFont.MeasureString("Rules").X / 2), 200), Color.Black);
+                        ((width / 2) - (bigMedievalFont.MeasureString("Rules").X/2), 50), Color.Black);
+
+                    //Draws all of the controls
+                    _spriteBatch.DrawString(medievalFont, "Be the first knight to bring your opponents health to 0! Try not to fall off!", 
+                        CenterFont("Be the first knight to bring your opponents health to 0! Try not to fall off!",
+                        medievalFont, 125), Color.Black);
+                    _spriteBatch.DrawString(medievalFont, "Pause - Q", CenterFont("Pause - Q",
+                        medievalFont, 160), Color.Black);
+                    _spriteBatch.DrawString(medievalFont, "Player 1:", CenterFont("Player 1:",
+                        medievalFont, 200), Color.Black);
+                    _spriteBatch.DrawString(medievalFont, "Move - Arrow Keys", CenterFont("Move - Arrow Keys",
+                        medievalFont, 230), Color.Black);
+                    _spriteBatch.DrawString(medievalFont, "Jab - P", CenterFont("Jab - P",
+                        medievalFont, 260), Color.Black);
+                    _spriteBatch.DrawString(medievalFont, "Special - O", CenterFont("Special - O",
+                        medievalFont, 290), Color.Black);
+                    _spriteBatch.DrawString(medievalFont, "Strong Attack - I", CenterFont("Strong Attack - I",
+                        medievalFont, 320), Color.Black);
+                    _spriteBatch.DrawString(medievalFont, "Dodge - L", CenterFont("Dodge - L",
+                        medievalFont, 350), Color.Black);
+                    _spriteBatch.DrawString(medievalFont, "Player 2:", CenterFont("Player 2:",
+                        medievalFont, 390), Color.Black);
+                    _spriteBatch.DrawString(medievalFont, "Move - WASD", CenterFont("Move - WASD",
+                        medievalFont, 420), Color.Black);
+                    _spriteBatch.DrawString(medievalFont, "Jab - Y", CenterFont("Jab - Y",
+                        medievalFont, 450), Color.Black);
+                    _spriteBatch.DrawString(medievalFont, "Special - T", CenterFont("Special - T",
+                        medievalFont, 480), Color.Black);
+                    _spriteBatch.DrawString(medievalFont, "Strong Attack - R", CenterFont("Strong Attack - R",
+                        medievalFont, 510), Color.Black);
+                    _spriteBatch.DrawString(medievalFont, "Dodge - G", CenterFont("Dodge - G",
+                        medievalFont, 540), Color.Black);
                     ShapeBatch.Box(buttonList[1].Postion, Color.SlateGray);
                     buttonList[1].Draw(_spriteBatch, "Back", medievalFont);
                     break;
@@ -300,7 +328,9 @@ namespace Team_Majx_Game
                 // draws all of the items needed in settings
                 case GameState.Settings:
                     _spriteBatch.DrawString(bigMedievalFont, "Settings", new Vector2
-                        ((width / 2) - (bigMedievalFont.MeasureString("Settings").X/2), 200), Color.Black);
+                        ((width / 2) - (bigMedievalFont.MeasureString("Settings").X/2), 50), Color.Black);
+                    _spriteBatch.DrawString(medievalFont, "To Be Implemented!", CenterFont("To Be Implemented!",
+                        medievalFont, 300), Color.Black);
                     ShapeBatch.Box(buttonList[1].Postion, Color.SlateGray);
                     buttonList[1].Draw(_spriteBatch, "Back", medievalFont);
                     break;
@@ -409,21 +439,21 @@ namespace Team_Majx_Game
 
                     //Draws the End Screen menu and button text
                     _spriteBatch.DrawString(bigMedievalFont, "Game End", new Vector2
-                        ((width / 2) - (bigMedievalFont.MeasureString("Game End").X/2), 250), Color.Black);
+                        ((width / 2) - (bigMedievalFont.MeasureString("Game End").X/2), 150), Color.Black);
                     buttonList[1].Draw(_spriteBatch, "Menu", medievalFont);
 
                     if (!player2.PlayerAlive)
                     {
                         _spriteBatch.DrawString(medievalFont,
                             "Player 1 Wins!",
-                            new Vector2(width / 2, height/2),
+                            CenterFont("Player 1 Wins!", medievalFont, 300),
                             Color.Black);
                     }
                     else
                     {
                         _spriteBatch.DrawString(medievalFont,
                             "Player 2 Wins!",
-                            new Vector2(width / 2, height / 2),
+                            CenterFont("Player 2 Wins!", medievalFont, 300),
                             Color.Black);
                     }
 
@@ -469,6 +499,11 @@ namespace Team_Majx_Game
             player2.PlayerAlive = true;
             player2.XVelocity = 0;
             player2.YVelocity = 0;
+        }
+
+        public Vector2 CenterFont(string text, SpriteFont currentFont, int textHeight)
+        {
+            return new Vector2((width / 2) - (currentFont.MeasureString(text).X / 2), textHeight);
         }
     }
 }
