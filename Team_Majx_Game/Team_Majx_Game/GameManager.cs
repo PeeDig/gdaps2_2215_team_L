@@ -23,6 +23,8 @@ namespace Team_Majx_Game
         private List<Tile> randomSpawnList;
         private List<Tile> spawnPoints;
 
+        
+
         // File IO fields
         private int stocks;
         private double health;
