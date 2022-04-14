@@ -53,7 +53,12 @@ namespace Team_Majx_Game
         // buttons
         private List<Button> buttonList;
 
+        // holds all the possible levels
+        private List<string> levelList;
+
         private int p2StockCt;
+
+        private string currentLevel;
 
         private string levelFile = "Level1.txt";
 
@@ -75,13 +80,15 @@ namespace Team_Majx_Game
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            levelList = new List<string>() {"Level1", "Level2", "Level3"};
+            currentLevel = levelList[1];
             IsMouseVisible = true;
         }
 
         protected override void Initialize()
         {
             manager1 = new GameManager();
-            manager1.ReadLevelFile(levelFile);
+            manager1.ReadLevelFile(currentLevel);
             width = manager1.ScreenWidth;
             height = manager1.ScreenHeight - 20;
             _graphics.PreferredBackBufferWidth = width;
@@ -240,6 +247,7 @@ namespace Team_Majx_Game
                     else if (buttonList[4].ClickButton(msState, prevMsState))
                     {
                         currentState = GameState.Menu;
+                        ResetPlayers();
                     }
                     break;
 
@@ -383,36 +391,33 @@ namespace Team_Majx_Game
                     }
 
                     // Draws the words "Player 1: 
-                    _spriteBatch.DrawString(medievalFont, "Player 1:", new Vector2(40, 38), Color.Black);
-
-                    //Draws the player 1 state for testing
-                    //_spriteBatch.DrawString(medievalFont, player1.ToString(), new Vector2(60, 70), Color.Black);
+                    _spriteBatch.DrawString(medievalFont, "Player 1:", new Vector2(440, 700), Color.Black);
 
                     // Draws player 1 hearts
                     for (int i = 0; i < player1.Stocks; i++)
                     {
                         _spriteBatch.Draw(heart, // texture
                             new Rectangle( // new rectangle
-                            (150) + (35 * i),
-                            40,
+                            (550) + (35 * i),
+                            702,
                             32,
                             32),
                             Color.White);
                     }
 
+                    _spriteBatch.DrawString(bigMedievalFont, player1.Health.ToString(), new Vector2(440, 725), Color.Black);
+
+                    _spriteBatch.DrawString(bigMedievalFont,
+                       player2.Health.ToString(),
+                       new Vector2((_graphics.PreferredBackBufferWidth - (35 * player2.Stocks) - 550), 725),
+                       Color.Black);
+
+
                     // Draws the words "Player 2: 
                     _spriteBatch.DrawString(medievalFont,
                         "Player 2:",
-                        new Vector2((_graphics.PreferredBackBufferWidth - (35 * player2.Stocks) - 150), 38),
+                        new Vector2((_graphics.PreferredBackBufferWidth - (35 * player2.Stocks) - 550), 700),
                         Color.Black);
-
-                    _spriteBatch.DrawString(medievalFont, player1.Health.ToString(), new Vector2(40, 60), Color.Black);
-
-                    _spriteBatch.DrawString(medievalFont,
-                       player2.Health.ToString(),
-                       new Vector2((_graphics.PreferredBackBufferWidth - (35 * player2.Stocks) - 150), 60),
-                       Color.Black);
-
 
                     // Drawing the hearts/ stock for player 2
                     for (int i = 0; i < player2.Stocks; i++)
@@ -420,12 +425,17 @@ namespace Team_Majx_Game
                         _spriteBatch.Draw(heart, // texture
                             new Rectangle( // new rectangle
                             // puts every heart to the right of the previous.
-                            (_graphics.PreferredBackBufferWidth - 35*player2.Stocks - 40) + (35*i), 
-                            40,
+                            ((_graphics.PreferredBackBufferWidth - 35*player2.Stocks - 40) + (35*i)) - 400, 
+                            702,
                             32,
                             32),
                             Color.White);
                     }
+
+
+
+                    //Draws the player 1 state for testing
+                    //_spriteBatch.DrawString(medievalFont, player1.ToString(), new Vector2(60, 70), Color.Black);
 
                     break;
 
