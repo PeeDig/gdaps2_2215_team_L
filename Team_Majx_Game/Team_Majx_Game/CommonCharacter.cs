@@ -58,11 +58,13 @@ namespace Team_Majx_Game
         protected int lagFrames;
         protected int currentFrame;
         protected bool hasDoubleJump = true;
+        protected Color color;
         private KeyboardState kbState;
         private KeyboardState prevKBState;
         private bool showExplosion;
         private Rectangle explosion;
         private int explosionFrames;
+        private int aerialDecelerateCooldown;
 
         // controls the game
         private bool playerAlive = true;
@@ -104,7 +106,7 @@ namespace Team_Majx_Game
 
         //Creates a character object with their position, textures, width, and height.
         protected CommonCharacter(Texture2D texture, int x, int y, int width, int height,
-            bool player1, GameManager gameManager, HurtBox hurtBox)
+            bool player1, GameManager gameManager, HurtBox hurtBox, Color color)
         {
             this.gameManager = gameManager;
             this.texture = texture;
@@ -113,24 +115,15 @@ namespace Team_Majx_Game
             this.stockCount = gameManager.Stocks;  //GET STOCKS FROM FILE
             this.player1 = player1;
             this.hurtBox = hurtBox;
+            this.color = color;
+
             yVelocity = 0;
             xVelocity = 0;
             lagFrames = 0;
-            // platform = new Tile(new Rectangle(new Vector2(10, 10), 10, 10, ), TileType.Platform);
+            aerialDecelerateCooldown = 5;
         }
 
         //Does the attacks and updates the state based on input or game environment
-        /*
-         * Details:
-         * Instead of edge cancelling we let them slide off the platform, but they stay in 
-         * the endlag of their current move and finish the animation.
-         * Could lead to some cool combos, but wouldn't lead to edge cancelling being too strong.
-         * Start accelrating when the button is pressed and decelerate when an attack
-         * is used, or you stop running or you crouch.
-         * Should jumping lower your speed? Do we want a base air speed for each class?
-         * 
-         * 
-         */
 
         public void update(GameTime gameTime, Keys up, Keys down,
             Keys left, Keys right, Keys attack, Keys special, Keys strong, Keys dodge, SpriteBatch sb)
@@ -179,12 +172,14 @@ namespace Team_Majx_Game
                     else if (KeyPress(strong))
                     {
                         currentAttackState = CharacterAttackState.ForwardStrong;
+                        lagFrames = getEndlag(CharacterAttackState.ForwardStrong);
                     }
                     else if (kbState.IsKeyDown(up))
                     {
 
                     }
                     Decelerate();
+                    TouchingWall();
                     break;
 
                 case CharacterAttackState.Walk:
@@ -225,6 +220,7 @@ namespace Team_Majx_Game
                             {
                                 Decelerate();
                                 currentAttackState = CharacterAttackState.ForwardStrong;
+                                lagFrames = getEndlag(CharacterAttackState.ForwardStrong);
                             }
                             else if (KeyPress(dodge))
                             {
@@ -253,6 +249,7 @@ namespace Team_Majx_Game
                         currentAttackState = CharacterAttackState.Stand;
                     }
                     position.X += xVelocity;
+                    
                     break;
 
                 case CharacterAttackState.Crouch:
@@ -340,7 +337,7 @@ namespace Team_Majx_Game
                         if (KeyPress(dodge))
                         {
                             currentAttackState = CharacterAttackState.AirDodge;
-                            lagFrames = 10;
+                            lagFrames = 17;
                         }
                         if (KeyPress(attack))
                         {
@@ -399,6 +396,11 @@ namespace Team_Majx_Game
                                     direction = Direction.Left;
                                 }
                             }
+                            else
+                            {
+
+                                aerialDecelerate();
+                            }
 
                             if (KeyPress(up))
                             {
@@ -446,6 +448,7 @@ namespace Team_Majx_Game
                 case CharacterAttackState.Jab:
                 case CharacterAttackState.ForwardTilt:
                 case CharacterAttackState.UpTilt:
+                case CharacterAttackState.ForwardStrong:
                     yVelocity = 0;
 
                     if (lagFrames == 0)
@@ -489,11 +492,17 @@ namespace Team_Majx_Game
                         lagFrames -= 1;
                         currentFrame++;
                     }
-                    TouchingWall();
+                    
                     TouchingCeiling();
                     position.X += xVelocity;
+                    TouchingWall();
                     position.Y += yVelocity;
+                    if (yVelocity > 0)
+                    {
+                        StandingOnPlatform();
+                    }
                     Decelerate();
+                    aerialDecelerate();
                     break;
 
                 case CharacterAttackState.DownTilt:
@@ -522,7 +531,7 @@ namespace Team_Majx_Game
                     if (StandingOnPlatform())
                     {
                         currentAttackState = CharacterAttackState.LandingLag;
-                        lagFrames = 10;
+                        lagFrames = 8;
                         currentFrame = 1;
                     }
                     else if (lagFrames == 0)
@@ -538,6 +547,7 @@ namespace Team_Majx_Game
                         yVelocity += 1;
                     }
                     TouchingWall();
+                    aerialDecelerate();
                     position.X += xVelocity;
                     break;
 
@@ -563,12 +573,15 @@ namespace Team_Majx_Game
                 playerAlive = false;
             }
 
-            if(currentAttackState == CharacterAttackState.Dodge && lagFrames < 7)
+            if (currentAttackState == CharacterAttackState.Dodge && lagFrames < 13 && lagFrames > 2)
             {
                 hurtBox.Position = new Rectangle(0, 0, 0, 0);
             }
+            else if (currentAttackState != CharacterAttackState.Crouch)
+                hurtBox.Position = position;
+
             else
-            hurtBox.Position = position;
+                hurtBox.Position = new Rectangle(position.X, position.Y - position.Height / 2, position.Height / 2, position.Width);
 
             // controls death and respawn
             if (health <= 0 || position.Y >= gameManager.ScreenHeight)
@@ -615,18 +628,17 @@ namespace Team_Majx_Game
                 case CharacterAttackState.UpSpecial:
                 case CharacterAttackState.DownSpecial:
                 case CharacterAttackState.ForwardSpecial:
-                case CharacterAttackState.ForwardStrong:
                 case CharacterAttackState.UpStrong:
                 case CharacterAttackState.DownStrong:
                     if (direction == Direction.Left)
                     {
                         spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 510, 510),
-                            Color.White, 0, Vector2.Zero, SpriteEffects.None, 0);
+                            color, 0, Vector2.Zero, SpriteEffects.None, 0);
                     }
                     else
                     {
                         spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 510, 510),
-                            Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
+                            color, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
                     }
                     break;
                 case CharacterAttackState.Crouch:
@@ -635,13 +647,13 @@ namespace Team_Majx_Game
                     {
                         spriteBatch.Draw(spriteSheet, new Rectangle(Position.X, Position.Y + Position.Height / 2,
                             Position.Width, Position.Height / 2), new Rectangle(0, 0, 510, 510),
-                            Color.White, 0, Vector2.Zero, SpriteEffects.None, 0);
+                            color, 0, Vector2.Zero, SpriteEffects.None, 0);
                     }
                     else
                     {
                         spriteBatch.Draw(spriteSheet, new Rectangle(Position.X, Position.Y + Position.Height / 2,
                             Position.Width, Position.Height / 2), new Rectangle(0, 0, 510, 510),
-                            Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
+                            color, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
                     }
                     break;
                 case CharacterAttackState.LandingLag:
@@ -814,6 +826,37 @@ namespace Team_Majx_Game
             
         }
 
+        public void aerialDecelerate()
+        {
+            if (aerialDecelerateCooldown >= 4)
+            {
+                aerialDecelerateCooldown = 0;
+                if (xVelocity > 0)
+                {
+                    xVelocity -= 1;
+                    if (xVelocity < 0)
+                    {
+                        xVelocity = 0;
+                    }
+                }
+
+                else if (xVelocity < 0)
+                {
+                    xVelocity += 1;
+                    if (xVelocity > 0)
+                    {
+                        xVelocity = 0;
+                    }
+                }
+            }
+            else
+            {
+                aerialDecelerateCooldown += 1;
+            }
+            
+
+        }
+
         //Returns and changes the position, width, and height of the character
         public Rectangle Position
         {
@@ -856,7 +899,7 @@ namespace Team_Majx_Game
                     position.Y + position.Height >= t.Position.Y && position.Y <= t.Position.Y - 30)
                 {
                     yVelocity = 0;
-                    position.Y = t.Position.Y - position.Height + 3;
+                    position.Y = t.Position.Y - position.Height + 4;
                     return true;
                 }
 
@@ -868,12 +911,24 @@ namespace Team_Majx_Game
         {
             foreach (Tile t in gameManager.platforms)
             {
-                if (xVelocity <= 0)
+                if(position.X <= 32)
+                {
+                    xVelocity = Math.Abs(xVelocity/2);
+                    position.X += 4;
+                    return true;
+                }
+                if (position.X + position.Width >= 1406)
+                {
+                    xVelocity = -(Math.Abs(xVelocity));
+                    position.X -= 6;
+                    return true;
+                }
+                else if (xVelocity <= 0)
                 {
                     if ((t.TileType == TileType.Platform || t.TileType == TileType.Wall) && position.X <= t.Position.X + t.Position.Width && position.X + position.Width >= t.Position.X &&
                         position.Y <= t.Position.Y + t.Position.Height && position.Y + position.Height >= t.Position.Y + 5)
                     {
-                        xVelocity *= -1;
+                        xVelocity = Math.Abs(xVelocity);
                         position.X += 2;
                         return true;
                     }
@@ -883,7 +938,7 @@ namespace Team_Majx_Game
                     if((t.TileType == TileType.Platform || t.TileType == TileType.Wall) && position.X + position.Width >= t.Position.X && position.X <= t.Position.X + t.Position.Width &&
                         position.Y <= t.Position.Y + t.Position.Height && position.Y + position.Height >= t.Position.Y + 5)
                     {
-                        xVelocity *= -1;
+                        xVelocity = -(Math.Abs(xVelocity));
                         position.X -= 2;
                         return true;
                     }
