@@ -59,9 +59,7 @@ namespace Team_Majx_Game
 
         private int p2StockCt;
 
-        private string currentLevel;
-
-        private string levelFile = "Level1.txt";
+        private int currentLevel = 1;
 
         //Temporary game manager class for the first demo
         private GameManager manager1;
@@ -81,15 +79,14 @@ namespace Team_Majx_Game
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            levelList = new List<string>() {"Level1", "Level2", "Level3"};
-            currentLevel = levelList[1];
+            levelList = new List<string>() {"Level1.txt", "Level2.txt", "Level3.txt"};
             IsMouseVisible = true;
         }
 
         protected override void Initialize()
         {
             manager1 = new GameManager();
-            manager1.ReadLevelFile("Leve1.txt");
+            manager1.ReadLevelFile(levelList[0]);
             width = manager1.ScreenWidth;
             height = manager1.ScreenHeight - 20;
             _graphics.PreferredBackBufferWidth = width;
@@ -118,9 +115,6 @@ namespace Team_Majx_Game
             mapButtonList.Add(new Button(new Rectangle(980, height / 2, 200, 75)));
 
             //Creating a temporary knight for the purpose of the first demo
-
-            manager1 = new GameManager();
-            manager1.ReadLevelFile(levelFile);
 
             Player1HurtBox = new HurtBox(new Rectangle(manager1.SpawnPoints[0].Position.X, manager1.SpawnPoints[0].Position.Y, 80, 80));
             Player2HurtBox = new HurtBox(new Rectangle(manager1.SpawnPoints[1].Position.X, manager1.SpawnPoints[1].Position.Y, 80, 80));
@@ -219,15 +213,18 @@ namespace Team_Majx_Game
                     }
                     else if (mapButtonList[0].ClickButton(msState, prevMsState))
                     {
-                        //Implementation for map 1
+                        manager1.ReadLevelFile(levelList[0]);
+                        currentLevel = 1;
                     }
                     else if (mapButtonList[1].ClickButton(msState, prevMsState))
                     {
-                        //Implementation for map 2
+                        manager1.ReadLevelFile(levelList[1]);
+                        currentLevel = 2;
                     }
                     else if (mapButtonList[2].ClickButton(msState, prevMsState))
                     {
-                        //Implementation for map 3
+                        manager1.ReadLevelFile(levelList[2]);
+                        currentLevel = 3;
                     }
                     break;
 

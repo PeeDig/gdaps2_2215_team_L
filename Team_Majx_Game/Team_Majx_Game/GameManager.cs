@@ -168,13 +168,19 @@ namespace Team_Majx_Game
         {
             try
             {
-                input = new StreamReader("../../../Level1.txt"); //+ filename);
+                input = new StreamReader("../../../" + filename); //+ filename);
 
                 // Reads the size of the map
                 string line = input.ReadLine();
                 string[] data = line.Split(',');
                 levelWidth = int.Parse(data[0]);
                 levelHeight = int.Parse(data[1]);
+
+                // reset the map array
+                mapArray = null;
+                platforms.Clear();
+                randomSpawnList.Clear();
+                spawnPoints.Clear();
 
                 // creates the array to hold all of the tiles
                 mapArray = new Tile[levelHeight, levelWidth];
