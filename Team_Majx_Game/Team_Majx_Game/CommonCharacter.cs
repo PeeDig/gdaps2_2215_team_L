@@ -508,6 +508,7 @@ namespace Team_Majx_Game
                     }
                     
                     aerialDecelerate();
+                    yVelocity += 1;
                     break;
 
                 case CharacterAttackState.DownTilt:
@@ -932,7 +933,10 @@ namespace Team_Majx_Game
                     if ((t.TileType == TileType.Platform || t.TileType == TileType.Wall) && position.X <= t.Position.X + t.Position.Width && position.X + position.Width >= t.Position.X &&
                         position.Y <= t.Position.Y + t.Position.Height && position.Y + position.Height >= t.Position.Y + 5)
                     {
-                        xVelocity = Math.Abs(xVelocity);
+                        if(xVelocity < -8)
+                            xVelocity = 8;
+                        else
+                            xVelocity = Math.Abs(xVelocity);
                         position.X += 2;
                         return true;
                     }
@@ -942,7 +946,10 @@ namespace Team_Majx_Game
                     if((t.TileType == TileType.Platform || t.TileType == TileType.Wall) && position.X + position.Width >= t.Position.X && position.X <= t.Position.X + t.Position.Width &&
                         position.Y <= t.Position.Y + t.Position.Height && position.Y + position.Height >= t.Position.Y + 5)
                     {
-                        xVelocity = -(Math.Abs(xVelocity));
+                        if (xVelocity > 8)
+                            xVelocity = -8;
+                        else
+                            xVelocity = -(Math.Abs(xVelocity));
                         position.X -= 2;
                         return true;
                     }
