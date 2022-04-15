@@ -267,6 +267,7 @@ namespace Team_Majx_Game
                         else if (KeyPress(strong))
                         {
                             currentAttackState = CharacterAttackState.DownStrong;
+                            lagFrames = getEndlag(CharacterAttackState.DownStrong);
                         }
                     }
                     else
@@ -449,6 +450,7 @@ namespace Team_Majx_Game
                 case CharacterAttackState.ForwardTilt:
                 case CharacterAttackState.UpTilt:
                 case CharacterAttackState.ForwardStrong:
+                case CharacterAttackState.UpStrong:
                     yVelocity = 0;
 
                     if (lagFrames == 0)
@@ -499,13 +501,17 @@ namespace Team_Majx_Game
                     position.Y += yVelocity;
                     if (yVelocity > 0)
                     {
-                        StandingOnPlatform();
+                        if(StandingOnPlatform())
+                        {
+                            Decelerate();
+                        }
                     }
-                    Decelerate();
+                    
                     aerialDecelerate();
                     break;
 
                 case CharacterAttackState.DownTilt:
+                case CharacterAttackState.DownStrong:
                     if (lagFrames == 0)
                     {
                         currentAttackState = CharacterAttackState.Crouch;
@@ -628,8 +634,6 @@ namespace Team_Majx_Game
                 case CharacterAttackState.UpSpecial:
                 case CharacterAttackState.DownSpecial:
                 case CharacterAttackState.ForwardSpecial:
-                case CharacterAttackState.UpStrong:
-                case CharacterAttackState.DownStrong:
                     if (direction == Direction.Left)
                     {
                         spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 510, 510),
@@ -828,7 +832,7 @@ namespace Team_Majx_Game
 
         public void aerialDecelerate()
         {
-            if (aerialDecelerateCooldown >= 4)
+            if (aerialDecelerateCooldown >= 5)
             {
                 aerialDecelerateCooldown = 0;
                 if (xVelocity > 0)
@@ -920,7 +924,7 @@ namespace Team_Majx_Game
                 if (position.X + position.Width >= 1406)
                 {
                     xVelocity = -(Math.Abs(xVelocity));
-                    position.X -= 6;
+                    position.X -= 7;
                     return true;
                 }
                 else if (xVelocity <= 0)

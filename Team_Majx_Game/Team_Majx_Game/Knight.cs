@@ -13,8 +13,6 @@ namespace Team_Majx_Game
     class Knight : CommonCharacter
     {
         private int shieldHealth;
-        private KeyboardState kbState;
-        private KeyboardState prevKBState;
         private Hitbox currentHitbox;
         private Color tempColor;
         private SpriteEffects SpriteEffect;
@@ -155,12 +153,12 @@ namespace Team_Majx_Game
                             if (direction == Direction.Left)
                             {
                                 SpriteEffect = SpriteEffects.None;
-                                currentHitbox = new Hitbox(new Rectangle(position.X - 60, position.Y + 50, 60, 40), 10, new Vector2(-5, -1), 14);
+                                currentHitbox = new Hitbox(new Rectangle(position.X - 60, position.Y + 50, 60, 40), 10, new Vector2(-6, -1), 14);
                             }
                             else
                             {
                                 SpriteEffect = SpriteEffects.FlipHorizontally;
-                                currentHitbox = new Hitbox(new Rectangle(position.X + position.Width, Position.Y + 50, 60, 40), 10, new Vector2(5, -1), 14);
+                                currentHitbox = new Hitbox(new Rectangle(position.X + position.Width, Position.Y + 50, 60, 40), 10, new Vector2(6, -1), 14);
                             }
                             currentHitbox.Draw(_spriteBatch, hitboxSprite);
                             if (!allHitboxes.Contains(currentHitbox))
@@ -350,12 +348,12 @@ namespace Team_Majx_Game
                             if (direction == Direction.Left)
                             {
                                 SpriteEffect = SpriteEffects.None;
-                                currentHitbox = new Hitbox(new Rectangle(position.X + position.Width, position.Y + Position.Height / 2 - 20, 50, 40), 20, new Vector2(-7, -3), 16);
+                                currentHitbox = new Hitbox(new Rectangle(position.X + position.Width, position.Y + Position.Height / 2 - 20, 50, 40), 20, new Vector2(7, -3), 16);
                             }
                             else
                             {
                                 SpriteEffect = SpriteEffects.FlipHorizontally;
-                                currentHitbox = new Hitbox(new Rectangle(position.X - 50, position.Y + Position.Height / 2 - 20, 50, 40), 20, new Vector2(7, -3), 16);
+                                currentHitbox = new Hitbox(new Rectangle(position.X - 50, position.Y + Position.Height / 2 - 20, 50, 40), 20, new Vector2(-7, -3), 16);
                             }
                             currentHitbox.Draw(_spriteBatch, hitboxSprite);
                             if (!allHitboxes.Contains(currentHitbox))
@@ -463,11 +461,50 @@ namespace Team_Majx_Game
                         new Rectangle(0, 0, 510, 510), tempColor, 0, Vector2.Zero, SpriteEffect, 0);
                     break;
 
+                case CharacterAttackState.DownStrong:
+                    if (frame > 8 && frame < 21)
+                    {
+                        if (!attackDidDamage)
+                        {
+                            tempColor = color;
+                            if (direction == Direction.Left)
+                            {
+                                SpriteEffect = SpriteEffects.None;
+                                currentHitbox = new Hitbox(new Rectangle(position.X - 80, position.Y + 50, 80, 50), 18, new Vector2(-10, -1), 15);
+                            }
+                            else
+                            {
+                                SpriteEffect = SpriteEffects.FlipHorizontally;
+                                currentHitbox = new Hitbox(new Rectangle(position.X + position.Width, Position.Y + 50, 80, 50), 10, new Vector2(10, -1), 15);
+                            }
+                            currentHitbox.Draw(_spriteBatch, hitboxSprite);
+                            if (!allHitboxes.Contains(currentHitbox))
+                                allHitboxes.Add(currentHitbox);
+                        }
+                    }
+                    else if (frame < 9 || frame > 20)
+                    {
+                        allHitboxes.Clear();
+                        attackDidDamage = false;
+                        tempColor = Color.Gray;
+                        if (direction == Direction.Left)
+                        {
+                            SpriteEffect = SpriteEffects.None;
+                        }
+                        else
+                        {
+                            SpriteEffect = SpriteEffects.FlipHorizontally;
+                        }
+                    }
+                    _spriteBatch.Draw(spriteSheet, new Rectangle(Position.X, Position.Y + Position.Height / 2, Position.Width, Position.Height / 2),
+                        new Rectangle(0, 0, 510, 510), tempColor, 0, Vector2.Zero, SpriteEffect, 0);
+                    break;
             }
 
         }
 
-        //Returns the number of endlag fram
+        //Returns the number of endlag frames in the inputted attack. This allows the update method in CommonCharacter
+        //To have the same number of frames in the attack as the knight method.
         public override int getEndlag(CharacterAttackState attack)
         {
             switch (attack)
@@ -494,6 +531,8 @@ namespace Team_Majx_Game
 
                 case CharacterAttackState.ForwardStrong:
                     return 30;
+                case CharacterAttackState.DownStrong:
+                    return 26;
                     
             }
             return 0;
