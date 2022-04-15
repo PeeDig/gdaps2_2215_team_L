@@ -13,8 +13,6 @@ namespace Team_Majx_Game
     class Knight : CommonCharacter
     {
         private int shieldHealth;
-        private KeyboardState kbState;
-        private KeyboardState prevKBState;
         private Hitbox currentHitbox;
         private Color tempColor;
         private SpriteEffects SpriteEffect;
@@ -77,12 +75,12 @@ namespace Team_Majx_Game
                             if (direction == Direction.Left)
                             {
                                 SpriteEffect = SpriteEffects.None;
-                                currentHitbox = new Hitbox(new Rectangle(position.X - 25, position.Y, 50, 50), 10, new Vector2(-2, -2), 10);
+                                currentHitbox = new Hitbox(new Rectangle(position.X - 25, position.Y, 50, 50), 10, new Vector2(-5, -2), 10);
                             }
                             else
                             {
                                 SpriteEffect = SpriteEffects.FlipHorizontally;
-                                currentHitbox = new Hitbox(new Rectangle(position.X + position.Width - 25, Position.Y, 50, 50), 10, new Vector2(2, -2), 10);
+                                currentHitbox = new Hitbox(new Rectangle(position.X + position.Width - 25, Position.Y, 50, 50), 10, new Vector2(5, -2), 10);
                             }
 
                             currentHitbox.Draw(_spriteBatch, hitboxSprite);
@@ -118,12 +116,12 @@ namespace Team_Majx_Game
                             if (direction == Direction.Left)
                             {
                                 SpriteEffect = SpriteEffects.None;
-                                currentHitbox = new Hitbox(new Rectangle(position.X - 50, position.Y, 75, 50), 10, new Vector2(-4, -2), 12);
+                                currentHitbox = new Hitbox(new Rectangle(position.X - 50, position.Y, 75, 50), 10, new Vector2(-7, -2), 12);
                             }
                             else
                             {
                                 SpriteEffect = SpriteEffects.FlipHorizontally;
-                                currentHitbox = new Hitbox(new Rectangle(position.X + position.Width - 25, Position.Y, 75, 50), 10, new Vector2(4, -2), 12);
+                                currentHitbox = new Hitbox(new Rectangle(position.X + position.Width - 25, Position.Y, 75, 50), 10, new Vector2(7, -2), 12);
                             }
                             currentHitbox.Draw(_spriteBatch, hitboxSprite);
                             if (!allHitboxes.Contains(currentHitbox))
@@ -155,12 +153,12 @@ namespace Team_Majx_Game
                             if (direction == Direction.Left)
                             {
                                 SpriteEffect = SpriteEffects.None;
-                                currentHitbox = new Hitbox(new Rectangle(position.X - 60, position.Y + 50, 60, 40), 10, new Vector2(-5, -1), 14);
+                                currentHitbox = new Hitbox(new Rectangle(position.X - 60, position.Y + 50, 60, 40), 10, new Vector2(-6, -1), 14);
                             }
                             else
                             {
                                 SpriteEffect = SpriteEffects.FlipHorizontally;
-                                currentHitbox = new Hitbox(new Rectangle(position.X + position.Width, Position.Y + 50, 60, 40), 10, new Vector2(5, -1), 14);
+                                currentHitbox = new Hitbox(new Rectangle(position.X + position.Width, Position.Y + 50, 60, 40), 10, new Vector2(6, -1), 14);
                             }
                             currentHitbox.Draw(_spriteBatch, hitboxSprite);
                             if (!allHitboxes.Contains(currentHitbox))
@@ -233,12 +231,12 @@ namespace Team_Majx_Game
                             if (direction == Direction.Left)
                             {
                                 SpriteEffect = SpriteEffects.None;
-                                currentHitbox = new Hitbox(new Rectangle(position.X - 10, position.Y - 10, position.Width + 20, position.Height + 20), 10, new Vector2(-3, -3), 8);
+                                currentHitbox = new Hitbox(new Rectangle(position.X - 10, position.Y - 10, position.Width + 20, position.Height + 20), 10, new Vector2(-5, -3), 8);
                             }
                             else
                             {
                                 SpriteEffect = SpriteEffects.FlipHorizontally;
-                                currentHitbox = new Hitbox(new Rectangle(position.X - 10, position.Y - 10, position.Width + 20, position.Height + 20), 10, new Vector2(3, -3), 8);
+                                currentHitbox = new Hitbox(new Rectangle(position.X - 10, position.Y - 10, position.Width + 20, position.Height + 20), 10, new Vector2(5, -3), 8);
                             }
                             currentHitbox.Draw(_spriteBatch, hitboxSprite);
                             if (!allHitboxes.Contains(currentHitbox))
@@ -272,12 +270,12 @@ namespace Team_Majx_Game
                             if (direction == Direction.Left)
                             {
                                 SpriteEffect = SpriteEffects.None;
-                                currentHitbox = new Hitbox(new Rectangle(position.X - 55, position.Y, 80, 50), 10, new Vector2(-4, -3), 6);
+                                currentHitbox = new Hitbox(new Rectangle(position.X - 55, position.Y, 80, 50), 10, new Vector2(-7, -3), 6);
                             }
                             else
                             {
                                 SpriteEffect = SpriteEffects.FlipHorizontally;
-                                currentHitbox = new Hitbox(new Rectangle(position.X + position.Width - 30, Position.Y, 80, 50), 10, new Vector2(4, -3), 6);
+                                currentHitbox = new Hitbox(new Rectangle(position.X + position.Width - 30, Position.Y, 80, 50), 10, new Vector2(7, -3), 6);
                             }
                             currentHitbox.Draw(_spriteBatch, hitboxSprite);
                             if (!allHitboxes.Contains(currentHitbox))
@@ -311,12 +309,12 @@ namespace Team_Majx_Game
                             if (direction == Direction.Left)
                             {
                                 SpriteEffect = SpriteEffects.None;
-                                currentHitbox = new Hitbox(new Rectangle(position.X - 10, position.Y - 10, position.Width + 20, 40), 10, new Vector2(-1, -6), 9);
+                                currentHitbox = new Hitbox(new Rectangle(position.X - 10, position.Y - 10, position.Width + 20, 40), 10, new Vector2(-2, -6), 9);
                             }
                             else
                             {
                                 SpriteEffect = SpriteEffects.FlipHorizontally;
-                                currentHitbox = new Hitbox(new Rectangle(position.X - 10, position.Y - 10, position.Width + 20, 40), 10, new Vector2(1, -6), 9);
+                                currentHitbox = new Hitbox(new Rectangle(position.X - 10, position.Y - 10, position.Width + 20, 40), 10, new Vector2(2, -6), 9);
                             }
                             currentHitbox.Draw(_spriteBatch, hitboxSprite);
                             if (!allHitboxes.Contains(currentHitbox))
@@ -350,12 +348,12 @@ namespace Team_Majx_Game
                             if (direction == Direction.Left)
                             {
                                 SpriteEffect = SpriteEffects.None;
-                                currentHitbox = new Hitbox(new Rectangle(position.X + position.Width, position.Y + Position.Height / 2 - 20, 50, 40), 20, new Vector2(-7, -3), 16);
+                                currentHitbox = new Hitbox(new Rectangle(position.X + position.Width, position.Y + Position.Height / 2 - 20, 50, 45), 20, new Vector2(9, -3), 16);
                             }
                             else
                             {
                                 SpriteEffect = SpriteEffects.FlipHorizontally;
-                                currentHitbox = new Hitbox(new Rectangle(position.X - 50, position.Y + Position.Height / 2 - 20, 50, 40), 20, new Vector2(7, -3), 16);
+                                currentHitbox = new Hitbox(new Rectangle(position.X - 50, position.Y + Position.Height / 2 - 20, 50, 45), 20, new Vector2(-9, -3), 16);
                             }
                             currentHitbox.Draw(_spriteBatch, hitboxSprite);
                             if (!allHitboxes.Contains(currentHitbox))
@@ -389,12 +387,12 @@ namespace Team_Majx_Game
                             if (direction == Direction.Left)
                             {
                                 SpriteEffect = SpriteEffects.None;
-                                currentHitbox = new Hitbox(new Rectangle(position.X + 10, position.Y + Position.Height, position.Width - 20, 50), 215, new Vector2(-1, 6), 12);
+                                currentHitbox = new Hitbox(new Rectangle(position.X + 10, position.Y + Position.Height, position.Width - 20, 50), 15, new Vector2(-1, 14), 12);
                             }
                             else
                             {
                                 SpriteEffect = SpriteEffects.FlipHorizontally;
-                                currentHitbox = new Hitbox(new Rectangle(position.X + 10, position.Y + Position.Height, position.Width - 20, 50), 15, new Vector2(1, 6), 12);
+                                currentHitbox = new Hitbox(new Rectangle(position.X + 10, position.Y + Position.Height, position.Width - 20, 50), 15, new Vector2(1, 14), 12);
                             }
                             currentHitbox.Draw(_spriteBatch, hitboxSprite);
                             if (!allHitboxes.Contains(currentHitbox))
@@ -433,7 +431,7 @@ namespace Team_Majx_Game
                             else
                             {
                                 SpriteEffect = SpriteEffects.FlipHorizontally;
-                                currentHitbox = new Hitbox(new Rectangle(position.X + position.Width - 30, Position.Y, 80, 50), 60, new Vector2(12, -3), 16);
+                                currentHitbox = new Hitbox(new Rectangle(position.X + position.Width - 30, Position.Y, 80, 50), 20, new Vector2(12, -3), 16);
                             }
                             currentHitbox.Draw(_spriteBatch, hitboxSprite);
                             if (!allHitboxes.Contains(currentHitbox))
@@ -458,16 +456,94 @@ namespace Team_Majx_Game
                         new Rectangle(0, 0, 510, 510), tempColor, 0, Vector2.Zero, SpriteEffect, 0);
                     break;
 
-                default:
+                case CharacterAttackState.UpStrong:
+                    if (frame > 8 && frame < 24)
+                    {
+                        if (!attackDidDamage)
+                        {
+                            tempColor = color;
+                            if (direction == Direction.Left)
+                            {
+                                SpriteEffect = SpriteEffects.None;
+                                currentHitbox = new Hitbox(new Rectangle(position.X, Position.Y - 70, position.Width, 70), 10, new Vector2(-2, -5), 7);
+                            }
+                            else
+                            {
+                                SpriteEffect = SpriteEffects.FlipHorizontally;
+                                currentHitbox = new Hitbox(new Rectangle(position.X, position.Y - 70, position.Width, 70), 10, new Vector2(2, -5), 7);
+                            }
+                            currentHitbox.Draw(_spriteBatch, hitboxSprite);
+                            if (!allHitboxes.Contains(currentHitbox))
+                                allHitboxes.Add(currentHitbox);
+                        }
+                    }
+                    else if (frame < 9 || frame > 23)
+                    {
+                        allHitboxes.Clear();
+                        attackDidDamage = false;
+                        tempColor = Color.Gray;
+                        if (direction == Direction.Left)
+                        {
+                            SpriteEffect = SpriteEffects.None;
+                        }
+                        else
+                        {
+                            SpriteEffect = SpriteEffects.FlipHorizontally;
+                        }
+                    }
                     _spriteBatch.Draw(spriteSheet, position,
                         new Rectangle(0, 0, 510, 510), tempColor, 0, Vector2.Zero, SpriteEffect, 0);
                     break;
 
+                case CharacterAttackState.DownStrong:
+                    if (frame > 8 && frame < 21)
+                    {
+                        if (!attackDidDamage)
+                        {
+                            tempColor = color;
+                            if (direction == Direction.Left)
+                            {
+                                SpriteEffect = SpriteEffects.None;
+                                currentHitbox = new Hitbox(new Rectangle(position.X - 80, position.Y + 50, 80, 50), 18, new Vector2(-10, -1), 15);
+                            }
+                            else
+                            {
+                                SpriteEffect = SpriteEffects.FlipHorizontally;
+                                currentHitbox = new Hitbox(new Rectangle(position.X + position.Width, Position.Y + 50, 80, 50), 10, new Vector2(10, -1), 15);
+                            }
+                            currentHitbox.Draw(_spriteBatch, hitboxSprite);
+                            if (!allHitboxes.Contains(currentHitbox))
+                                allHitboxes.Add(currentHitbox);
+                        }
+                    }
+                    else if (frame < 9 || frame > 20)
+                    {
+                        allHitboxes.Clear();
+                        attackDidDamage = false;
+                        tempColor = Color.Gray;
+                        if (direction == Direction.Left)
+                        {
+                            SpriteEffect = SpriteEffects.None;
+                        }
+                        else
+                        {
+                            SpriteEffect = SpriteEffects.FlipHorizontally;
+                        }
+                    }
+                    _spriteBatch.Draw(spriteSheet, new Rectangle(Position.X, Position.Y + Position.Height / 2, Position.Width, Position.Height / 2),
+                        new Rectangle(0, 0, 510, 510), tempColor, 0, Vector2.Zero, SpriteEffect, 0);
+                    break;
+
+                default:
+                    _spriteBatch.Draw(spriteSheet, position,
+                        new Rectangle(0, 0, 510, 510), tempColor, 0, Vector2.Zero, SpriteEffect, 0);
+                    break;
             }
 
         }
 
-        //Returns the number of endlag fram
+        //Returns the number of endlag frames in the inputted attack. This allows the update method in CommonCharacter
+        //To have the same number of frames in the attack as the knight method.
         public override int getEndlag(CharacterAttackState attack)
         {
             switch (attack)
@@ -493,7 +569,11 @@ namespace Team_Majx_Game
                     return 16;
 
                 case CharacterAttackState.ForwardStrong:
-                    return 30;
+                    return 32;
+                case CharacterAttackState.DownStrong:
+                    return 28;
+                case CharacterAttackState.UpStrong:
+                    return 34;
                     
             }
             return 0;
