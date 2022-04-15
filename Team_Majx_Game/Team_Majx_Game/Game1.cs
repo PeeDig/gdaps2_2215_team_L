@@ -34,6 +34,13 @@ namespace Team_Majx_Game
         private SpriteFont bigMedievalFont;
         private Texture2D castleBackground;
         private Rectangle backgroundPosition;
+        private Texture2D map1Picture;
+        private Rectangle map1PicBackground;
+        private Texture2D map2Picture;
+        private Rectangle map2PicBackground;
+        private Texture2D map3Picture;
+        private Rectangle map3PicBackground;
+        private Texture2D mapSquare;
         
         // textures
         private Texture2D hitbox;
@@ -113,9 +120,9 @@ namespace Team_Majx_Game
             buttonList.Add(new Button(new Rectangle(774, 600, 200, 75)));
 
             //Map button list (higher than buttons above)
-            mapButtonList.Add(new Button(new Rectangle(260, height/2, 200, 75)));
-            mapButtonList.Add(new Button(new Rectangle(620, height / 2, 200, 75)));
-            mapButtonList.Add(new Button(new Rectangle(980, height / 2, 200, 75)));
+            mapButtonList.Add(new Button(new Rectangle(160, 450, 200, 75)));
+            mapButtonList.Add(new Button(new Rectangle(620, 450, 200, 75)));
+            mapButtonList.Add(new Button(new Rectangle(1080, 450, 200, 75)));
 
             //Creating a temporary knight for the purpose of the first demo
 
@@ -149,6 +156,9 @@ namespace Team_Majx_Game
 
             //Background variables
             backgroundPosition = new Rectangle(0, 0, width, height);
+            map1PicBackground = new Rectangle(75, 190, 370, 223);
+            map2PicBackground = new Rectangle(535, 190, 370, 223);
+            map3PicBackground = new Rectangle(895, 190, 370, 223);
 
             base.Initialize();
         }
@@ -163,6 +173,8 @@ namespace Team_Majx_Game
             heart = Content.Load<Texture2D>("heart");
             tempSquare = Content.Load<Texture2D>("red square");
             castleBackground = Content.Load<Texture2D>("castle");
+            map1Picture = Content.Load<Texture2D>("Map1Pic");
+            mapSquare = Content.Load<Texture2D>("red square cropped");
 
             //Fonts
             font = Content.Load<SpriteFont>("arial");
@@ -232,6 +244,10 @@ namespace Team_Majx_Game
                     break;
 
                 case GameState.Battle:
+                    player1.update(gameTime, Keys.Up, Keys.Down, Keys.Left, Keys.Right, Keys.P, Keys.O, Keys.I, Keys.L, _spriteBatch);
+                    player1.DealDamage(player2);
+                    player2.update(gameTime, Keys.W, Keys.S, Keys.A, Keys.D, Keys.Y, Keys.T, Keys.R, Keys.G, _spriteBatch);
+                    player2.DealDamage(player1);
                     if (SingleKeyPress(Keys.Q, kbState))
                     {
                         currentState = GameState.Pause;
@@ -374,19 +390,22 @@ namespace Team_Majx_Game
                     mapButtonList[0].Draw(_spriteBatch, "Map 1", medievalFont);
                     mapButtonList[1].Draw(_spriteBatch, "Map 2", medievalFont);
                     mapButtonList[2].Draw(_spriteBatch, "Map 3", medievalFont);
+
+                    //Pictures of current maps and backgrounds for them
+                    _spriteBatch.Draw(mapSquare, map1PicBackground, Color.Black);
+                    _spriteBatch.Draw(mapSquare, map2PicBackground, Color.Black);
+                    _spriteBatch.Draw(mapSquare, map3PicBackground, Color.Black);
+                    _spriteBatch.Draw(map1Picture, new Rectangle(85, 200, 350, 203), Color.White);
                     break;
 
                 // draws everything in the battle scene
                 case GameState.Battle:
                     GraphicsDevice.Clear(Color.Tan);
-                    player1.update(gameTime, Keys.Up, Keys.Down, Keys.Left, Keys.Right, Keys.P, Keys.O, Keys.I, Keys.L, _spriteBatch);
+                    
                     player1.Draw(_spriteBatch, knight, hitbox, explosion);
-                    player1.DealDamage(player2);
 
-
-                    player2.update(gameTime, Keys.W, Keys.S, Keys.A, Keys.D, Keys.Y, Keys.T, Keys.R, Keys.G, _spriteBatch);
                     player2.Draw(_spriteBatch, knight, hitbox, explosion);
-                    player2.DealDamage(player1);
+
                     // _spriteBatch.Draw(hitbox, new Rectangle(720, 505, 400, 100), Color.White);
 
 
