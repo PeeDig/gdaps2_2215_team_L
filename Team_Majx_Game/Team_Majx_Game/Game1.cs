@@ -121,7 +121,7 @@ namespace Team_Majx_Game
 
             player1 = new Knight(knight, //texture
                 manager1.SpawnPoints[0].Position.X, // x starting position
-                manager1.SpawnPoints[0].Position.Y - 50, // y starting position
+                manager1.SpawnPoints[0].Position.Y + 20, // y starting position
                 80, // size
                 80,  // size
                 false,
@@ -131,7 +131,7 @@ namespace Team_Majx_Game
 
             player2 = new Knight(knight, //texture
                manager1.SpawnPoints[1].Position.X, // x starting position
-               manager1.SpawnPoints[1].Position.Y - 50, // y starting position
+               manager1.SpawnPoints[1].Position.Y + 20, // y starting position
                80, // size
                80,  // size
                true,
@@ -211,17 +211,35 @@ namespace Team_Majx_Game
                     }
                     else if (mapButtonList[0].ClickButton(msState, prevMsState))
                     {
+                        // loads the first level file
                         manager1.ReadLevelFile(levelList[0]);
+
+                        // sets the players position to the new location
+                        player1.PlayerPositionX = manager1.SpawnPoints[0].Position.X;
+                        player1.PlayerPositionY = manager1.SpawnPoints[0].Position.Y - 20;
+                        player2.PlayerPositionX = manager1.SpawnPoints[1].Position.X - 20;
+                        player2.PlayerPositionY = manager1.SpawnPoints[1].Position.Y;
+
                         currentLevel = 1;
                     }
                     else if (mapButtonList[1].ClickButton(msState, prevMsState))
                     {
                         manager1.ReadLevelFile(levelList[1]);
+                        player1.PlayerPositionX = manager1.SpawnPoints[0].Position.X;
+                        player1.PlayerPositionY = manager1.SpawnPoints[0].Position.Y + 20;
+
+                        player2.PlayerPositionX = manager1.SpawnPoints[1].Position.X;
+                        player2.PlayerPositionY = manager1.SpawnPoints[1].Position.Y + 20;
                         currentLevel = 2;
                     }
                     else if (mapButtonList[2].ClickButton(msState, prevMsState))
                     {
                         manager1.ReadLevelFile(levelList[2]);
+                        player1.PlayerPositionX = manager1.SpawnPoints[0].Position.X;
+                        player1.PlayerPositionY = manager1.SpawnPoints[0].Position.Y;
+
+                        player2.PlayerPositionX = manager1.SpawnPoints[1].Position.X;
+                        player2.PlayerPositionY = manager1.SpawnPoints[1].Position.Y;
                         currentLevel = 3;
                     }
                     break;
