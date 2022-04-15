@@ -168,7 +168,7 @@ namespace Team_Majx_Game
         {
             try
             {
-                input = new StreamReader("../../../" + filename);
+                input = new StreamReader("../../../Level1.txt"); //+ filename);
 
                 // Reads the size of the map
                 string line = input.ReadLine();
