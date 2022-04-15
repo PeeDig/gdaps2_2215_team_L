@@ -88,7 +88,7 @@ namespace Team_Majx_Game
         protected override void Initialize()
         {
             manager1 = new GameManager();
-            manager1.ReadLevelFile(currentLevel);
+            manager1.ReadLevelFile("Leve1");
             width = manager1.ScreenWidth;
             height = manager1.ScreenHeight - 20;
             _graphics.PreferredBackBufferWidth = width;
