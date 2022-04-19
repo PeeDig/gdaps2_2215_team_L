@@ -118,7 +118,7 @@ namespace Team_Majx_Game
             this.hurtBox = hurtBox;
             this.color = color;
 
-            if(player1 == true)
+            if(player1 != true)
             {
                 direction = Direction.Left;
             }
@@ -181,9 +181,23 @@ namespace Team_Majx_Game
                     }
                     else if (kbState.IsKeyDown(up))
                     {
-
+                        if(KeyPress(attack))
+                        {
+                            currentAttackState = CharacterAttackState.UpTilt;
+                            lagFrames = getEndlag(CharacterAttackState.UpTilt);
+                        }
+                        else if(KeyPress(special))
+                        {
+                            currentAttackState = CharacterAttackState.UpSpecial;
+                            lagFrames = getEndlag(CharacterAttackState.UpSpecial);
+                        }
+                        else if(KeyPress(strong))
+                        {
+                            currentAttackState = CharacterAttackState.UpStrong;
+                            lagFrames = getEndlag(CharacterAttackState.UpStrong);
+                        }
                     }
-                    Decelerate();
+                    xVelocity = 0;
                     TouchingWall();
                     break;
 
@@ -596,6 +610,34 @@ namespace Team_Majx_Game
                     }
                     break;
 
+                case CharacterAttackState.SpecialFall:
+                    TouchingCeiling();
+                    if(StandingOnPlatform())
+                    {
+                        currentAttackState = CharacterAttackState.Walk;
+                        hasDoubleJump = true;
+                    }
+                    
+                    if(kbState.IsKeyDown(right))
+                    {
+                        AerialAccelerateRight();
+                    }
+                    else if(kbState.IsKeyDown(left))
+                    {
+                        AerialAccelerateLeft();
+                    }
+                    else
+                    {
+                        aerialDecelerate();
+                    }
+                    
+                    YVelocity += 1;
+                    position.Y += yVelocity;
+                    TouchingWall();
+                    position.X += xVelocity;
+
+                    break;
+
                 default:
                     currentAttackState = CharacterAttackState.Jump;
                     break;
@@ -723,7 +765,7 @@ namespace Team_Majx_Game
         public string ToString()
 
         {
-            return currentAttackState.ToString() + " x: " + xVelocity.ToString() + "y: " + yVelocity.ToString() + hasDoubleJump.ToString();
+            return currentAttackState.ToString();
         }
 
 
@@ -840,7 +882,7 @@ namespace Team_Majx_Game
         {
                 if (xVelocity > 0)
                 {
-                    xVelocity -= 4;
+                    xVelocity -= 2;
                     if (xVelocity < 0)
                     {
                         xVelocity = 0;
@@ -849,7 +891,7 @@ namespace Team_Majx_Game
             
                 else if (xVelocity < 0)
                 {
-                    xVelocity += 4;
+                    xVelocity += 2;
                     if (xVelocity > 0)
                     {
                         xVelocity = 0;
@@ -902,7 +944,7 @@ namespace Team_Majx_Game
 
         public int XVelocity
         {
-            get { return XVelocity; }
+            get { return xVelocity; }
             set { xVelocity = value; }
         }
 
