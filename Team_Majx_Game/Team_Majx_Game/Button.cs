@@ -13,17 +13,25 @@ namespace Team_Majx_Game
         //Declares all needed fields
         private Rectangle postion;
         private Vector2 buttonTxtLoc;
+        private Color buttonColor;
 
-        //Property for rectangle of the button
+        //Property for rectangle of the button and color of the button
         public Rectangle Postion
         {
             get { return postion; }
         }
 
+        public Color ButtonColor
+        {
+            get { return buttonColor; }
+            set { buttonColor = value; }
+        }
+
         //Parameterized constructor
-        public Button(Rectangle postion)
+        public Button(Rectangle postion, Color buttonColor)
         {
             this.postion = postion;
+            this.buttonColor = buttonColor;
         }
 
         // method controls a single mouse button click
@@ -43,6 +51,19 @@ namespace Team_Majx_Game
         public bool ClickButton(MouseState mState, MouseState prevMsState)
         {
             if (SingleMousePress(mState, prevMsState) && postion.Contains(mState.X, mState.Y))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        //Creates a hover for the mouse on the button
+        public bool ButtonHover(MouseState mState)
+        {
+            if (postion.Contains(mState.X, mState.Y))
             {
                 return true;
             }
