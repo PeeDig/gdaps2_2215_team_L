@@ -534,6 +534,51 @@ namespace Team_Majx_Game
                         new Rectangle(0, 0, 510, 510), tempColor, 0, Vector2.Zero, SpriteEffect, 0);
                     break;
 
+                case CharacterAttackState.UpSpecial:
+                    if(frame == 1)
+                    {
+                        yVelocity = -12;
+                    }
+
+                    if (frame > 2 && frame < 13)
+                    {
+                        if (!attackDidDamage)
+                        {
+                            tempColor = color;
+                            if (direction == Direction.Left)
+                            {
+                                SpriteEffect = SpriteEffects.None;
+                                currentHitbox = new Hitbox(new Rectangle(position.X - 40, position.Y + 50 - 10*frame, 40, 50), 18, new Vector2(-10, -1), 15);
+                            }
+                            else
+                            {
+                                SpriteEffect = SpriteEffects.FlipHorizontally;
+                                currentHitbox = new Hitbox(new Rectangle(position.X + position.Width, position.Y + 50 - 10 * frame, 40, 50), 18, new Vector2(-10, -1), 15);
+                            }
+                        
+                            currentHitbox.Draw(_spriteBatch, hitboxSprite);
+                            if (!allHitboxes.Contains(currentHitbox))
+                                allHitboxes.Add(currentHitbox);
+                        }
+                    }
+                    else if (frame < 3)
+                    {
+                        allHitboxes.Clear();
+                        attackDidDamage = false;
+                        tempColor = Color.Gray;
+                        if (direction == Direction.Left)
+                        {
+                            SpriteEffect = SpriteEffects.None;
+                        }
+                        else
+                        {
+                            SpriteEffect = SpriteEffects.FlipHorizontally;
+                        }
+                    }
+                    _spriteBatch.Draw(spriteSheet, position,
+                        new Rectangle(0, 0, 510, 510), tempColor, 0, Vector2.Zero, SpriteEffect, 0);
+                    break;
+
                 default:
                     _spriteBatch.Draw(spriteSheet, position,
                         new Rectangle(0, 0, 510, 510), tempColor, 0, Vector2.Zero, SpriteEffect, 0);
@@ -574,6 +619,8 @@ namespace Team_Majx_Game
                     return 28;
                 case CharacterAttackState.UpStrong:
                     return 34;
+                case CharacterAttackState.UpSpecial:
+                    return 15;
                     
             }
             return 0;

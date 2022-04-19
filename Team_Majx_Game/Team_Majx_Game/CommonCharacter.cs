@@ -33,7 +33,8 @@ namespace Team_Majx_Game
         AirDodge,
         Hitstun,
         LandingLag,
-        JumpSquat
+        JumpSquat,
+        SpecialFall
     }
     enum Direction
     {
@@ -117,6 +118,10 @@ namespace Team_Majx_Game
             this.hurtBox = hurtBox;
             this.color = color;
 
+            if(player1 == true)
+            {
+                direction = Direction.Left;
+            }
             yVelocity = 0;
             xVelocity = 0;
             lagFrames = 0;
@@ -422,6 +427,7 @@ namespace Team_Majx_Game
                                 else if (KeyPress(special))
                                 {
                                     currentAttackState = CharacterAttackState.UpSpecial;
+                                    lagFrames = getEndlag(CharacterAttackState.UpSpecial);
                                 }
                             }
 
@@ -557,6 +563,27 @@ namespace Team_Majx_Game
                     aerialDecelerate();
                     position.X += xVelocity;
                     break;
+                case CharacterAttackState.UpSpecial:
+                    TouchingCeiling();
+                    position.Y += yVelocity;
+                    if (lagFrames == 0)
+                    {
+                        currentAttackState = CharacterAttackState.SpecialFall;
+                        currentFrame = 1;
+                        yVelocity += 1;
+                    }
+                    else
+                    {
+                        lagFrames--;
+                        currentFrame++;
+
+                        if(yVelocity > 0)
+                        yVelocity += 1;
+                    }
+                    TouchingWall();
+                    aerialDecelerate();
+                    position.X += xVelocity;
+                    break;
 
                 case CharacterAttackState.LandingLag:
                     if (lagFrames <= 0)
@@ -632,7 +659,6 @@ namespace Team_Majx_Game
                 case CharacterAttackState.Walk:
                 case CharacterAttackState.Jump:
                 case CharacterAttackState.NeutralSpecial:
-                case CharacterAttackState.UpSpecial:
                 case CharacterAttackState.DownSpecial:
                 case CharacterAttackState.ForwardSpecial:
                     if (direction == Direction.Left)
@@ -665,6 +691,7 @@ namespace Team_Majx_Game
                 case CharacterAttackState.Hitstun:
                 case CharacterAttackState.Dodge:
                 case CharacterAttackState.AirDodge:
+                case CharacterAttackState.SpecialFall:
                     if (direction == Direction.Left)
                     {
                         spriteBatch.Draw(spriteSheet, Position, new Rectangle(0, 0, 510, 510),
@@ -752,11 +779,6 @@ namespace Team_Majx_Game
             stockCount--; // takes away life
             health = 100; // resets the health to full
 
-            // ---- TODO ---- Have a quick exposion appear ----
-            // SpriteBatch.Draw(game1Object.Explosion, position, Color.White);  // draws the explosion
-
-            //RecursionExplosion(Position);
-            // ---- TODO ----Have the charcter respawn at a random spawn point ----
             Tile spawnTile = gameManager.RandomSpawnPoints[rng.Next(0, gameManager.RandomSpawnPoints.Count)];
             position.X = spawnTile.Position.X;
             position.Y = spawnTile.Position.Y - 64;
