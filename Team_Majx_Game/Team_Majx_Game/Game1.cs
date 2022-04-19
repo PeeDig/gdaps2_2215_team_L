@@ -57,9 +57,10 @@ namespace Team_Majx_Game
         private Texture2D tempSquare;
         private Texture2D explosion;
 
-        // buttons
+        // buttons and button color
         private List<Button> buttonList;
         private List<Button> mapButtonList;
+        private Color deafultButtonColor;
 
         // holds all the possible levels
         private List<string> levelList;
@@ -70,6 +71,10 @@ namespace Team_Majx_Game
 
         //Temporary game manager class for the first demo
         private GameManager manager1;
+
+        //All needed keys in a list
+        private List<Keys> player1Keys;
+        private List<Keys> player2Keys;
 
         // property so the cc class can get texturd
         public Texture2D Explosion
@@ -103,23 +108,24 @@ namespace Team_Majx_Game
             prevkbState = Keyboard.GetState();
             prevMsState = Mouse.GetState();
 
-            //initializes the new button lists
+            //initializes the new button lists and their color
             buttonList = new List<Button>();
             mapButtonList = new List<Button>();
+            deafultButtonColor = Color.SlateGray;
 
             //Each button seperated by 240
             //Buttons split up by 3 (and 1 for the middle)
-            buttonList.Add(new Button(new Rectangle(260, 600, 200, 75)));
-            buttonList.Add(new Button(new Rectangle(620, 600, 200, 75)));
-            buttonList.Add(new Button(new Rectangle(980, 600, 200, 75)));
+            buttonList.Add(new Button(new Rectangle(260, 600, 200, 75), deafultButtonColor));
+            buttonList.Add(new Button(new Rectangle(620, 600, 200, 75), deafultButtonColor));
+            buttonList.Add(new Button(new Rectangle(980, 600, 200, 75), deafultButtonColor));
             //Buttons split up by 2
-            buttonList.Add(new Button(new Rectangle(466, 600, 200, 75)));
-            buttonList.Add(new Button(new Rectangle(774, 600, 200, 75)));
+            buttonList.Add(new Button(new Rectangle(466, 600, 200, 75), deafultButtonColor));
+            buttonList.Add(new Button(new Rectangle(774, 600, 200, 75), deafultButtonColor));
 
             //Map button list (higher than buttons above)
-            mapButtonList.Add(new Button(new Rectangle(160, 450, 200, 75)));
-            mapButtonList.Add(new Button(new Rectangle(620, 450, 200, 75)));
-            mapButtonList.Add(new Button(new Rectangle(1080, 450, 200, 75)));
+            mapButtonList.Add(new Button(new Rectangle(160, 450, 200, 75), deafultButtonColor));
+            mapButtonList.Add(new Button(new Rectangle(620, 450, 200, 75), deafultButtonColor));
+            mapButtonList.Add(new Button(new Rectangle(1080, 450, 200, 75), deafultButtonColor));
 
             //Creating a temporary knight for the purpose of the first demo
 
@@ -150,7 +156,19 @@ namespace Team_Majx_Game
             backgroundPosition = new Rectangle(0, 0, width, height);
             map1PicBackground = new Rectangle(75, 190, 370, 223);
             map2PicBackground = new Rectangle(535, 190, 370, 223);
-            map3PicBackground = new Rectangle(895, 190, 370, 223);
+            map3PicBackground = new Rectangle(995, 190, 370, 223);
+
+            //Initializes the list of keys (attack, special, dodge, strong)
+            player1Keys = new List<Keys>();
+            player1Keys.Add(Keys.P);
+            player1Keys.Add(Keys.O);
+            player1Keys.Add(Keys.I);
+            player1Keys.Add(Keys.L);
+            player2Keys = new List<Keys>();
+            player2Keys.Add(Keys.Y);
+            player2Keys.Add(Keys.T);
+            player2Keys.Add(Keys.R);
+            player2Keys.Add(Keys.G);
 
             base.Initialize();
         }
@@ -166,6 +184,8 @@ namespace Team_Majx_Game
             tempSquare = Content.Load<Texture2D>("red square");
             castleBackground = Content.Load<Texture2D>("castle");
             map1Picture = Content.Load<Texture2D>("Map1Pic");
+            map2Picture = Content.Load<Texture2D>("Map2Pic");
+            //map3Picture = Content.Load<Texture2D>("Map3Pic");
             mapSquare = Content.Load<Texture2D>("red square cropped");
 
             //Fonts
@@ -257,9 +277,11 @@ namespace Team_Majx_Game
                     break;
 
                 case GameState.Battle:
-                    player1.update(gameTime, Keys.Up, Keys.Down, Keys.Left, Keys.Right, Keys.P, Keys.O, Keys.I, Keys.L, _spriteBatch);
+                    player1.update(gameTime, Keys.Up, Keys.Down, Keys.Left, Keys.Right, player1Keys[0], player1Keys[1],
+                        player1Keys[2], player1Keys[3], _spriteBatch);
                     player1.DealDamage(player2);
-                    player2.update(gameTime, Keys.W, Keys.S, Keys.A, Keys.D, Keys.Y, Keys.T, Keys.R, Keys.G, _spriteBatch);
+                    player2.update(gameTime, Keys.W, Keys.S, Keys.A, Keys.D, player2Keys[0], player2Keys[1], 
+                        player2Keys[2], player2Keys[3], _spriteBatch);
                     player2.DealDamage(player1);
                     if (SingleKeyPress(Keys.Q, kbState))
                     {
@@ -322,9 +344,9 @@ namespace Team_Majx_Game
                     //_spriteBatch.Draw(castleBackground, backgroundPosition, Color.White);
                     
                     //Draws all the Buttons for the menu
-                    ShapeBatch.Box(buttonList[0].Postion, Color.SlateGray);
-                    ShapeBatch.Box(buttonList[1].Postion, Color.SlateGray);
-                    ShapeBatch.Box(buttonList[2].Postion, Color.SlateGray);
+                    ShapeBatch.Box(buttonList[0].Postion, buttonList[0].ButtonColor);
+                    ShapeBatch.Box(buttonList[1].Postion, buttonList[1].ButtonColor);
+                    ShapeBatch.Box(buttonList[2].Postion, buttonList[2].ButtonColor);
 
                     //Draws the menu text and button text
                     _spriteBatch.DrawString(bigMedievalFont, "Medieval Kombat", new Vector2
@@ -379,9 +401,9 @@ namespace Team_Majx_Game
                         medievalFont, 450, 0.75f), Color.Black);
 
                     //Buttons and button boxes
-                    ShapeBatch.Box(buttonList[0].Postion, Color.SlateGray);
-                    ShapeBatch.Box(buttonList[1].Postion, Color.SlateGray);
-                    ShapeBatch.Box(buttonList[2].Postion, Color.SlateGray);
+                    ShapeBatch.Box(buttonList[0].Postion, buttonList[0].ButtonColor);
+                    ShapeBatch.Box(buttonList[1].Postion, buttonList[1].ButtonColor);
+                    ShapeBatch.Box(buttonList[2].Postion, buttonList[2].ButtonColor);
                     buttonList[0].Draw(_spriteBatch, "Change P1 Keys", medievalFont);
                     buttonList[1].Draw(_spriteBatch, "Back", medievalFont);
                     buttonList[2].Draw(_spriteBatch, "Change P2 Keys", medievalFont);
@@ -393,10 +415,35 @@ namespace Team_Majx_Game
                         ((width / 2) - (bigMedievalFont.MeasureString("Map Select").X/2), 50), Color.Black);
 
                     //Button boxes
-                    ShapeBatch.Box(buttonList[1].Postion, Color.SlateGray);
-                    ShapeBatch.Box(mapButtonList[0].Postion, Color.SlateGray);
-                    ShapeBatch.Box(mapButtonList[1].Postion, Color.SlateGray);
-                    ShapeBatch.Box(mapButtonList[2].Postion, Color.SlateGray);
+                    ShapeBatch.Box(buttonList[1].Postion, buttonList[1].ButtonColor);
+                    ShapeBatch.Box(mapButtonList[0].Postion, mapButtonList[0].ButtonColor);
+                    ShapeBatch.Box(mapButtonList[1].Postion, mapButtonList[1].ButtonColor);
+                    ShapeBatch.Box(mapButtonList[2].Postion, mapButtonList[2].ButtonColor);
+
+                    //Changes the color of the button depending on which level is selected
+                    switch (currentLevel)
+                    {
+                        //Map 1
+                        case 1:
+                            mapButtonList[0].ButtonColor = Color.AntiqueWhite;
+                            mapButtonList[1].ButtonColor = deafultButtonColor;
+                            mapButtonList[2].ButtonColor = deafultButtonColor;
+                            break;
+
+                        //Map 2
+                        case 2:
+                            mapButtonList[0].ButtonColor = deafultButtonColor;
+                            mapButtonList[1].ButtonColor = Color.AntiqueWhite;
+                            mapButtonList[2].ButtonColor = deafultButtonColor;
+                            break;
+
+                        //Map 3
+                        case 3:
+                            mapButtonList[0].ButtonColor = deafultButtonColor;
+                            mapButtonList[1].ButtonColor = deafultButtonColor;
+                            mapButtonList[2].ButtonColor = Color.AntiqueWhite;
+                            break;
+                    }
 
                     //Buttons for MapSelect
                     buttonList[1].Draw(_spriteBatch, "Back", medievalFont);
@@ -409,6 +456,8 @@ namespace Team_Majx_Game
                     _spriteBatch.Draw(mapSquare, map2PicBackground, Color.Black);
                     _spriteBatch.Draw(mapSquare, map3PicBackground, Color.Black);
                     _spriteBatch.Draw(map1Picture, new Rectangle(85, 200, 350, 203), Color.White);
+                    _spriteBatch.Draw(map2Picture, new Rectangle(545, 200, 350, 203), Color.White);
+                    //_spriteBatch.Draw(map3Picture, new Rectangle(1005, 200, 350, 203), Color.White);
                     break;
 
                 // draws everything in the battle scene
@@ -482,8 +531,8 @@ namespace Team_Majx_Game
 
                 case GameState.Pause:
                     //Draws the Pause buttons
-                    ShapeBatch.Box(buttonList[3].Postion, Color.SlateGray);
-                    ShapeBatch.Box(buttonList[4].Postion, Color.SlateGray);
+                    ShapeBatch.Box(buttonList[3].Postion, buttonList[3].ButtonColor);
+                    ShapeBatch.Box(buttonList[4].Postion, buttonList[4].ButtonColor);
 
                     //Draws the Pause menu and button text
                     _spriteBatch.DrawString(bigMedievalFont, "Game Paused", new Vector2
@@ -494,7 +543,7 @@ namespace Team_Majx_Game
 
                 case GameState.EndScreen:
                     //Draws the End Screen buttons
-                    ShapeBatch.Box(buttonList[1].Postion, Color.SlateGray);
+                    ShapeBatch.Box(buttonList[1].Postion, buttonList[1].ButtonColor);
 
                     //Draws the End Screen menu and button text
                     _spriteBatch.DrawString(bigMedievalFont, "Game End", new Vector2
