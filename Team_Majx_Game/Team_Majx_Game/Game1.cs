@@ -441,7 +441,7 @@ namespace Team_Majx_Game
                             702,
                             32,
                             32),
-                            Color.White);
+                            Color.Red);
                     }
 
                     _spriteBatch.DrawString(bigMedievalFont, player1.Health.ToString(), new Vector2(440, 725), Color.Black);
