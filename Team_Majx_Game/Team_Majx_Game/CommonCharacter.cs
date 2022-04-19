@@ -779,11 +779,6 @@ namespace Team_Majx_Game
             stockCount--; // takes away life
             health = 100; // resets the health to full
 
-            // ---- TODO ---- Have a quick exposion appear ----
-            // SpriteBatch.Draw(game1Object.Explosion, position, Color.White);  // draws the explosion
-
-            //RecursionExplosion(Position);
-            // ---- TODO ----Have the charcter respawn at a random spawn point ----
             Tile spawnTile = gameManager.RandomSpawnPoints[rng.Next(0, gameManager.RandomSpawnPoints.Count)];
             position.X = spawnTile.Position.X;
             position.Y = spawnTile.Position.Y - 64;

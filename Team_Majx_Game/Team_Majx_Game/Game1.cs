@@ -227,29 +227,29 @@ namespace Team_Majx_Game
                         manager1.ReadLevelFile(levelList[0]);
 
                         // sets the players position to the new location
-                        player1.PlayerPositionX = manager1.SpawnPoints[0].Position.X;
-                        player1.PlayerPositionY = manager1.SpawnPoints[0].Position.Y + 20;
-                        player2.PlayerPositionX = manager1.SpawnPoints[1].Position.X;
-                        player2.PlayerPositionY = manager1.SpawnPoints[1].Position.Y + 20;
+                        player2.PlayerPositionX = manager1.SpawnPoints[0].Position.X;
+                        player2.PlayerPositionY = manager1.SpawnPoints[0].Position.Y + 20;
+                        player1.PlayerPositionX = manager1.SpawnPoints[1].Position.X;
+                        player1.PlayerPositionY = manager1.SpawnPoints[1].Position.Y + 20;
 
                         currentLevel = 1;
                     }
                     else if (mapButtonList[1].ClickButton(msState, prevMsState))
                     {
                         manager1.ReadLevelFile(levelList[1]);
-                        player1.PlayerPositionX = manager1.SpawnPoints[0].Position.X;
-                        player1.PlayerPositionY = manager1.SpawnPoints[0].Position.Y + 20;
-                        player2.PlayerPositionX = manager1.SpawnPoints[1].Position.X;
-                        player2.PlayerPositionY = manager1.SpawnPoints[1].Position.Y + 20;
+                        player2.PlayerPositionX = manager1.SpawnPoints[0].Position.X;
+                        player2.PlayerPositionY = manager1.SpawnPoints[0].Position.Y + 20;
+                        player1.PlayerPositionX = manager1.SpawnPoints[1].Position.X;
+                        player1.PlayerPositionY = manager1.SpawnPoints[1].Position.Y + 20;
                         currentLevel = 2;
                     }
                     else if (mapButtonList[2].ClickButton(msState, prevMsState))
                     {
                         manager1.ReadLevelFile(levelList[2]);
-                        player1.PlayerPositionX = manager1.SpawnPoints[0].Position.X;
-                        player1.PlayerPositionY = manager1.SpawnPoints[0].Position.Y - 45;
-                        player2.PlayerPositionX = manager1.SpawnPoints[1].Position.X - 15;
-                        player2.PlayerPositionY = manager1.SpawnPoints[1].Position.Y - 45;
+                        player2.PlayerPositionX = manager1.SpawnPoints[0].Position.X;
+                        player2.PlayerPositionY = manager1.SpawnPoints[0].Position.Y - 45;
+                        player1.PlayerPositionX = manager1.SpawnPoints[1].Position.X - 15;
+                        player1.PlayerPositionY = manager1.SpawnPoints[1].Position.Y - 45;
                         currentLevel = 3;
                     }
                     break;
@@ -464,7 +464,7 @@ namespace Team_Majx_Game
                         _spriteBatch.Draw(heart, // texture
                             new Rectangle( // new rectangle
                             // puts every heart to the right of the previous.
-                            ((_graphics.PreferredBackBufferWidth - 35*player2.Stocks - 40) + (35*i)) - 400, 
+                            ((_graphics.PreferredBackBufferWidth - 35 * player1.Stocks - 40) + (35*i)) - 400, 
                             702,
                             32,
                             32),
@@ -542,8 +542,8 @@ namespace Team_Majx_Game
             // resets player 1
             player1.Stocks = manager1.Stocks;
             player1.Health = manager1.Health;
-            player1.PlayerPositionX = manager1.SpawnPoints[0].Position.X;
-            player1.PlayerPositionY = manager1.SpawnPoints[1].Position.Y - 40;
+            player2.PlayerPositionX = manager1.SpawnPoints[0].Position.X;
+            player2.PlayerPositionY = manager1.SpawnPoints[1].Position.Y - 45;
             player1.PlayerAlive = true;
             player1.XVelocity = 0;
             player1.YVelocity = 0;
@@ -551,8 +551,8 @@ namespace Team_Majx_Game
             // resets player 2
             player2.Stocks = manager1.Stocks;
             player2.Health = manager1.Health;
-            player2.PlayerPositionX = manager1.SpawnPoints[1].Position.X;
-            player2.PlayerPositionY = manager1.SpawnPoints[1].Position.Y - 40;
+            player1.PlayerPositionX = manager1.SpawnPoints[1].Position.X;
+            player1.PlayerPositionY = manager1.SpawnPoints[1].Position.Y - 45;
             player2.PlayerAlive = true;
             player2.XVelocity = 0;
             player2.YVelocity = 0;
