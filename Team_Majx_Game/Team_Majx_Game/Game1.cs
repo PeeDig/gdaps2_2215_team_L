@@ -433,7 +433,7 @@ namespace Team_Majx_Game
                     _spriteBatch.DrawString(medievalFont, "Player 1:", new Vector2(440, 700), Color.Black);
 
                     // Draws player 1 hearts
-                    for (int i = 0; i < player1.Stocks; i++)
+                    for (int i = 0; i < player2.Stocks; i++)
                     {
                         _spriteBatch.Draw(heart, // texture
                             new Rectangle( // new rectangle
@@ -459,7 +459,7 @@ namespace Team_Majx_Game
                         Color.Black);
 
                     // Drawing the hearts/ stock for player 2
-                    for (int i = 0; i < player2.Stocks; i++)
+                    for (int i = 0; i < player1.Stocks; i++)
                     {
                         _spriteBatch.Draw(heart, // texture
                             new Rectangle( // new rectangle
