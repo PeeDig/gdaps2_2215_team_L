@@ -127,8 +127,8 @@ namespace Team_Majx_Game
             Player2HurtBox = new HurtBox(new Rectangle(manager1.SpawnPoints[1].Position.X, manager1.SpawnPoints[1].Position.Y, 80, 80));
 
             player1 = new Knight(knight, //texture
-                manager1.SpawnPoints[0].Position.X, // x starting position
-                manager1.SpawnPoints[0].Position.Y + 20, // y starting position
+                manager1.SpawnPoints[1].Position.X, // x starting position
+                manager1.SpawnPoints[1].Position.Y + 20, // y starting position
                 80, // size
                 80,  // size
                 false,
@@ -137,8 +137,8 @@ namespace Team_Majx_Game
                 Color.LightBlue);
 
             player2 = new Knight(knight, //texture
-               manager1.SpawnPoints[1].Position.X, // x starting position
-               manager1.SpawnPoints[1].Position.Y + 20, // y starting position
+               manager1.SpawnPoints[0].Position.X, // x starting position
+               manager1.SpawnPoints[0].Position.Y + 20, // y starting position
                80, // size
                80,  // size
                true,
