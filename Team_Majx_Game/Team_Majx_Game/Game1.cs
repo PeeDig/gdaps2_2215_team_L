@@ -129,8 +129,8 @@ namespace Team_Majx_Game
 
             //Creating a temporary knight for the purpose of the first demo
 
-            Player1HurtBox = new HurtBox(new Rectangle(manager1.SpawnPoints[0].Position.X, manager1.SpawnPoints[0].Position.Y, 80, 80));
-            Player2HurtBox = new HurtBox(new Rectangle(manager1.SpawnPoints[1].Position.X, manager1.SpawnPoints[1].Position.Y, 80, 80));
+            Player1HurtBox = new HurtBox(new Rectangle(manager1.SpawnPoints[1].Position.X, manager1.SpawnPoints[1].Position.Y, 80, 80));
+            Player2HurtBox = new HurtBox(new Rectangle(manager1.SpawnPoints[0].Position.X, manager1.SpawnPoints[0].Position.Y, 80, 80));
 
             player1 = new Knight(knight, //texture
                 manager1.SpawnPoints[1].Position.X, // x starting position
@@ -480,6 +480,7 @@ namespace Team_Majx_Game
 
                     // Draws the words "Player 1: 
                     _spriteBatch.DrawString(medievalFont, "Player 1:", new Vector2(440, 700), Color.Black);
+                    _spriteBatch.DrawString(medievalFont, player1.ToString(), new Vector2(440, 750), Color.Black);
 
                     // Draws player 1 hearts
                     for (int i = 0; i < player2.Stocks; i++)
@@ -493,10 +494,10 @@ namespace Team_Majx_Game
                             Color.Red);
                     }
 
-                    _spriteBatch.DrawString(bigMedievalFont, player1.Health.ToString(), new Vector2(440, 725), Color.Black);
+                    _spriteBatch.DrawString(bigMedievalFont, player2.Health.ToString(), new Vector2(440, 725), Color.Black);
 
                     _spriteBatch.DrawString(bigMedievalFont,
-                       player2.Health.ToString(),
+                       player1.Health.ToString(),
                        new Vector2((_graphics.PreferredBackBufferWidth - (35 * player2.Stocks) - 550), 725),
                        Color.Black);
 
