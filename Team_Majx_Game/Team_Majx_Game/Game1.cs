@@ -185,7 +185,7 @@ namespace Team_Majx_Game
             castleBackground = Content.Load<Texture2D>("castle");
             map1Picture = Content.Load<Texture2D>("Map1Pic");
             map2Picture = Content.Load<Texture2D>("Map2Pic");
-            //map3Picture = Content.Load<Texture2D>("Map3Pic");
+            map3Picture = Content.Load<Texture2D>("Map3Pic");
             mapSquare = Content.Load<Texture2D>("red square cropped");
 
             //Fonts
@@ -399,12 +399,12 @@ namespace Team_Majx_Game
                         medievalFont, 450, 0.75f), Color.Black);
 
                     //Buttons and button boxes
-                    ShapeBatch.Box(buttonList[0].Postion, buttonList[0].ButtonColor);
+                    //ShapeBatch.Box(buttonList[0].Postion, buttonList[0].ButtonColor);
                     ShapeBatch.Box(buttonList[1].Postion, buttonList[1].ButtonColor);
-                    ShapeBatch.Box(buttonList[2].Postion, buttonList[2].ButtonColor);
-                    buttonList[0].Draw(_spriteBatch, "Change P1 Keys", medievalFont);
+                    //ShapeBatch.Box(buttonList[2].Postion, buttonList[2].ButtonColor);
+                    //buttonList[0].Draw(_spriteBatch, "Change P1 Keys", medievalFont);
                     buttonList[1].Draw(_spriteBatch, "Back", medievalFont);
-                    buttonList[2].Draw(_spriteBatch, "Change P2 Keys", medievalFont);
+                    //buttonList[2].Draw(_spriteBatch, "Change P2 Keys", medievalFont);
                     break;
 
                 // draws all of the items needed in MapSelect
@@ -455,7 +455,7 @@ namespace Team_Majx_Game
                     _spriteBatch.Draw(mapSquare, map3PicBackground, Color.Black);
                     _spriteBatch.Draw(map1Picture, new Rectangle(85, 200, 350, 203), Color.White);
                     _spriteBatch.Draw(map2Picture, new Rectangle(545, 200, 350, 203), Color.White);
-                    //_spriteBatch.Draw(map3Picture, new Rectangle(1005, 200, 350, 203), Color.White);
+                    _spriteBatch.Draw(map3Picture, new Rectangle(1005, 200, 350, 203), Color.White);
                     break;
 
                 // draws everything in the battle scene
