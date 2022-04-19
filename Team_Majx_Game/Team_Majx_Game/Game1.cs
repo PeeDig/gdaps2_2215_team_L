@@ -228,9 +228,9 @@ namespace Team_Majx_Game
 
                         // sets the players position to the new location
                         player1.PlayerPositionX = manager1.SpawnPoints[0].Position.X;
-                        player1.PlayerPositionY = manager1.SpawnPoints[0].Position.Y - 20;
-                        player2.PlayerPositionX = manager1.SpawnPoints[1].Position.X - 20;
-                        player2.PlayerPositionY = manager1.SpawnPoints[1].Position.Y;
+                        player1.PlayerPositionY = manager1.SpawnPoints[0].Position.Y + 20;
+                        player2.PlayerPositionX = manager1.SpawnPoints[1].Position.X;
+                        player2.PlayerPositionY = manager1.SpawnPoints[1].Position.Y + 20;
 
                         currentLevel = 1;
                     }
@@ -239,7 +239,6 @@ namespace Team_Majx_Game
                         manager1.ReadLevelFile(levelList[1]);
                         player1.PlayerPositionX = manager1.SpawnPoints[0].Position.X;
                         player1.PlayerPositionY = manager1.SpawnPoints[0].Position.Y + 20;
-
                         player2.PlayerPositionX = manager1.SpawnPoints[1].Position.X;
                         player2.PlayerPositionY = manager1.SpawnPoints[1].Position.Y + 20;
                         currentLevel = 2;
@@ -248,10 +247,9 @@ namespace Team_Majx_Game
                     {
                         manager1.ReadLevelFile(levelList[2]);
                         player1.PlayerPositionX = manager1.SpawnPoints[0].Position.X;
-                        player1.PlayerPositionY = manager1.SpawnPoints[0].Position.Y;
-
-                        player2.PlayerPositionX = manager1.SpawnPoints[1].Position.X;
-                        player2.PlayerPositionY = manager1.SpawnPoints[1].Position.Y;
+                        player1.PlayerPositionY = manager1.SpawnPoints[0].Position.Y - 45;
+                        player2.PlayerPositionX = manager1.SpawnPoints[1].Position.X - 15;
+                        player2.PlayerPositionY = manager1.SpawnPoints[1].Position.Y - 45;
                         currentLevel = 3;
                     }
                     break;
@@ -470,7 +468,7 @@ namespace Team_Majx_Game
                             702,
                             32,
                             32),
-                            Color.White);
+                            Color.Blue);
                     }
 
 
