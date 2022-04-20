@@ -197,8 +197,7 @@ namespace Team_Majx_Game
                             lagFrames = getEndlag(CharacterAttackState.UpStrong);
                         }
                     }
-                    xVelocity = 0;
-                    TouchingWall();
+                    Decelerate();
                     break;
 
                 case CharacterAttackState.Walk:
