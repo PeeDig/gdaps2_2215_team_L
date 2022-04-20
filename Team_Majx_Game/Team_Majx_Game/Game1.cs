@@ -69,6 +69,16 @@ namespace Team_Majx_Game
 
         private int currentLevel = 1;
 
+        //All different Keys
+        private Keys player1Attack;
+        private Keys player1Special;
+        private Keys player1Dodge;
+        private Keys player1Strong;
+        private Keys player2Attack;
+        private Keys player2Special;
+        private Keys player2Dodge;
+        private Keys player2Strong;
+
         //Temporary game manager class for the first demo
         private GameManager manager1;
 
@@ -158,17 +168,27 @@ namespace Team_Majx_Game
             map2PicBackground = new Rectangle(535, 190, 370, 223);
             map3PicBackground = new Rectangle(995, 190, 370, 223);
 
+            //All different Keys
+            player1Attack = (Keys.P);
+            player1Special = (Keys.O);
+            player1Dodge = (Keys.I);
+            player1Strong = (Keys.L);
+            player2Attack = (Keys.Y);
+            player2Special = (Keys.T);
+            player2Dodge = (Keys.R);
+            player2Strong = (Keys.G);
+
             //Initializes the list of keys (attack, special, dodge, strong)
             player1Keys = new List<Keys>();
-            player1Keys.Add(Keys.P);
-            player1Keys.Add(Keys.O);
-            player1Keys.Add(Keys.I);
-            player1Keys.Add(Keys.L);
+            player1Keys.Add(player1Attack);
+            player1Keys.Add(player1Special);
+            player1Keys.Add(player1Dodge );
+            player1Keys.Add(player1Strong);
             player2Keys = new List<Keys>();
-            player2Keys.Add(Keys.Y);
-            player2Keys.Add(Keys.T);
-            player2Keys.Add(Keys.R);
-            player2Keys.Add(Keys.G);
+            player2Keys.Add(player2Attack);
+            player2Keys.Add(player2Special);
+            player2Keys.Add(player2Dodge);
+            player2Keys.Add(player2Strong);
 
             base.Initialize();
         }
