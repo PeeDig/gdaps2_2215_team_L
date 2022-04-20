@@ -542,6 +542,7 @@ namespace Team_Majx_Game
 
                     if (frame > 2 && frame < 13)
                     {
+                        allHitboxes.Remove(currentHitbox);
                         if (!attackDidDamage)
                         {
                             tempColor = color;
@@ -561,7 +562,7 @@ namespace Team_Majx_Game
                                 allHitboxes.Add(currentHitbox);
                         }
                     }
-                    else if (frame < 3)
+                    else if (frame < 3 || frame > 12)
                     {
                         allHitboxes.Clear();
                         attackDidDamage = false;
