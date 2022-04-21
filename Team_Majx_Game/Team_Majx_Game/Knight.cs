@@ -504,7 +504,7 @@ namespace Team_Majx_Game
                             if (direction == Direction.Left)
                             {
                                 SpriteEffect = SpriteEffects.None;
-                                currentHitbox = new Hitbox(new Rectangle(position.X - 80, position.Y + 50, 80, 50), 18, new Vector2(-10, -1), 15);
+                                currentHitbox = new Hitbox(new Rectangle(position.X - 80, position.Y + 50, 80, 50), 1, new Vector2(-10, -1), 15);
                             }
                             else
                             {
@@ -544,18 +544,19 @@ namespace Team_Majx_Game
                     {
                         if (!attackDidDamage)
                         {
+                            allHitboxes.Remove(currentHitbox);
                             tempColor = color;
                             if (direction == Direction.Left)
                             {
                                 SpriteEffect = SpriteEffects.None;
-                                currentHitbox = new Hitbox(new Rectangle(position.X - 40, position.Y + 50 - 10*frame, 40, 50), 18, new Vector2(-10, -1), 15);
+                                currentHitbox = new Hitbox(new Rectangle(position.X - 40, position.Y + 50 - 10*frame, 40, 50), 12, new Vector2(-3, -7), 12);
                             }
                             else
                             {
                                 SpriteEffect = SpriteEffects.FlipHorizontally;
-                                currentHitbox = new Hitbox(new Rectangle(position.X + position.Width, position.Y + 50 - 10 * frame, 40, 50), 18, new Vector2(-10, -1), 15);
+                                currentHitbox = new Hitbox(new Rectangle(position.X + position.Width, position.Y + 50 - 10 * frame, 40, 50), 12, new Vector2(-3, -7), 12);
                             }
-                        
+                       
                             currentHitbox.Draw(_spriteBatch, hitboxSprite);
                             if (!allHitboxes.Contains(currentHitbox))
                                 allHitboxes.Add(currentHitbox);

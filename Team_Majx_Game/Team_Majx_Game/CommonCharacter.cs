@@ -198,7 +198,12 @@ namespace Team_Majx_Game
                         }
                     }
                     xVelocity = 0;
+                    if(!StandingOnPlatform())
+                    {
+                        currentAttackState = CharacterAttackState.Jump;
+                    }
                     TouchingWall();
+                    position.X += xVelocity;
                     break;
 
                 case CharacterAttackState.Walk:
@@ -612,10 +617,17 @@ namespace Team_Majx_Game
 
                 case CharacterAttackState.SpecialFall:
                     TouchingCeiling();
-                    if(StandingOnPlatform())
+                    if(!StandingOnPlatform())
                     {
-                        currentAttackState = CharacterAttackState.Walk;
+                        YVelocity += 1;
+                        position.Y += yVelocity;
+                        TouchingWall();
+                        position.X += xVelocity;
+                    }
+                    else
+                    {
                         hasDoubleJump = true;
+                        currentAttackState = CharacterAttackState.Stand;
                     }
                     
                     if(kbState.IsKeyDown(right))
@@ -631,10 +643,7 @@ namespace Team_Majx_Game
                         aerialDecelerate();
                     }
                     
-                    YVelocity += 1;
-                    position.Y += yVelocity;
-                    TouchingWall();
-                    position.X += xVelocity;
+                  
 
                     break;
 
@@ -765,7 +774,7 @@ namespace Team_Majx_Game
         public string ToString()
 
         {
-            return currentAttackState.ToString();
+            return currentAttackState.ToString() + xVelocity.ToString();
         }
 
 
@@ -877,7 +886,7 @@ namespace Team_Majx_Game
         {
                 if (xVelocity > 0)
                 {
-                    xVelocity -= 2;
+                    xVelocity -= 4;
                     if (xVelocity < 0)
                     {
                         xVelocity = 0;
@@ -886,7 +895,7 @@ namespace Team_Majx_Game
             
                 else if (xVelocity < 0)
                 {
-                    xVelocity += 2;
+                    xVelocity += 4;
                     if (xVelocity > 0)
                     {
                         xVelocity = 0;
