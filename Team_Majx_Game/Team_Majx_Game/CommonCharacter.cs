@@ -172,7 +172,7 @@ namespace Team_Majx_Game
                     else if (KeyPress(dodge))
                     {
                         currentAttackState = CharacterAttackState.Dodge;
-                        lagFrames = 10;
+                        lagFrames = 32;
                     }
                     else if (KeyPress(strong))
                     {
@@ -658,7 +658,7 @@ namespace Team_Majx_Game
                 playerAlive = false;
             }
 
-            if (currentAttackState == CharacterAttackState.Dodge && lagFrames < 13 && lagFrames > 2)
+            if (currentAttackState == CharacterAttackState.Dodge && lagFrames < 30 && lagFrames > 2)
             {
                 hurtBox.Position = new Rectangle(0, 0, 0, 0);
             }

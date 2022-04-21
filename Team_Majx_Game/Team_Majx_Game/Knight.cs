@@ -75,12 +75,12 @@ namespace Team_Majx_Game
                             if (direction == Direction.Left)
                             {
                                 SpriteEffect = SpriteEffects.None;
-                                currentHitbox = new Hitbox(new Rectangle(position.X - 25, position.Y, 50, 50), 10, new Vector2(-5, -2), 10);
+                                currentHitbox = new Hitbox(new Rectangle(position.X - 25, position.Y, 50, 50), 10, new Vector2(-8, -2), 8);
                             }
                             else
                             {
                                 SpriteEffect = SpriteEffects.FlipHorizontally;
-                                currentHitbox = new Hitbox(new Rectangle(position.X + position.Width - 25, Position.Y, 50, 50), 10, new Vector2(5, -2), 10);
+                                currentHitbox = new Hitbox(new Rectangle(position.X + position.Width - 25, Position.Y, 50, 50), 10, new Vector2(8, -2), 8);
                             }
 
                             currentHitbox.Draw(_spriteBatch, hitboxSprite);
@@ -542,6 +542,7 @@ namespace Team_Majx_Game
 
                     if (frame > 2 && frame < 13)
                     {
+                        allHitboxes.Remove(currentHitbox);
                         if (!attackDidDamage)
                         {
                             allHitboxes.Remove(currentHitbox);
@@ -562,7 +563,7 @@ namespace Team_Majx_Game
                                 allHitboxes.Add(currentHitbox);
                         }
                     }
-                    else if (frame < 3)
+                    else if (frame < 3 || frame > 12)
                     {
                         allHitboxes.Clear();
                         attackDidDamage = false;
