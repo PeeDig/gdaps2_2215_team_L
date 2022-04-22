@@ -666,7 +666,7 @@ namespace Team_Majx_Game
                 hurtBox.Position = position;
 
             else
-                hurtBox.Position = new Rectangle(position.X, position.Y - position.Height / 2, position.Height / 2, position.Width);
+                hurtBox.Position = new Rectangle(position.X, position.Y - position.Height / 2, position.Width, position.Height/2);
 
             // controls death and respawn
             if (health <= 0 || position.Y >= gameManager.ScreenHeight)
@@ -774,7 +774,7 @@ namespace Team_Majx_Game
         public string ToString()
 
         {
-            return currentAttackState.ToString() + xVelocity.ToString();
+            return "Y: "+ YVelocity.ToString() + "X: "  + xVelocity.ToString();
         }
 
 

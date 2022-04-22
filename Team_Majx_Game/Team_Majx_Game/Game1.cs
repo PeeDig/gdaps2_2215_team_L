@@ -487,6 +487,7 @@ namespace Team_Majx_Game
                     GraphicsDevice.Clear(Color.Tan);
                     
                     player1.Draw(_spriteBatch, knight, hitbox, explosion);
+                    
 
                     player2.Draw(_spriteBatch, knight, hitbox, explosion);
 
