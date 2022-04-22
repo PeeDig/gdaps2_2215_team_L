@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Team_Majx_Game
 {
+    //this handles all the game states of the character.
     enum CharacterAttackState
     {
         Stand,
@@ -36,6 +37,7 @@ namespace Team_Majx_Game
         JumpSquat,
         SpecialFall
     }
+    //this handles the character's direction and will mirror their image if they are facing right.
     enum Direction
     {
         Right,
@@ -43,7 +45,7 @@ namespace Team_Majx_Game
     }
     abstract class CommonCharacter
     {
-
+        //Sets all the inherited variables for each character to the knight class
         protected Texture2D texture;
         protected Rectangle position;
         protected double speed;
@@ -60,11 +62,17 @@ namespace Team_Majx_Game
         protected int currentFrame;
         protected bool hasDoubleJump = true;
         protected Color color;
+
+        //Creates the variables to check for the keyboard state
         private KeyboardState kbState;
         private KeyboardState prevKBState;
+
+        //Variables for the explosion when a character dies
         private bool showExplosion;
         private Rectangle explosion;
         private int explosionFrames;
+
+        //Controls how fast the characters decelerate while in the air and not holding a direction
         private int aerialDecelerateCooldown;
 
         // controls the game
@@ -73,12 +81,14 @@ namespace Team_Majx_Game
 
         Random rng = new Random();
 
+        //Property to return or change the stock count
         public int Stocks
         {
             get { return stockCount; }
             set { stockCount = value; }
         }
 
+        //Property to return or change whether or not the player is alive
         public bool PlayerAlive
         {
             get { return playerAlive; }
@@ -98,6 +108,7 @@ namespace Team_Majx_Game
             set { position.Y = value; }
         }
 
+        //Property to return or change the health value
         public double Health
         {
             get { return health; }
@@ -105,19 +116,48 @@ namespace Team_Majx_Game
         }
 
 
+        //Returns and changes the position, width, and height of the character
+        public Rectangle Position
+        {
+            get { return position; }
+            set { position = value; }
+        }
+
+        //Property to return or change the speed value
+        public double Speed
+        {
+            get { return speed; }
+        }
+
+        //Property to return or change the current x velocity
+        public int XVelocity
+        {
+            get { return xVelocity; }
+            set { xVelocity = value; }
+        }
+
+        //Property to return or change the current y velocity
+        public int YVelocity
+        {
+            get { return yVelocity; }
+            set { yVelocity = value; }
+        }
+
         //Creates a character object with their position, textures, width, and height.
+        //Also sets their base varaibles to their base values.
         protected CommonCharacter(Texture2D texture, int x, int y, int width, int height,
             bool player1, GameManager gameManager, HurtBox hurtBox, Color color)
         {
             this.gameManager = gameManager;
             this.texture = texture;
             this.position = new Rectangle(x, y, width, height);
-            this.health = gameManager.Health; //GET HEALTH HERE FROM FILE
-            this.stockCount = gameManager.Stocks;  //GET STOCKS FROM FILE
+            this.health = 100;
+            this.stockCount = 3;
             this.player1 = player1;
             this.hurtBox = hurtBox;
             this.color = color;
 
+            //Makes player 2 face left on spawn in
             if(player1 != true)
             {
                 direction = Direction.Left;
@@ -137,6 +177,7 @@ namespace Team_Majx_Game
             switch (currentAttackState)
             {
                 case CharacterAttackState.Stand:
+                    //checks for if the right key is held down and sets the attack state to walk, direction to right, and begins to accelerate right.
                     if (kbState.IsKeyDown(right))
                     {
                         AccelerateRight();
@@ -151,34 +192,44 @@ namespace Team_Majx_Game
                         direction = Direction.Left;
                         break;
                     }
+                    //checks for the up key being pressed and puts the character into jump squat. This is a short animation
+                    //of anticipation before the jump and allows the user to input up attack, up strong, or up special.
                     else if (KeyPress(up))
                     {
                         currentAttackState = CharacterAttackState.JumpSquat;
                         lagFrames = 4;
                     }
+                    //checks for the down key being pressed and puts the character into crouching state if it is
                     else if (KeyPress(down))
                     {
                         currentAttackState = CharacterAttackState.Crouch;
                     }
+                    //checks for the attack key being pressed. Since the character is in the standing state and none of the 
+                    //directional inputs are being pressed, the character will enter the jab state, which is the neutral attack on the ground.
                     else if (KeyPress(attack))
                     {
                         currentAttackState = CharacterAttackState.Jab;
                         lagFrames = getEndlag(CharacterAttackState.Jab);
                     }
+                    //Neutral special
                     else if (KeyPress(special))
                     {
                         currentAttackState = CharacterAttackState.NeutralSpecial;
                     }
+                    //Dodge
                     else if (KeyPress(dodge))
                     {
                         currentAttackState = CharacterAttackState.Dodge;
                         lagFrames = 32;
                     }
+                    //Neutral strong
                     else if (KeyPress(strong))
                     {
                         currentAttackState = CharacterAttackState.ForwardStrong;
                         lagFrames = getEndlag(CharacterAttackState.ForwardStrong);
                     }
+                    //Checks for if the up key was already held down. This will allow the player to use their up attack, up special,
+                    //and up strong while on the ground without jumping.
                     else if (kbState.IsKeyDown(up))
                     {
                         if(KeyPress(attack))
@@ -198,6 +249,9 @@ namespace Team_Majx_Game
                         }
                     }
                     xVelocity = 0;
+
+                    //if the player falls off a platform, put them into the jump state without giving them initial y velocity.
+                    //this will make them fall.
                     if(!StandingOnPlatform())
                     {
                         currentAttackState = CharacterAttackState.Jump;
@@ -306,12 +360,16 @@ namespace Team_Majx_Game
                 //Case for when you press jump on the ground and you "charge" up the jump for a few frames before jumping.
                 //Up tilt, up strong, and up special can be inputted during these frames.
                 case CharacterAttackState.JumpSquat:
+                    //Once jump squat ends, the character will jump. We set their vertical velocity to -16 so that they move upwards,
+                    //and we change their y position by this value every frame. We increase this value by 1 every frame until it becomes positive and
+                    //then then jump is over and the character will begin to fall.
                     if (lagFrames == 0)
                     {
                         yVelocity = -16;
                         position.Y += yVelocity;
                         currentAttackState = CharacterAttackState.Jump;
                     }
+                    //checks for inputs for up attack, up strong, and up special.
                     else if (KeyPress(attack))
                     {
                         currentAttackState = CharacterAttackState.UpTilt;
@@ -666,7 +724,7 @@ namespace Team_Majx_Game
                 hurtBox.Position = position;
 
             else
-                hurtBox.Position = new Rectangle(position.X, position.Y - position.Height / 2, position.Height / 2, position.Width);
+                hurtBox.Position = new Rectangle(position.X, position.Y + position.Height / 2, position.Width, position.Height/2);
 
             // controls death and respawn
             if (health <= 0 || position.Y >= gameManager.ScreenHeight)
@@ -693,7 +751,8 @@ namespace Team_Majx_Game
             prevKBState = kbState;
         }
 
-
+        //this runs from the knight class when the player gets hit. It puts the character into hitstun state so they cannot do anytinh
+        //and sets the amount of frames that they are in hitstun for.
         public void gotHit(int hitStun)
         {
             currentAttackState = CharacterAttackState.Hitstun;
@@ -705,7 +764,7 @@ namespace Team_Majx_Game
         {
             switch (currentAttackState)
             {
-                //Draws character based on their state
+                //Draws the character in the neutral position when they are not attacking
                 case CharacterAttackState.Stand:
                 case CharacterAttackState.Walk:
                 case CharacterAttackState.Jump:
@@ -723,6 +782,7 @@ namespace Team_Majx_Game
                             color, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
                     }
                     break;
+                    //Draws the character crouching if they're in the crouch or jumpsquat state
                 case CharacterAttackState.Crouch:
                 case CharacterAttackState.JumpSquat:
                     if (direction == Direction.Left)
@@ -738,6 +798,7 @@ namespace Team_Majx_Game
                             color, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
                     }
                     break;
+                    //Draws the character gray if they're in endlag, hitstun, or dodging
                 case CharacterAttackState.LandingLag:
                 case CharacterAttackState.Hitstun:
                 case CharacterAttackState.Dodge:
@@ -762,37 +823,34 @@ namespace Team_Majx_Game
                     break;
 
             }
+            //Draws the explosion if it should be drawn.
             if(showExplosion)
                 spriteBatch.Draw(ex, explosion, Color.White);
-            
-            ;
-
         }
 
-        //returns character state
-
+        //returns character state for testing purposes
         public string ToString()
 
         {
             return currentAttackState.ToString() + xVelocity.ToString();
         }
 
-
-        //attack method to cover all the different attacks. It's virtual so the character classes
-        //and override them with their respective attacks.
+        //attack method to cover all the different attacks. It's virtual so the character classes can override them with 
+        //their respective attacks. This also draws the character, so it is ran through the draw class.
         public virtual void Attack(CharacterAttackState attack, Direction direction,
             int frame, SpriteBatch _spriteBatch, Texture2D hitboxSprite, Texture2D spriteSheet, bool isPlayer1)
         {
 
         }
 
-        //Returns the endlag of the current move. Overridden by each respective character class
+        //Returns the endlag of the current move. Overridden by each respective character class, and  returns 0 as a default.
         public virtual int getEndlag(CharacterAttackState attack)
         {
             return 0;
         }
 
-        //Handles acceleration to make the update method simpler
+        //Handles acceleration towards the right side of the screen to make the update method simpler.
+        //Increases speed by 3 every frame until it reaches the max of 8.
         public void AccelerateRight()
         {
             if (!TouchingWall())
@@ -808,6 +866,8 @@ namespace Team_Majx_Game
             }
         }
 
+        //Handles acceleration towards the left side of the screen to make the update method simpler.
+        //Increases speed by -3 every frame until it reaches the max of -8.
         public void AccelerateLeft()
         {
             if (!TouchingWall())
@@ -823,7 +883,7 @@ namespace Team_Majx_Game
             }
         }
 
-        // Determines if the player will lose a life.
+        //Runs if the player loses a life, respawns them, and sets related variables to their base value.
         public void LoseStockandRespawn()
         {
             playerDied = true;
@@ -834,7 +894,7 @@ namespace Team_Majx_Game
             position.X = spawnTile.Position.X;
             position.Y = spawnTile.Position.Y - 64;
             xVelocity = 0;
-            YVelocity = 0;
+            yVelocity = 0;
 
             playerDied = false;
 
@@ -855,6 +915,8 @@ namespace Team_Majx_Game
             
         }
 
+        //Handles aerial acceleration towards the right side of the screen to make the update method simpler.
+        //Increases speed by 2 every frame until it reaches the max of 8.
         public void AerialAccelerateRight()
         {
             TouchingWall();
@@ -868,6 +930,8 @@ namespace Team_Majx_Game
             }
         }
 
+        //Handles aerial acceleration towards the left side of the screen to make the update method simpler.
+        //Increases speed by -2 every frame until it reaches the max of -8.
         public void AerialAccelerateLeft()
         {
             TouchingWall();
@@ -881,7 +945,7 @@ namespace Team_Majx_Game
             }
         }
 
-        //Handles deceleration when you use a move while moving (sliding)
+        //Handles deceleration when you use a move (or stop) while moving (sliding)
         public void Decelerate()
         {
                 if (xVelocity > 0)
@@ -903,7 +967,9 @@ namespace Team_Majx_Game
                 }
             
         }
-
+        
+        //Handles when the player stops holding a direction in the air and they need to slowly decelerate. If their aerial deceleration cooldown
+        //is 5, then decrease their speed by 1 and set it to 0. If it's less than 5, increase it by 1 and do not change the x velocity.
         public void aerialDecelerate()
         {
             if (aerialDecelerateCooldown >= 5)
@@ -935,29 +1001,6 @@ namespace Team_Majx_Game
 
         }
 
-        //Returns and changes the position, width, and height of the character
-        public Rectangle Position
-        {
-            get { return position; }
-            set { position = value; }
-        }
-        public double Speed
-        {
-            get { return speed; }
-        }
-
-        public int XVelocity
-        {
-            get { return xVelocity; }
-            set { xVelocity = value; }
-        }
-
-        public int YVelocity
-        {
-            get { return yVelocity; }
-            set { yVelocity = value; }
-        }
-
         //Checks if a key was just pressed
         public bool KeyPress(Keys key)
         {
@@ -967,8 +1010,8 @@ namespace Team_Majx_Game
         }
 
         //Checks if the character is standing on a platform
-
-        //TODO: Check if character is actually standing on a platform and not touching it from the side or the top.
+        //Checks the bottom of the character and if it's below the top of the platform, then we stop all momentum in the y direction
+        //and move them to the top of the platform.
         public bool StandingOnPlatform()
         {
             foreach (Tile t in gameManager.platforms)
@@ -985,10 +1028,13 @@ namespace Team_Majx_Game
             return false;
         }
 
+        //checks if the character is touching a wall and bounces them off of it.
         public bool TouchingWall()
         {
             foreach (Tile t in gameManager.platforms)
             {
+                //Checks x position and if it's outside of the walls of the stage then we move the characer towards the center of the screen.
+                //the right side had some bugs so we had to move them inwards more on that side.
                 if(position.X <= 32)
                 {
                     xVelocity = Math.Abs(xVelocity/2);
@@ -1001,6 +1047,9 @@ namespace Team_Majx_Game
                     position.X -= 7;
                     return true;
                 }
+                //We check the side of the character that their moving on and if it's inside the side of the platform or the walls at the end of the 
+                //screen, we move them in the opposite direction based on their x velocity. This prevents them getting stuck in the walls,
+                //but bounces them off the platforms.
                 else if (xVelocity <= 0)
                 {
                     if ((t.TileType == TileType.Platform || t.TileType == TileType.Wall) && position.X <= t.Position.X + t.Position.Width && position.X + position.Width >= t.Position.X &&
@@ -1032,7 +1081,8 @@ namespace Team_Majx_Game
 
         }
 
-
+        //Checks if the character is touching the bottom of a platform and stops all momentum in the y direction. Checks the top of the
+        //character and stops them if it's above the bottom of any of the platforms.
         public bool TouchingCeiling()
         {
             foreach (Tile t in gameManager.platforms)
