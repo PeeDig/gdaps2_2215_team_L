@@ -162,14 +162,15 @@ namespace Team_Majx_Game
             map3PicBackground = new Rectangle(995, 190, 370, 223);
 
             //All different Keys
-            player1Attack = (Keys.P);
-            player1Special = (Keys.O);
-            player1Dodge = (Keys.L);
-            player1Strong = (Keys.I);
-            player2Attack = (Keys.Y);
-            player2Special = (Keys.T);
-            player2Dodge = (Keys.G);
-            player2Strong = (Keys.R);
+            player1Attack = (Keys.Y);
+            player1Special = (Keys.T);
+            player1Dodge = (Keys.G);
+            player1Strong = (Keys.R);
+
+            player2Attack = (Keys.P);
+            player2Special = (Keys.O);
+            player2Dodge = (Keys.L);
+            player2Strong = (Keys.I);
 
             //Initializes the list of keys (attack, special, dodge, strong)
             player1Keys = new List<Keys>();
@@ -177,6 +178,7 @@ namespace Team_Majx_Game
             player1Keys.Add(player1Special);
             player1Keys.Add(player1Dodge);
             player1Keys.Add(player1Strong);
+
             player2Keys = new List<Keys>();
             player2Keys.Add(player2Attack);
             player2Keys.Add(player2Special);
@@ -244,7 +246,11 @@ namespace Team_Majx_Game
                     }
                     else if (buttonList[0].ClickButton(msState, prevMsState))
                     {
-                        //Change Player 1's keybinds 
+                        //Changes player 1's keybinds
+                        player1Keys[0] = CustomInput(kbState, player1Keys[0]);
+                        player1Keys[1] = CustomInput(kbState, player1Keys[1]);
+                        player1Keys[2] = CustomInput(kbState, player1Keys[2]);
+                        player1Keys[3] = CustomInput(kbState, player1Keys[3]);
                     }
                     else if (buttonList[2].ClickButton(msState, prevMsState))
                     {
@@ -293,12 +299,12 @@ namespace Team_Majx_Game
 
                 case GameState.Battle:
                     //The main battle
-                    //Updates the player and their damage dealt
-                    player1.update(gameTime, Keys.Up, Keys.Down, Keys.Left, Keys.Right, player1Keys[0], player1Keys[1],
-                        player1Keys[3], player1Keys[2], _spriteBatch);
-                    player1.DealDamage(player2);
-                    player2.update(gameTime, Keys.W, Keys.S, Keys.A, Keys.D, player2Keys[0], player2Keys[1], 
+                    //Updates the player and their damage dealt (player's were swapped so player 2 keys = player 1 keys)
+                    player1.update(gameTime, Keys.Up, Keys.Down, Keys.Left, Keys.Right, player2Keys[0], player2Keys[1],
                         player2Keys[3], player2Keys[2], _spriteBatch);
+                    player1.DealDamage(player2);
+                    player2.update(gameTime, Keys.W, Keys.S, Keys.A, Keys.D, player1Keys[0], player1Keys[1], 
+                        player1Keys[3], player1Keys[2], _spriteBatch);
                     player2.DealDamage(player1);
 
                     //Pauses the game
@@ -385,33 +391,33 @@ namespace Team_Majx_Game
                     _spriteBatch.DrawString(medievalFont, "Player 1:", CenterFont("Player 1:",
                         medievalFont, 200, 0.25f), Color.Black);
                     _spriteBatch.DrawString(medievalFont, "Move - Arrow Keys", CenterFont("Move - Arrow Keys",
-                        medievalFont, 250, 0.75f), Color.Black);
+                        medievalFont, 250, 0.25f), Color.Black);
                     _spriteBatch.DrawString(medievalFont, "Attack - " + player1Keys[0], CenterFont("Attack - " + player1Keys[0],
-                        medievalFont, 300, 0.75f), Color.Black);
+                        medievalFont, 300, 0.25f), Color.Black);
                     _spriteBatch.DrawString(medievalFont, "Special - " + player1Keys[1], CenterFont("Special - " + player1Keys[1],
-                        medievalFont, 350, 0.75f), Color.Black);
+                        medievalFont, 350, 0.25f), Color.Black);
                     _spriteBatch.DrawString(medievalFont, "Strong Attack - " + player1Keys[3], CenterFont("Strong Attack - " + player1Keys[3],
-                        medievalFont, 400, 0.75f), Color.Black);
+                        medievalFont, 400, 0.25f), Color.Black);
                     _spriteBatch.DrawString(medievalFont, "Dodge - " + player1Keys[2], CenterFont("Dodge - " + player1Keys[2],
-                        medievalFont, 450, 0.75f), Color.Black); //CHANGE TO 350 
+                        medievalFont, 450, 0.25f), Color.Black); //CHANGE TO 350 
                        _spriteBatch.DrawString(medievalFont, "Double Jump - Up x 2", CenterFont("Double Jump - Up x 2",
-                        medievalFont, 500, 0.75f), Color.Black);
+                        medievalFont, 500, 0.25f), Color.Black);
 
                     //Draws player 2's controls
                     _spriteBatch.DrawString(medievalFont, "Player 2:", CenterFont("Player 2:",
                         medievalFont, 200, 0.75f), Color.Black);
                     _spriteBatch.DrawString(medievalFont, "Move - WASD", CenterFont("Move - WASD",
-                        medievalFont, 250, 0.25f), Color.Black);
+                        medievalFont, 250, 0.75f), Color.Black);
                     _spriteBatch.DrawString(medievalFont, "Attack - " + player2Keys[0], CenterFont("Attack - " + player2Keys[0],
-                        medievalFont, 300, 0.25f), Color.Black);
+                        medievalFont, 300, 0.75f), Color.Black);
                     _spriteBatch.DrawString(medievalFont, "Special - " + player2Keys[1], CenterFont("Special - " + player2Keys[1],
-                        medievalFont, 350, 0.25f), Color.Black);
+                        medievalFont, 350, 0.75f), Color.Black);
                     _spriteBatch.DrawString(medievalFont, "Strong Attack - " + player2Keys[3], CenterFont("Strong Attack - " + player2Keys[3],
-                        medievalFont, 400, 0.25f), Color.Black);
+                        medievalFont, 400, 0.75f), Color.Black);
                     _spriteBatch.DrawString(medievalFont, "Dodge - " + player2Keys[2], CenterFont("Dodge - " + player2Keys[2],
-                        medievalFont, 450, 0.25f), Color.Black); // CHANGE TO 540
+                        medievalFont, 450, 0.75f), Color.Black); // CHANGE TO 540
                     _spriteBatch.DrawString(medievalFont, "Double Jump - W x 2", CenterFont("Double Jump - W x 2",
-                        medievalFont, 500, 0.25f), Color.Black);
+                        medievalFont, 500, 0.75f), Color.Black);
 
                     //Buttons and button boxes
                     ShapeBatch.Box(buttonList[0].Postion, buttonList[0].ButtonColor);
@@ -626,6 +632,21 @@ namespace Team_Majx_Game
         public Vector2 CenterFont(string text, SpriteFont currentFont, int textHeight, float dividedByWidth)
         {
             return new Vector2((width * dividedByWidth) - (currentFont.MeasureString(text).X / 2), textHeight);
+        }
+
+        //Method that grabs the custom keys of the user
+        public Keys CustomInput(KeyboardState currentKey, Keys keySwitch)
+        {
+            bool waitingForKey = true;
+            if (waitingForKey)
+            {
+                if (currentKey.GetPressedKeys().Length > 0)
+                {
+                    keySwitch = currentKey.GetPressedKeys()[0];
+                    waitingForKey = false;
+                }
+            }
+            return keySwitch;
         }
     }
 }
