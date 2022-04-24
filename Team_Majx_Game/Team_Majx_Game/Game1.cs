@@ -479,6 +479,7 @@ namespace Team_Majx_Game
                     
                     //Draws the two knights
                     player1.Draw(_spriteBatch, knight, hitbox, explosion);
+                    
 
                     player2.Draw(_spriteBatch, knight, hitbox, explosion);
 

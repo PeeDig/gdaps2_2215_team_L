@@ -75,12 +75,12 @@ namespace Team_Majx_Game
                             if (direction == Direction.Left)
                             {
                                 SpriteEffect = SpriteEffects.None;
-                                currentHitbox = new Hitbox(new Rectangle(position.X - 25, position.Y, 50, 50), 10, new Vector2(-8, -2), 8);
+                                currentHitbox = new Hitbox(new Rectangle(position.X - 25, position.Y, 50, 40), 10, new Vector2(-8, -2), 8);
                             }
                             else
                             {
                                 SpriteEffect = SpriteEffects.FlipHorizontally;
-                                currentHitbox = new Hitbox(new Rectangle(position.X + position.Width - 25, Position.Y, 50, 50), 10, new Vector2(8, -2), 8);
+                                currentHitbox = new Hitbox(new Rectangle(position.X + position.Width - 25, Position.Y, 50, 40), 10, new Vector2(8, -2), 8);
                             }
 
                             currentHitbox.Draw(_spriteBatch, hitboxSprite);
