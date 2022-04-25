@@ -60,19 +60,6 @@ namespace Team_Majx_Game
             }
         }
 
-        //Creates a hover for the mouse on the button
-        public bool ButtonHover(MouseState mState)
-        {
-            if (postion.Contains(mState.X, mState.Y))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
         //Draws the button's text
         public void Draw(SpriteBatch spriteBatch, string buttonTxt, SpriteFont medievalFont)
         {

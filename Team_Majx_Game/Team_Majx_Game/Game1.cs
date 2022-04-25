@@ -29,11 +29,8 @@ namespace Team_Majx_Game
         private MouseState prevMsState;
 
         // font and backgrounds
-        private SpriteFont font;
         private SpriteFont medievalFont;
         private SpriteFont bigMedievalFont;
-        private Texture2D castleBackground;
-        private Rectangle backgroundPosition;
         private Texture2D map1Picture;
         private Rectangle map1PicBackground;
         private Texture2D map2Picture;
@@ -65,26 +62,10 @@ namespace Team_Majx_Game
         // holds all the possible levels
         private List<string> levelList;
 
-        private int p2StockCt;
-
         private int currentLevel = 1;
-
-        //All different Keys
-        private Keys player1Attack;
-        private Keys player1Special;
-        private Keys player1Dodge;
-        private Keys player1Strong;
-        private Keys player2Attack;
-        private Keys player2Special;
-        private Keys player2Dodge;
-        private Keys player2Strong;
 
         //Temporary game manager class for the first demo
         private GameManager manager1;
-
-        //All needed keys in a list
-        private List<Keys> player1Keys;
-        private List<Keys> player2Keys;
 
         // property so the cc class can get texturd
         public Texture2D Explosion
@@ -114,7 +95,6 @@ namespace Team_Majx_Game
             _graphics.PreferredBackBufferWidth = width;
             _graphics.PreferredBackBufferHeight = height;
             _graphics.ApplyChanges();
-            // TODO: Add your initialization logic here
             prevkbState = Keyboard.GetState();
             prevMsState = Mouse.GetState();
 
@@ -137,11 +117,11 @@ namespace Team_Majx_Game
             mapButtonList.Add(new Button(new Rectangle(620, 450, 200, 75), deafultButtonColor));
             mapButtonList.Add(new Button(new Rectangle(1080, 450, 200, 75), deafultButtonColor));
 
-            //Creating a temporary knight for the purpose of the first demo
-
+            //Player's hurt boxes
             Player1HurtBox = new HurtBox(new Rectangle(manager1.SpawnPoints[1].Position.X, manager1.SpawnPoints[1].Position.Y, 80, 80));
             Player2HurtBox = new HurtBox(new Rectangle(manager1.SpawnPoints[0].Position.X, manager1.SpawnPoints[0].Position.Y, 80, 80));
 
+            //The two knights
             player1 = new Knight(knight, //texture
                 manager1.SpawnPoints[1].Position.X, // x starting position
                 manager1.SpawnPoints[1].Position.Y + 20, // y starting position
@@ -163,32 +143,9 @@ namespace Team_Majx_Game
                Color.Red);
 
             //Background variables
-            backgroundPosition = new Rectangle(0, 0, width, height);
             map1PicBackground = new Rectangle(75, 190, 370, 223);
             map2PicBackground = new Rectangle(535, 190, 370, 223);
             map3PicBackground = new Rectangle(995, 190, 370, 223);
-
-            //All different Keys
-            player1Attack = (Keys.P);
-            player1Special = (Keys.O);
-            player1Dodge = (Keys.L);
-            player1Strong = (Keys.I);
-            player2Attack = (Keys.Y);
-            player2Special = (Keys.T);
-            player2Dodge = (Keys.G);
-            player2Strong = (Keys.R);
-
-            //Initializes the list of keys (attack, special, dodge, strong)
-            player1Keys = new List<Keys>();
-            player1Keys.Add(player1Attack);
-            player1Keys.Add(player1Special);
-            player1Keys.Add(player1Dodge);
-            player1Keys.Add(player1Strong);
-            player2Keys = new List<Keys>();
-            player2Keys.Add(player2Attack);
-            player2Keys.Add(player2Special);
-            player2Keys.Add(player2Dodge);
-            player2Keys.Add(player2Strong);
 
             base.Initialize();
         }
@@ -202,17 +159,17 @@ namespace Team_Majx_Game
             knight = Content.Load<Texture2D>("knight1");
             heart = Content.Load<Texture2D>("heart");
             tempSquare = Content.Load<Texture2D>("red square");
-            castleBackground = Content.Load<Texture2D>("castle");
+            explosion = Content.Load<Texture2D>("explosion");
+
+            //Maps (for map select)
             map1Picture = Content.Load<Texture2D>("Map1Pic");
             map2Picture = Content.Load<Texture2D>("Map2Pic");
             map3Picture = Content.Load<Texture2D>("Map3Pic");
             mapSquare = Content.Load<Texture2D>("red square cropped");
 
             //Fonts
-            font = Content.Load<SpriteFont>("arial");
             medievalFont = Content.Load<SpriteFont>("dutchMediaeval");
             bigMedievalFont = Content.Load<SpriteFont>("bigDutchMediaeval");
-            explosion = Content.Load<Texture2D>("explosion");
         }
 
         protected override void Update(GameTime gameTime)
@@ -220,6 +177,7 @@ namespace Team_Majx_Game
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            //Gets the keyboard and mouse states
             KeyboardState kbState = Keyboard.GetState();
             MouseState msState = Mouse.GetState();
 
@@ -227,6 +185,7 @@ namespace Team_Majx_Game
             switch (currentState)
             {
                 case GameState.Menu:
+                    //Main Menu, switch between controls, battle, and map select
                     if (buttonList[0].ClickButton(msState, prevMsState))
                     {
                         currentState = GameState.Controls;
@@ -242,21 +201,15 @@ namespace Team_Majx_Game
                     break;
 
                 case GameState.Controls:
+                    //Controls, set controls per character or go back to menu
                     if (buttonList[1].ClickButton(msState, prevMsState))
                     {
                         currentState = GameState.Menu;
                     }
-                    else if (buttonList[0].ClickButton(msState, prevMsState))
-                    {
-                        //Change Player 1's keybinds 
-                    }
-                    else if (buttonList[2].ClickButton(msState, prevMsState))
-                    {
-                        //Change Player 2's keybinds
-                    }
                     break;
 
                 case GameState.MapSelect:
+                    //Map select, switch between the different maps
                     if (buttonList[1].ClickButton(msState, prevMsState))
                     {
                         currentState = GameState.Menu;
@@ -295,19 +248,19 @@ namespace Team_Majx_Game
                     break;
 
                 case GameState.Battle:
-                    player1.update(gameTime, Keys.Up, Keys.Down, Keys.Left, Keys.Right, player1Keys[0], player1Keys[1],
-                        player1Keys[3], player1Keys[2], _spriteBatch);
+                    //The main battle
+                    //Updates the player and their damage dealt (players were swapped so player 2 keys = player 1 keys)
+                    player1.update(gameTime, Keys.Up, Keys.Down, Keys.Left, Keys.Right, Keys.P, Keys.O,
+                        Keys.I, Keys.L, _spriteBatch);
                     player1.DealDamage(player2);
-                    player2.update(gameTime, Keys.W, Keys.S, Keys.A, Keys.D, player2Keys[0], player2Keys[1], 
-                        player2Keys[3], player2Keys[2], _spriteBatch);
+                    player2.update(gameTime, Keys.W, Keys.S, Keys.A, Keys.D, Keys.Y, Keys.T, 
+                        Keys.R, Keys.G, _spriteBatch);
                     player2.DealDamage(player1);
+
+                    //Pauses the game
                     if (SingleKeyPress(Keys.Q, kbState))
                     {
                         currentState = GameState.Pause;
-                    }
-                    else if (SingleKeyPress(Keys.Enter, kbState))
-                    {
-                        currentState = GameState.EndScreen;
                     }
 
                     // If a player dies, switch to the end screen
@@ -315,10 +268,10 @@ namespace Team_Majx_Game
                     {
                         currentState = GameState.EndScreen;
                     }
-                    
                     break;
 
                 case GameState.Pause:
+                    //Switches between the battle or menu (reseting in the process)
                     if (buttonList[3].ClickButton(msState, prevMsState))
                     {
                         currentState = GameState.Battle;
@@ -331,6 +284,7 @@ namespace Team_Majx_Game
                     break;
 
                 case GameState.EndScreen:
+                    //End Screen, goes back to menu and resets
                     if (buttonList[1].ClickButton(msState, prevMsState))
                     {
                         currentState = GameState.Menu;
@@ -339,6 +293,7 @@ namespace Team_Majx_Game
                     break;
             }
 
+            //The previous keyboard and mouse states
             prevkbState = kbState;
             prevMsState = msState;
 
@@ -349,6 +304,7 @@ namespace Team_Majx_Game
         {
             GraphicsDevice.Clear(Color.Tan);
 
+            //SpriteBatch and ShapeBatch
             _spriteBatch.Begin();
             ShapeBatch.Begin(GraphicsDevice);
 
@@ -358,9 +314,6 @@ namespace Team_Majx_Game
             {
                 // draws all of the menu items
                 case GameState.Menu:
-                    //Background image
-                    //_spriteBatch.Draw(castleBackground, backgroundPosition, Color.White);
-                    
                     //Draws all the Buttons for the menu
                     ShapeBatch.Box(buttonList[0].Postion, buttonList[0].ButtonColor);
                     ShapeBatch.Box(buttonList[1].Postion, buttonList[1].ButtonColor);
@@ -376,17 +329,11 @@ namespace Team_Majx_Game
 
                 // draws all of the Controls items
                 case GameState.Controls:
-                    //Draws the Controls menu and buttons
                     _spriteBatch.DrawString(bigMedievalFont, "Controls", new Vector2
                         ((width / 2) - (bigMedievalFont.MeasureString("Controls").X/2), 50), Color.Black);
 
                     //Draws all of the controls
-                    /*
-                    _spriteBatch.DrawString(medievalFont, "Be the first knight to bring your opponents health to 0! Try not to fall off!", 
-                        CenterFont("Be the first knight to bring your opponents health to 0! Try not to fall off!",
-                        medievalFont, 125), Color.Black);
-                    */
-
+                    //Pause text
                     _spriteBatch.DrawString(medievalFont, "Pause - Q", CenterFont("Pause - Q",
                         medievalFont, 160, 0.5f), Color.Black);
 
@@ -394,41 +341,37 @@ namespace Team_Majx_Game
                     _spriteBatch.DrawString(medievalFont, "Player 1:", CenterFont("Player 1:",
                         medievalFont, 200, 0.25f), Color.Black);
                     _spriteBatch.DrawString(medievalFont, "Move - Arrow Keys", CenterFont("Move - Arrow Keys",
-                        medievalFont, 250, 0.75f), Color.Black);
-                    _spriteBatch.DrawString(medievalFont, "Attack - " + player1Keys[0], CenterFont("Attack - " + player1Keys[0],
-                        medievalFont, 300, 0.75f), Color.Black);
-                    _spriteBatch.DrawString(medievalFont, "Special - " + player1Keys[1], CenterFont("Special - " + player1Keys[1],
-                        medievalFont, 350, 0.75f), Color.Black);
-                    _spriteBatch.DrawString(medievalFont, "Strong Attack - " + player1Keys[3], CenterFont("Strong Attack - " + player1Keys[3],
-                        medievalFont, 400, 0.75f), Color.Black);
-                    _spriteBatch.DrawString(medievalFont, "Dodge - " + player1Keys[2], CenterFont("Dodge - " + player1Keys[2],
-                        medievalFont, 450, 0.75f), Color.Black); //CHANGE TO 350 
-                       _spriteBatch.DrawString(medievalFont, "Double Jump - Up x 2", CenterFont("Double Jump - Up x 2",
-                        medievalFont, 500, 0.75f), Color.Black);
+                        medievalFont, 250, 0.25f), Color.Black);
+                    _spriteBatch.DrawString(medievalFont, "Attack - P", CenterFont("Attack - P",
+                        medievalFont, 300, 0.25f), Color.Black);
+                    _spriteBatch.DrawString(medievalFont, "Up Special - O + Up", CenterFont("Up Special - O + Up",
+                        medievalFont, 350, 0.25f), Color.Black);
+                    _spriteBatch.DrawString(medievalFont, "Strong Attack - I", CenterFont("Strong Attack - I",
+                        medievalFont, 400, 0.25f), Color.Black);
+                    _spriteBatch.DrawString(medievalFont, "Dodge - L", CenterFont("Dodge - L",
+                        medievalFont, 450, 0.25f), Color.Black); //CHANGE TO 350 
+                    _spriteBatch.DrawString(medievalFont, "Double Jump - Up x 2", CenterFont("Double Jump - Up x 2",
+                        medievalFont, 500, 0.25f), Color.Black);
 
                     //Draws player 2's controls
                     _spriteBatch.DrawString(medievalFont, "Player 2:", CenterFont("Player 2:",
                         medievalFont, 200, 0.75f), Color.Black);
                     _spriteBatch.DrawString(medievalFont, "Move - WASD", CenterFont("Move - WASD",
-                        medievalFont, 250, 0.25f), Color.Black);
-                    _spriteBatch.DrawString(medievalFont, "Attack - " + player2Keys[0], CenterFont("Attack - " + player2Keys[0],
-                        medievalFont, 300, 0.25f), Color.Black);
-                    _spriteBatch.DrawString(medievalFont, "Special - " + player2Keys[1], CenterFont("Special - " + player2Keys[1],
-                        medievalFont, 350, 0.25f), Color.Black);
-                    _spriteBatch.DrawString(medievalFont, "Strong Attack - " + player2Keys[3], CenterFont("Strong Attack - " + player2Keys[3],
-                        medievalFont, 400, 0.25f), Color.Black);
-                    _spriteBatch.DrawString(medievalFont, "Dodge - " + player2Keys[2], CenterFont("Dodge - " + player2Keys[2],
-                        medievalFont, 450, 0.25f), Color.Black); // CHANGE TO 540
+                        medievalFont, 250, 0.75f), Color.Black);
+                    _spriteBatch.DrawString(medievalFont, "Attack - Y", CenterFont("Attack - Y",
+                        medievalFont, 300, 0.75f), Color.Black);
+                    _spriteBatch.DrawString(medievalFont, "Up Special - T + W", CenterFont("Up Special - T + W",
+                        medievalFont, 350, 0.75f), Color.Black);
+                    _spriteBatch.DrawString(medievalFont, "Strong Attack - R", CenterFont("Strong Attack - R",
+                        medievalFont, 400, 0.75f), Color.Black);
+                    _spriteBatch.DrawString(medievalFont, "Dodge - G", CenterFont("Dodge - G",
+                        medievalFont, 450, 0.75f), Color.Black); // CHANGE TO 540
                     _spriteBatch.DrawString(medievalFont, "Double Jump - W x 2", CenterFont("Double Jump - W x 2",
-                        medievalFont, 500, 0.25f), Color.Black);
+                        medievalFont, 500, 0.75f), Color.Black);
 
                     //Buttons and button boxes
-                    //ShapeBatch.Box(buttonList[0].Postion, buttonList[0].ButtonColor);
                     ShapeBatch.Box(buttonList[1].Postion, buttonList[1].ButtonColor);
-                    //ShapeBatch.Box(buttonList[2].Postion, buttonList[2].ButtonColor);
-                    //buttonList[0].Draw(_spriteBatch, "Change P1 Keys", medievalFont);
                     buttonList[1].Draw(_spriteBatch, "Back", medievalFont);
-                    //buttonList[2].Draw(_spriteBatch, "Change P2 Keys", medievalFont);
                     break;
 
                 // draws all of the items needed in MapSelect
@@ -486,12 +429,11 @@ namespace Team_Majx_Game
                 case GameState.Battle:
                     GraphicsDevice.Clear(Color.Tan);
                     
+                    //Draws the two knights
                     player1.Draw(_spriteBatch, knight, hitbox, explosion);
+                    
 
                     player2.Draw(_spriteBatch, knight, hitbox, explosion);
-
-                    // _spriteBatch.Draw(hitbox, new Rectangle(720, 505, 400, 100), Color.White);
-
 
                     // Draws the map
                     for (int r = 0; r < manager1.MapArray.GetLength(0); r++)
@@ -517,8 +459,12 @@ namespace Team_Majx_Game
                             Color.Red);
                     }
 
-                    _spriteBatch.DrawString(bigMedievalFont, player2.Health.ToString(), new Vector2(440, 725), Color.Black);
+                    //Player 2's health
+                    _spriteBatch.DrawString(bigMedievalFont, 
+                        player2.Health.ToString(), 
+                        new Vector2(440, 725), Color.Black);
 
+                    //Player 1's health
                     _spriteBatch.DrawString(bigMedievalFont,
                        player1.Health.ToString(),
                        new Vector2((_graphics.PreferredBackBufferWidth - (35 * player1.Stocks) - 550), 725),
@@ -543,12 +489,6 @@ namespace Team_Majx_Game
                             32),
                             Color.Blue);
                     }
-
-
-
-                    //Draws the player 1 state for testing
-                    //_spriteBatch.DrawString(medievalFont, player1.ToString(), new Vector2(60, 70), Color.Black);
-
                     break;
 
                 case GameState.Pause:
@@ -574,6 +514,7 @@ namespace Team_Majx_Game
 
                     if (!player1.PlayerAlive)
                     {
+                        //Player 1 win screen
                         _spriteBatch.DrawString(medievalFont,
                             "Player 1 Wins!",
                             CenterFont("Player 1 Wins!", medievalFont, 400, 0.5f),
@@ -581,12 +522,12 @@ namespace Team_Majx_Game
                     }
                     else
                     {
+                        //Player 2 win screen
                         _spriteBatch.DrawString(medievalFont,
                             "Player 2 Wins!",
                             CenterFont("Player 2 Wins!", medievalFont, 400, 0.5f),
                             Color.Black);
                     }
-
                     break;
             }
 
@@ -633,6 +574,7 @@ namespace Team_Majx_Game
             
         }
 
+        //Method for centering font for a specific fraction of the screen
         public Vector2 CenterFont(string text, SpriteFont currentFont, int textHeight, float dividedByWidth)
         {
             return new Vector2((width * dividedByWidth) - (currentFont.MeasureString(text).X / 2), textHeight);
