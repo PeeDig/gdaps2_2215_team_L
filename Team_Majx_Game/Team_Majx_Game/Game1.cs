@@ -521,14 +521,14 @@ namespace Team_Majx_Game
 
                     _spriteBatch.DrawString(bigMedievalFont,
                        player1.Health.ToString(),
-                       new Vector2((_graphics.PreferredBackBufferWidth - (35 * player2.Stocks) - 550), 725),
+                       new Vector2((_graphics.PreferredBackBufferWidth - (35 * player1.Stocks) - 550), 725),
                        Color.Black);
 
 
                     // Draws the words "Player 2: 
                     _spriteBatch.DrawString(medievalFont,
                         "Player 2:",
-                        new Vector2((_graphics.PreferredBackBufferWidth - (35 * player2.Stocks) - 550), 700),
+                        new Vector2((_graphics.PreferredBackBufferWidth - (35 * player1.Stocks) - 550), 700),
                         Color.Black);
 
                     // Drawing the hearts/ stock for player 2
