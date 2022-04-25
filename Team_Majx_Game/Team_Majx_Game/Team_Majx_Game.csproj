@@ -10,6 +10,10 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Archer.cs" />
+    <Compile Remove="Mage.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="Icon.ico" />
     <None Remove="Icon.bmp" />
   </ItemGroup>

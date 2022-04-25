@@ -67,17 +67,6 @@ namespace Team_Majx_Game
         //Temporary game manager class for the first demo
         private GameManager manager1;
 
-        // property so the cc class can get texturd
-        public Texture2D Explosion
-        {
-            get { return explosion; }
-        }
-
-        public SpriteBatch SpriteBatch
-        {
-            get { return _spriteBatch; }
-        }
-
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
