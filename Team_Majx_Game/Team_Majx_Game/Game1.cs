@@ -67,17 +67,6 @@ namespace Team_Majx_Game
         //Temporary game manager class for the first demo
         private GameManager manager1;
 
-        // property so the cc class can get texturd
-        public Texture2D Explosion
-        {
-            get { return explosion; }
-        }
-
-        public SpriteBatch SpriteBatch
-        {
-            get { return _spriteBatch; }
-        }
-
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -467,14 +456,14 @@ namespace Team_Majx_Game
                     //Player 1's health
                     _spriteBatch.DrawString(bigMedievalFont,
                        player1.Health.ToString(),
-                       new Vector2((_graphics.PreferredBackBufferWidth - (35 * player2.Stocks) - 550), 725),
+                       new Vector2((_graphics.PreferredBackBufferWidth - (35 * player1.Stocks) - 550), 725),
                        Color.Black);
 
 
                     // Draws the words "Player 2: 
                     _spriteBatch.DrawString(medievalFont,
                         "Player 2:",
-                        new Vector2((_graphics.PreferredBackBufferWidth - (35 * player2.Stocks) - 550), 700),
+                        new Vector2((_graphics.PreferredBackBufferWidth - (35 * player1.Stocks) - 550), 700),
                         Color.Black);
 
                     // Drawing the hearts/ stock for player 2
