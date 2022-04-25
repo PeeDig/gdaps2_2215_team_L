@@ -12,7 +12,6 @@ namespace Team_Majx_Game
     /// </summary>
     class Knight : CommonCharacter
     {
-        private int shieldHealth;
         private Hitbox currentHitbox;
         private Color tempColor;
         private SpriteEffects SpriteEffect;
@@ -23,40 +22,12 @@ namespace Team_Majx_Game
             ) : base(texture, x, y, width, height, player1, gameManager, hurtBox, color)
         {
             this.gameManager = gameManager;
-            shieldHealth = 100; //Default value???
             this.texture = texture;
             this.position = new Rectangle(x, y, width, height);
             speed = 1; //Default speed???
             this.player1 = player1;
             this.hurtBox = hurtBox;
             this.color = color;
-        }
-
-        public List<Hitbox> AllHitboxes
-        {
-            get { return allHitboxes; }
-        }
-
-
-        //Returns and changes the shield health. Sets the shield health to 100 if the inputted number is greater than it
-        public int ShieldHealth
-        {
-            get { return shieldHealth; }
-            set
-            {
-                if (value >= 100)
-                {
-                    shieldHealth = 100;
-                }
-                else if (value <= 100 && value >= 0)
-                {
-                    shieldHealth = value;
-                }
-                else
-                {
-                    shieldHealth = 0;
-                }
-            }
         }
 
         //Draws the hitboxes and the player's current frame based on the number of frames in the attack.
@@ -66,31 +37,39 @@ namespace Team_Majx_Game
         {
             switch (attack)
             {
+                //The basis for every attack
                 case CharacterAttackState.Jab:
+                    //While the hitbox should be active
                     if (frame > 2 && frame < 7 )
                     {
+                        //Create the hitbox if it hasn't already hit the opponent yet.
                         if (!attackDidDamage)
                         {
                             tempColor = color;
                             if (direction == Direction.Left)
                             {
                                 SpriteEffect = SpriteEffects.None;
+                                //Creates the hitbox facing left
                                 currentHitbox = new Hitbox(new Rectangle(position.X - 25, position.Y, 50, 40), 10, new Vector2(-8, -2), 8);
                             }
                             else
                             {
                                 SpriteEffect = SpriteEffects.FlipHorizontally;
+                                //Creates the hitbox facing right
                                 currentHitbox = new Hitbox(new Rectangle(position.X + position.Width - 25, Position.Y, 50, 40), 10, new Vector2(8, -2), 8);
                             }
 
+                            //Add it to the list of all hitboxes
                             currentHitbox.Draw(_spriteBatch, hitboxSprite);
                             if (!allHitboxes.Contains(currentHitbox))
                                 allHitboxes.Add(currentHitbox);
                         }
                     }
 
+                    //While the hitbox should not be active
                     else if (frame < 2 || frame > 6)
                     {
+                        //Remove all the hitboxes from the list and draw the character gray to show that they are in startup/endlag.
                         allHitboxes.Clear();
                         currentHitbox = null;
                         attackDidDamage = false;
@@ -504,12 +483,12 @@ namespace Team_Majx_Game
                             if (direction == Direction.Left)
                             {
                                 SpriteEffect = SpriteEffects.None;
-                                currentHitbox = new Hitbox(new Rectangle(position.X - 80, position.Y + 50, 80, 50), 1, new Vector2(-10, -1), 15);
+                                currentHitbox = new Hitbox(new Rectangle(position.X - 80, position.Y + 50, 80, 50), 14, new Vector2(-10, -1), 15);
                             }
                             else
                             {
                                 SpriteEffect = SpriteEffects.FlipHorizontally;
-                                currentHitbox = new Hitbox(new Rectangle(position.X + position.Width, Position.Y + 50, 80, 50), 10, new Vector2(10, -1), 15);
+                                currentHitbox = new Hitbox(new Rectangle(position.X + position.Width, Position.Y + 50, 80, 50), 14, new Vector2(10, -1), 15);
                             }
                             currentHitbox.Draw(_spriteBatch, hitboxSprite);
                             if (!allHitboxes.Contains(currentHitbox))
@@ -629,7 +608,7 @@ namespace Team_Majx_Game
 
         }
 
-
+        //If a hitbox collides with the other player, then they take damage, knockback, and the hitbox is removed from the list of hitboxes.
         public void DealDamage(Knight player)
         {
             if (allHitboxes.Count != 0)
@@ -642,7 +621,7 @@ namespace Team_Majx_Game
                         player.xVelocity = (int)h.Knockback.X;
                         player.yVelocity = (int)h.Knockback.Y;
                         player.gotHit(h.HitStun);
-                        AllHitboxes.Remove(h);
+                        allHitboxes.Remove(h);
                         attackDidDamage = true;
                         break;
                     }

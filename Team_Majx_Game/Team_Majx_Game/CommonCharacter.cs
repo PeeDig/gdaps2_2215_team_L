@@ -396,6 +396,7 @@ namespace Team_Majx_Game
                     {
                         TouchingCeiling();
                         position.Y += yVelocity;
+                        //If the player touches the ground they they get put into a walking stste if they're moviing and a standing state if they're not.
                         if (StandingOnPlatform())
                         {
                             hasDoubleJump = true;
@@ -416,12 +417,14 @@ namespace Team_Majx_Game
                                 currentAttackState = CharacterAttackState.Stand;
                             }
                         }
+                        //checks for airdodge
                         else
                         if (KeyPress(dodge))
                         {
                             currentAttackState = CharacterAttackState.AirDodge;
                             lagFrames = 17;
                         }
+                        //Checks for neutral air and neutral special
                         if (KeyPress(attack))
                         {
                             currentAttackState = CharacterAttackState.NeutralAir;
@@ -433,9 +436,11 @@ namespace Team_Majx_Game
                         }
 
                         {
+                            //If they're holding down the right key then they accelerate right
                             if (kbState.IsKeyDown(right))
                             {
                                 AerialAccelerateRight();
+                                //If they attack while holding a direction and facing the opposite direction, it's a back air. If they are the same, its an up air.
                                 if (KeyPress(attack))
                                 {
                                     if (direction == Direction.Right)
@@ -449,13 +454,14 @@ namespace Team_Majx_Game
                                         lagFrames = getEndlag(CharacterAttackState.BackAir);
                                     }
                                 }
-
+                                //Checks for forward special
                                 else if (KeyPress(special))
                                 {
                                     currentAttackState = CharacterAttackState.ForwardSpecial;
                                     direction = Direction.Right;
                                 }
                             }
+                            //Same thing as the right key but for the left key
                             else if (kbState.IsKeyDown(left))
                             {
                                 AerialAccelerateLeft();
@@ -484,7 +490,7 @@ namespace Team_Majx_Game
 
                                 aerialDecelerate();
                             }
-
+                            //If they press up and have a double jump, jump again and remove their ability to double jump.
                             if (KeyPress(up))
                             {
                                 if (hasDoubleJump)
@@ -494,6 +500,7 @@ namespace Team_Majx_Game
                                 }
                             }
 
+                            //checks for up air and up special
                             if (kbState.IsKeyDown(up))
                             {
                                 if (KeyPress(attack))
@@ -508,6 +515,7 @@ namespace Team_Majx_Game
                                 }
                             }
 
+                            //Checks for down air and down special
                             else if (kbState.IsKeyDown(down))
                             {
                                 if (KeyPress(attack))
@@ -529,6 +537,8 @@ namespace Team_Majx_Game
                         break;
                     }
 
+                    //Does all the grounded attacks that are not crouching. When the number of lag frames = 0, set the state to the standing state. 
+                    //If not, reduce the lagframes by 1.
                 case CharacterAttackState.Jab:
                 case CharacterAttackState.ForwardTilt:
                 case CharacterAttackState.UpTilt:
@@ -546,8 +556,8 @@ namespace Team_Majx_Game
                         lagFrames -= 1;
                         currentFrame++;
                     }
-                    Decelerate();
                     break;
+                    //Same thing but keeps the character's current momentum
                 case CharacterAttackState.Dodge:
                     yVelocity = 0;
 
@@ -566,6 +576,7 @@ namespace Team_Majx_Game
                     Decelerate();
                     break;
 
+                    //Same thing but also checks for collisions.
                 case CharacterAttackState.Hitstun:
                     if (lagFrames == 0)
                     {
@@ -594,6 +605,7 @@ namespace Team_Majx_Game
                     yVelocity += 1;
                     break;
 
+                    //Same thing but puts the characters in the crouch state when it ends.
                 case CharacterAttackState.DownTilt:
                 case CharacterAttackState.DownStrong:
                     if (lagFrames == 0)
@@ -610,6 +622,8 @@ namespace Team_Majx_Game
                     position.X += xVelocity;
                     Decelerate();
                     break;
+                    //Same thing but keeps the current momentum in the air and sets the current state to jump after the attack is over.
+                    //If they touch the ground before the move ends, they get put into landing lag.
                 case CharacterAttackState.NeutralAir:
                 case CharacterAttackState.ForwardAir:
                 case CharacterAttackState.UpAir:
@@ -640,6 +654,7 @@ namespace Team_Majx_Game
                     aerialDecelerate();
                     position.X += xVelocity;
                     break;
+                    //Similar to the endlag of aerial attacks, but puts the character into special fall after the move is over
                 case CharacterAttackState.UpSpecial:
                     TouchingCeiling();
                     position.Y += yVelocity;
@@ -661,7 +676,7 @@ namespace Team_Majx_Game
                     aerialDecelerate();
                     position.X += xVelocity;
                     break;
-
+                    //Landing lag is similar to the endlag of any grounded move
                 case CharacterAttackState.LandingLag:
                     if (lagFrames <= 0)
                     {
@@ -673,6 +688,7 @@ namespace Team_Majx_Game
                     }
                     break;
 
+                    //Special fall where you cannot do any actions besides move
                 case CharacterAttackState.SpecialFall:
                     TouchingCeiling();
                     if(!StandingOnPlatform())
@@ -700,9 +716,6 @@ namespace Team_Majx_Game
                     {
                         aerialDecelerate();
                     }
-                    
-                  
-
                     break;
 
                 default:
